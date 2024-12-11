@@ -18,7 +18,7 @@
                         <ul>
 
                             {% for category in categories %}
-                                <li><a href="#">{{ category.product_category | capfirst }}</a></li>
+                                <li><a href="{% url 'product:category_page' category.product_category %}">{{ category.product_category | capfirst }}</a></li>
                             {% endfor %}
 
                         </ul>
@@ -51,7 +51,7 @@
                             <span>FRUIT FRESH</span>
                             <h2>Vegetable <br />100% Organic</h2>
                             <p>Free Pickup and Delivery Available</p>
-                            <a href="#" class="primary-btn">SHOP NOW</a>
+                            <a href="{% url 'product:store_page' %}" class="primary-btn">SHOP NOW</a>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
 
                     <div class="col-lg-3">
                         <div class="categories__item set-bg" data-setbg="{{ category.category_image.url }}">
-                            <h5><a href="#">{{ category.product_category }}</a></h5>
+                            <h5><a href="{% url 'product:category_page' category.product_category %}">{{ category.product_category }}</a></h5>
                         </div>
                     </div>
 
@@ -113,11 +113,11 @@
                         <div class="featured__item__pic set-bg" data-setbg="{{ product.product_image.url }}">
                             <ul class="featured__item__pic__hover">
                                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="{% url 'product:single_product' product.id %}"><i class="fa fa-shopping-cart"></i></a></li>
                             </ul>
                         </div>
                         <div class="featured__item__text">
-                            <h6><a href="#">{{ product.product_name | capfirst }}</a></h6>
+                            <h6><a href="{% url 'product:single_product' product.id %}">{{ product.product_name | capfirst }}</a></h6>
                             <h5>${{ product.product_price }}</h5>
                         </div>
                     </div>
