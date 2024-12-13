@@ -1,0 +1,3 @@
+username: admin
+email: admin@mail.com
+password: 1234
