@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'product.apps.ProductConfig',
     'cart.apps.CartConfig',
-    'account.apps.AccountConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -141,4 +141,4 @@ MEDIA_URL = '/media/'
 
 
 # custom authentication model
-# AUTH_USER_MODEL = "account.UserAccount"
+AUTH_USER_MODEL = "accounts.UserAccount"
