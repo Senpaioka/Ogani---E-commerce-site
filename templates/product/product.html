@@ -43,6 +43,9 @@
                     
                     
                     {% if product.is_available %}
+
+                    {% if user.is_authenticated %}
+
                     <div class="product__details__quantity">
                         <div class="quantity">
                             <div class="pro-qty">
@@ -51,8 +54,16 @@
                         </div>
                     </div>
 
-                    <a href="#" class="primary-btn">ADD TO CARD</a>
+                    <a href="{% url 'cart:add_cart' product.id %}" class="primary-btn">ADD TO CARD</a>
                     <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                    {% else %}
+
+            
+
+                    <a href="#" class="primary-btn">Please Login</a>
+                    
+
+                    {% endif %}
 
                     <ul>
                         <li><b>Availability</b> <span>In Stock</span></li>

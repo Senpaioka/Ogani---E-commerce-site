@@ -67,9 +67,11 @@ def login_page(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        user = auth.authenticate(username=username, password=password)
+        user = auth.authenticate(request, username=username, password=password)
         
         if user:
+            auth.login(request, user)
+
             return redirect('home:home_page')
 
 
@@ -77,3 +79,13 @@ def login_page(request):
     context =  {}
 
     return render(request, html_template_name, context)
+
+
+
+
+
+def logout_view(request):
+
+    auth.logout(request)
+
+    return redirect('home:home_page')

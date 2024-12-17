@@ -39,10 +39,19 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
+                {% if user.is_authenticated %}
                 <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                <li><a href="{% url 'cart:cart_page' %}"><i class="fa fa-shopping-bag"></i> <span>{{ counter }}</span></a></li>
+                {% else %}
+                <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
+                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
+                {% endif %}
             </ul>
+            {% if user.is_authenticated %}
             <div class="header__cart__price">item: <span>$150.00</span></div>
+            {% else %}
+            <div class="header__cart__price">item: <span>$00.0</span></div>
+            {% endif %}
         </div>
         <div class="humberger__menu__widget">
             <div class="header__top__right__language">
@@ -55,7 +64,11 @@
                 </ul>
             </div>
             <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
+                {% else %}
+                <a href="{% url 'account:login_page' %}"><i class="fa fa-user"></i> Login</a>
+                {% endif %}
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
@@ -121,7 +134,11 @@
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
+                                {% else %}
                                 <a href="{% url 'account:login_page' %}"><i class="fa fa-user"></i> Login</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -156,10 +173,20 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
+                            {% if user.is_authenticated %}
                             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="{% url 'cart:cart_page' %}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="{% url 'cart:cart_page' %}"><i class="fa fa-shopping-bag"></i> <span>{{ counter }}</span></a></li>
+                            {% else %}
+                            <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
+                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
+                            {% endif %}
+                            
                         </ul>
+                        {% if user.is_authenticated %}
                         <div class="header__cart__price">item: <span>$150.00</span></div>
+                        {% else %}
+                        <div class="header__cart__price">item: <span>$00.00</span></div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

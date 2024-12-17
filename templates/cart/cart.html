@@ -21,9 +21,6 @@
     <!-- Breadcrumb Section End -->
 
 
-
-
-
  <!-- Shopping Cart Section Begin -->
 
  <section class="shoping-cart spad">
@@ -42,29 +39,79 @@
                             </tr>
                         </thead>
                         <tbody>
+
+                        {% if all_products %}
                             
+                            {% for data in all_products %}
                             <tr>
                                 <td class="shoping__cart__item">
-                                    <img src="img/cart/cart-2.jpg" alt="">
-                                    <h5>Fresh Garden Vegetable</h5>
-                                </td>
+                                    <img src="{{ data.product.product_image.url }}" alt="">
+                                    <h5>{{ cart_product.product.product_name }}</h5>
+                                </td> 
                                 <td class="shoping__cart__price">
-                                    $39.00
+                                    ${{ data.product.product_price }}
                                 </td>
+                           
                                 <td class="shoping__cart__quantity">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
+                                    
+                                    <div class="quantity" style="display: flex; align-items: center; gap: 0px;">
+
+
+                                        <a href="{% url 'cart:decrease_product' data.product.id %}" class="btn btn-light" type="button" id="button-plus">
+                                          <i class="fa fa-minus"></i>
+                                        </a>
+                                        
+                                        <form action="{% url 'cart:increase_product' data.product.id %}" method="POST" style="display: flex; align-items: center;">
+                                          {% csrf_token %}
+                                          <input type="text" style="width: 40px; height: 40px; text-align: center; margin: 0 10px;" value='{{ data.quantity }}' readonly>
+                                          <button class="btn btn-light" type="submit" id="button-minus">
+                                            <i class="fa fa-plus"></i>
+                                          </button>
+                                        </form>
+
+                                      </div>
+                                </td>
+
+                                <td class="shoping__cart__total">
+                                    ${{ data.sub_total }}
+                                </td>
+
+
+
+                                <form action="{% url 'cart:delete_product' data.product.id %}" method='POST'>
+                                    {% csrf_token %}
+                                    <td class="shoping__cart__item__close">
+                                        
+                                        <button type='submit' class="icon_close" style="background-color: red; color: white; border: none; padding: 10px 10px;"></button>
+                                    </td>
+
+                                </form>
+
+                    
+                            </tr>
+
+                            {% endfor %}
+
+                            {% else %}
+
+                            <tr>
+                                <td class="shoping__cart__item">
+                                    <div class="shoping__cart__btns">
+
+                                        
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <h3>No Products Found</h3>
+                                        <br>
+                                        <br>
+                                        <br>
+
                                     </div>
                                 </td>
-                                <td class="shoping__cart__total">
-                                    $39.99
-                                </td>
-                                <td class="shoping__cart__item__close">
-                                    <span class="icon_close"></span>
-                                </td>
                             </tr>
+
+                            {% endif %}
                             
                         </tbody>
                     </table>
@@ -75,8 +122,8 @@
             <div class="col-lg-12">
                 <div class="shoping__cart__btns">
                     <a href="{% url 'product:store_page' %}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                    <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                        Upadate Cart</a>
+                    <a href="{% url 'cart:cart_page' %}" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+                        Refresh Cart</a>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -95,6 +142,7 @@
                     <h5>Cart Total</h5>
                     <ul>
                         <li>Subtotal <span>$454.98</span></li>
+                        <li>Tax <span>10%</span></li>
                         <li>Total <span>$454.98</span></li>
                     </ul>
                     <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
@@ -108,3 +156,4 @@
 
 
 {% endblock %}
+

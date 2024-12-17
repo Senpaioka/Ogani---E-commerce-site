@@ -15,7 +15,7 @@
                         <h4>Department</h4>
                         <ul>
                             {% for category in categories %}
-                                <li><a href="#">{{ category.product_category | capfirst }}</a></li>
+                                <li><a href="{% url 'product:category_page' category.product_category %}">{{ category.product_category | capfirst }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
