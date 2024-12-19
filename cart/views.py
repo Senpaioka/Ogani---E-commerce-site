@@ -17,8 +17,23 @@ def main_cart_page(request):
 
         user_cart_products = CartProduct.objects.filter(user=current_user)
 
+        # calculate all product price
+        total_price = 0
+        tax_percent = 0.1 # 10%
+
+        for data in user_cart_products:
+            total_price += data.product.product_price * data.quantity
+
+        # calculate tax
+        tax = round(total_price * tax_percent, 2) # example: 5.00
+        final_price = total_price + tax
+
+
     context = {
         'all_products': user_cart_products,
+        'total_price': total_price,
+        'final_price': final_price,
+        'tax': tax,
     }
 
     return render(request, html_template_name, context)
@@ -35,6 +50,12 @@ def add_product_into_cart(request, product_id):
 
     if current_user.is_authenticated:
 
+        if request.method == 'GET':
+            quantity = request.GET.get('value')
+        print(quantity)
+
+        
+
         # getting selected product details
         get_product = Product.objects.get(pk=product_id)
 
@@ -50,7 +71,7 @@ def add_product_into_cart(request, product_id):
         
         cart_id.save()
 
-
+        # add new product if already not exists in cart
         all_cart_products = CartProduct.objects.filter(user=current_user)
 
         product_in_cart = []
@@ -58,7 +79,7 @@ def add_product_into_cart(request, product_id):
             for value in all_cart_products.values():
                 product_in_cart.append(value['product_id'])
 
-
+        # if product exists in the cart
         if get_product.id in product_in_cart:
 
             cart_product = CartProduct.objects.get(product=get_product)
@@ -67,7 +88,7 @@ def add_product_into_cart(request, product_id):
             
         
         else:
-            # saving user session and product info in CartProduct model
+            # if not exists crate product info in CartProduct model
             cart_product = CartProduct.objects.create(
                 user = current_user,
                 user_session = cart_id,
