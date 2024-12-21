@@ -37,3 +37,13 @@ class  CartProduct(models.Model):
 
 
 
+# user wishlist
+class UserWishList(models.Model):
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    is_wishlist = models.BooleanField(default=False)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return self.product.product_name

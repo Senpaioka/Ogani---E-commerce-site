@@ -47,8 +47,39 @@
                     {% if user.is_authenticated %}
 
 
-                    <a href="{% url 'cart:add_cart' product.id %}" class="primary-btn">ADD TO CARD</a>
-                    <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <a href="{% url 'cart:add_cart' product.id %}" class="primary-btn">ADD TO CART</a>
+
+
+                            
+                        
+                                {% if check_wishlist %}
+
+                                    <form action="{% url 'cart:add_wishlist' product.id %}" method="POST" style="margin: 0;">
+                                        {% csrf_token %}
+                                        <button type='submit' style="border: none; color: red;" class="heart-icon">
+                                        <span class="fa fa-heart"></span>
+                                        </button>
+                                    </form>
+
+                                {% else %}
+
+                                    <form action="{% url 'cart:add_wishlist' product.id %}" method="POST" style="margin: 0;">
+                                        {% csrf_token %}
+                                        <button type='submit' style="border: none;" class="heart-icon">
+                                        <span class="icon_heart_alt"></span>
+                                        </button>
+                                    </form>
+
+                                {% endif %}
+                           
+
+                            
+                      
+                        
+                      </div>
+                    
+
                     {% else %}
 
             

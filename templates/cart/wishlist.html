@@ -1,0 +1,137 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Your WishList</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+
+ <!-- Shopping Cart Section Begin -->
+
+ <section class="shoping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="shoping__product">Products</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        {% if all_products %}
+                            
+                            {% for data in all_products %}
+                            <tr>
+                                <td class="shoping__cart__item">
+                                    <img src="{{ data.product.product_image.url }}" alt="">
+                                    <h5>{{ cart_product.product.product_name }}</h5>
+                                </td> 
+                                <td class="shoping__cart__price">
+                                    ${{ data.product.product_price }}
+                                </td>
+                           
+                                <td class="shoping__cart__quantity">
+                                    
+                                    <div class="quantity" style="display: flex; align-items: center; gap: 0px;">
+
+
+                                        <a href="{% url 'cart:decrease_product' data.product.id %}" class="btn btn-light" type="button" id="button-plus">
+                                          <i class="fa fa-minus"></i>
+                                        </a>
+                                        
+                                        <form action="{% url 'cart:increase_product' data.product.id %}" method="POST" style="display: flex; align-items: center;">
+                                          {% csrf_token %}
+                                          <input type="text" style="width: 40px; height: 40px; text-align: center; margin: 0 10px;" value='{{ data.quantity }}' readonly>
+                                          <button class="btn btn-light" type="submit" id="button-minus">
+                                            <i class="fa fa-plus"></i>
+                                          </button>
+                                        </form>
+
+                                      </div>
+                                </td>
+
+                                <td class="shoping__cart__total">
+                                    ${{ data.sub_total }}
+                                </td>
+
+
+
+                                <form action="{% url 'cart:delete_product' data.product.id %}" method='POST'>
+                                    {% csrf_token %}
+                                    <td class="shoping__cart__item__close">
+                                        
+                                        <button type='submit' class="icon_close" style="background-color: red; color: white; border: none; padding: 10px 10px;"></button>
+                                    </td>
+
+                                </form>
+
+                    
+                            </tr>
+
+                            {% endfor %}
+
+                            {% else %}
+
+                            <tr>
+                                <td class="shoping__cart__item">
+                                    <div class="shoping__cart__btns">
+
+                                        
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <h3>No Products Found</h3>
+                                        <br>
+                                        <br>
+                                        <br>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                            {% endif %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__btns">
+                    <a href="{% url 'product:store_page' %}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                    <a href="{% url 'cart:wishlist_page' %}" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+                        Refresh List</a>
+                </div>
+            </div>
+            
+            
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shoping Cart Section End -->
+
+
+
+{% endblock %}
+

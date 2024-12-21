@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from product.models import Product, ProductCategory, ProductGallery
 from django.core.paginator import Paginator
-
+from cart.models import UserWishList
 # Create your views here.
 
 
@@ -35,6 +35,19 @@ def single_product_page(request, product_id):
     
     html_file_name = 'product/product.html'
 
+    # getting user wishlist info
+    current_user = request.user
+
+    if current_user.is_authenticated:
+        user_wishlist = UserWishList.objects.filter(product__pk=product_id)
+        if user_wishlist.exists():
+            wishlist_or_not = user_wishlist[0].is_wishlist
+        else:
+            wishlist_or_not = False 
+
+
+
+    # getting selected product
     selected_product = Product.objects.get(pk=product_id)
     thumb_img = ProductGallery.objects.filter(product__pk=product_id)
     
@@ -45,6 +58,8 @@ def single_product_page(request, product_id):
         'product': selected_product,
         'small_image': thumb_img,
         'related_products': related_category_product,
+        # 'wishlist': user_wishlist,
+        'check_wishlist': wishlist_or_not,
     }
 
     return render(request, html_file_name, context)

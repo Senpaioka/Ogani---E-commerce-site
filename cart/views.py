@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from codelib.user_session import _user_session_key
-from cart.models import CartID, CartProduct
+from cart.models import CartID, CartProduct, UserWishList
 from product.models import Product
-from accounts.models import UserAccount
 
 # Create your views here.
 
@@ -49,12 +48,6 @@ def add_product_into_cart(request, product_id):
     current_user = request.user
 
     if current_user.is_authenticated:
-
-        if request.method == 'GET':
-            quantity = request.GET.get('value')
-        print(quantity)
-
-        
 
         # getting selected product details
         get_product = Product.objects.get(pk=product_id)
@@ -173,3 +166,72 @@ def delete_cart_product(request, product_id):
         cart_product.delete()
 
     return redirect('cart:cart_page')
+
+
+
+
+
+
+
+
+
+# wishlist functionality
+
+def wishlist_main_page(request):
+
+    html_template_name = 'cart/wishlist.html'
+
+    current_user = request.user
+
+    if current_user.is_authenticated:
+
+        get_user_wishlist = UserWishList.objects.all().filter(user=current_user)
+
+
+
+
+    context = {
+        'wishlist': get_user_wishlist,
+    }
+
+    return render(request, html_template_name, context)
+
+
+
+
+
+
+
+
+def wishlist_add_product(request, product_id):
+
+    current_user = request.user
+
+    if current_user.is_authenticated:
+        
+        get_product = Product.objects.get(pk=product_id)
+        get_wishlist = UserWishList.objects.filter(product__pk=get_product.id)
+        
+
+
+        if get_wishlist.exists():
+            set_wishlist = UserWishList.objects.get(product=get_product)
+            if set_wishlist.is_wishlist == False:
+                set_wishlist.is_wishlist = True
+                set_wishlist.save()
+            else:
+                set_wishlist.is_wishlist = False
+                set_wishlist.save() 
+       
+        else:
+            user_wishlist = UserWishList.objects.create(
+                user = current_user,
+                product = get_product,
+                is_wishlist = True,
+            )
+
+            user_wishlist.save()
+
+
+    return redirect(request.META['HTTP_REFERER'])
+    
