@@ -32,56 +32,31 @@
                         <thead>
                             <tr>
                                 <th class="shoping__product">Products</th>
-                                <th></th>
+                                <th class="shoping__product">Price</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                        {% if all_products %}
+                        {% if wishlist %}
                             
-                            {% for data in all_products %}
+                            {% for data in wishlist %}
                             <tr>
                                 <td class="shoping__cart__item">
                                     <img src="{{ data.product.product_image.url }}" alt="">
-                                    <h5>{{ cart_product.product.product_name }}</h5>
-                                </td> 
+                                    <a href="{% url 'product:single_product' data.product.id %}"><h5>{{ data.product.product_name }}</h5></a>
+                                </td>
+
                                 <td class="shoping__cart__price">
                                     ${{ data.product.product_price }}
                                 </td>
                            
-                                <td class="shoping__cart__quantity">
-                                    
-                                    <div class="quantity" style="display: flex; align-items: center; gap: 0px;">
 
-
-                                        <a href="{% url 'cart:decrease_product' data.product.id %}" class="btn btn-light" type="button" id="button-plus">
-                                          <i class="fa fa-minus"></i>
-                                        </a>
-                                        
-                                        <form action="{% url 'cart:increase_product' data.product.id %}" method="POST" style="display: flex; align-items: center;">
-                                          {% csrf_token %}
-                                          <input type="text" style="width: 40px; height: 40px; text-align: center; margin: 0 10px;" value='{{ data.quantity }}' readonly>
-                                          <button class="btn btn-light" type="submit" id="button-minus">
-                                            <i class="fa fa-plus"></i>
-                                          </button>
-                                        </form>
-
-                                      </div>
-                                </td>
-
-                                <td class="shoping__cart__total">
-                                    ${{ data.sub_total }}
-                                </td>
-
-
-
-                                <form action="{% url 'cart:delete_product' data.product.id %}" method='POST'>
+                                <form action="{% url 'cart:remove_wishlist' data.product.id %}" method='POST'>
                                     {% csrf_token %}
+
                                     <td class="shoping__cart__item__close">
-                                        
                                         <button type='submit' class="icon_close" style="background-color: red; color: white; border: none; padding: 10px 10px;"></button>
                                     </td>
-
                                 </form>
 
                     

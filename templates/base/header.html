@@ -174,7 +174,7 @@
                     <div class="header__cart">
                         <ul>
                             {% if user.is_authenticated %}
-                            <li><a href="{% url 'cart:wishlist_page' %}"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                            <li><a href="{% url 'cart:wishlist_page' %}"><i class="fa fa-heart"></i> <span>{{ count_wishlist }}</span></a></li>
                             <li><a href="{% url 'cart:cart_page' %}"><i class="fa fa-shopping-bag"></i> <span>{{ counter }}</span></a></li>
                             {% else %}
                             <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>

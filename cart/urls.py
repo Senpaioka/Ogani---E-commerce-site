@@ -15,6 +15,7 @@ urlpatterns = [
     # wishlist link
     path('wishlist/', views.wishlist_main_page, name='wishlist_page'),
     path('add_to_wishlist/<int:product_id>/', views.wishlist_add_product, name='add_wishlist'),
+    path('remove_wishlist/<int:product_id>/', views.remove_wishlist_product, name='remove_wishlist'),
 ]
 
 

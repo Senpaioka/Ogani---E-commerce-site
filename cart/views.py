@@ -185,9 +185,7 @@ def wishlist_main_page(request):
 
     if current_user.is_authenticated:
 
-        get_user_wishlist = UserWishList.objects.all().filter(user=current_user)
-
-
+        get_user_wishlist = UserWishList.objects.all().filter(user=current_user, is_wishlist=True)
 
 
     context = {
@@ -235,3 +233,20 @@ def wishlist_add_product(request, product_id):
 
     return redirect(request.META['HTTP_REFERER'])
     
+
+
+
+
+
+
+def remove_wishlist_product(request, product_id):
+
+    current_user = request.user
+
+    if current_user.is_authenticated:
+
+        get_product = Product.objects.get(pk=product_id)
+        get_wishlist = UserWishList.objects.get(product__pk=get_product.id)
+        get_wishlist.delete()
+
+    return redirect('cart:wishlist_page')

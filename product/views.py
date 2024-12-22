@@ -43,7 +43,10 @@ def single_product_page(request, product_id):
         if user_wishlist.exists():
             wishlist_or_not = user_wishlist[0].is_wishlist
         else:
-            wishlist_or_not = False 
+            wishlist_or_not = False
+            
+    else:
+         wishlist_or_not = False
 
 
 
@@ -58,7 +61,6 @@ def single_product_page(request, product_id):
         'product': selected_product,
         'small_image': thumb_img,
         'related_products': related_category_product,
-        # 'wishlist': user_wishlist,
         'check_wishlist': wishlist_or_not,
     }
 

@@ -69,7 +69,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # custom context processors
                 'processors.cart_product_count.product_in_cart_count',
+                'processors.wishlist_tracker.wishlist_counter',
             ],
         },
     },
