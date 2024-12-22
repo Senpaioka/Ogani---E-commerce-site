@@ -72,6 +72,7 @@ TEMPLATES = [
                 # custom context processors
                 'processors.cart_product_count.product_in_cart_count',
                 'processors.wishlist_tracker.wishlist_counter',
+                'processors.money_counter.cart_total',
             ],
         },
     },
