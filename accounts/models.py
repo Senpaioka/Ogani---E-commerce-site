@@ -21,7 +21,7 @@ class UserAccountManager(BaseUserManager):
             city = city,
             country = country,
         )
-         
+        user.profile_picture 
         user.is_active = True 
 
         user.set_password(password)
@@ -43,6 +43,7 @@ class UserAccountManager(BaseUserManager):
             password = password,
         )
 
+        user.profile_picture
         user.is_admin = True
         user.is_active = True
         user.is_staff = True
@@ -58,6 +59,7 @@ class UserAccountManager(BaseUserManager):
 
 class UserAccount(AbstractBaseUser):
 
+    profile_picture = models.ImageField(upload_to='profile/img', null=True, blank=True)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     username = models.CharField(max_length=20, unique=True)

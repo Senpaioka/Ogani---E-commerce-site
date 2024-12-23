@@ -1,0 +1,150 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+<style>   
+
+    /* Header Section */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background: #F3F6FA;
+      color: #fff;
+    }
+
+    .profile-header img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-right: 20px;
+    }
+
+    .profile-header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .profile-header p {
+      font-size: 14px;
+    }
+
+    /* Navigation Section */
+    .profile-nav {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .profile-nav a {
+      text-decoration: none;
+      color: #252525;
+      font-weight: bold;
+    }
+
+    .profile-nav a:hover {
+      color: #7fad39;
+    }
+
+    /* Main Content */
+    .profile-content {
+      padding: 20px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #7fad39;
+    }
+
+    .section p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 10px;
+      background: #7fad39;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #7fad39;
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <img src="{{ info.profile_picture.url }}" alt="Profile Picture">
+      <div>
+        <h1>{{ info.full_name }}</h1>
+        <p>@{{ info.username }} | Joined: {{ info.date_joined | date:"d M Y" }}</p>
+      </div>
+    </div>
+
+    <!-- Profile Navigation -->
+    <div class="profile-nav">
+      <a href="#about">About</a>
+      <a href="#activity">Activity</a>
+      <a href="#settings">Settings</a>
+      <a href="{% url 'account:logout' %}">Logout</a>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="profile-content">
+      <!-- About Section -->
+      <div id="about" class="section">
+        <h2>About</h2>
+        <br>
+        <p>Name: {{ info.full_name | title}}</p>
+        <p>Username: {{ info.username }}</p>
+        <p>Email: {{ info.email }}</p>
+        <p>Phone: {{ info.phone }}</p>
+        <p>Address: {{ info.address | title}}</p>
+        <p>Location: {{ info.city | capfirst }}, {{ info.country | capfirst}}</p>
+
+        <a href="{% url 'account:update_page'%}" class="btn">Update Info</a>
+      </div>
+      <br>
+      <!-- Activity Section -->
+      <div id="activity" class="section">
+        <h2>Recent Activity</h2>
+        <br>
+        <p>Product In Wishlist: <b>{{ count_wishlist }}</b></p>
+        <p>Product In Cart: <b>{{ counter }}</b></p>
+      </div>
+      <br>
+      <!-- Settings Section -->
+      <div id="settings" class="section">
+        <h2>Settings</h2>
+        <br>
+        <p>Manage your account settings, change your password, and update your preferences.</p>
+        <a href="{% url 'account:settings_page'%}" class="btn">Go to Settings</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
+
+{% endblock %}

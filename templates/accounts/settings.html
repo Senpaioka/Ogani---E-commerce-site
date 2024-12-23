@@ -1,0 +1,117 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+<style>   
+
+    /* Header Section */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background: #F3F6FA;
+      color: #fff;
+    }
+
+    .profile-header img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-right: 20px;
+    }
+
+    .profile-header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .profile-header p {
+      font-size: 14px;
+    }
+
+    /* Navigation Section */
+    .profile-nav {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .profile-nav a {
+      text-decoration: none;
+      color: #252525;
+      font-weight: bold;
+    }
+
+    .profile-nav a:hover {
+      color: #7fad39;
+    }
+
+    /* Main Content */
+    .profile-content {
+      padding: 20px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #7fad39;
+    }
+
+    .section a {
+      font-size: 16px;
+      color: #555;
+    }
+
+
+    .section a:hover {
+      color: #7fad39;
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <img src="{{ info.profile_picture.url }}" alt="Profile Picture">
+      <div>
+        <h1>{{ info.full_name }}</h1>
+        <p>@{{ info.username }} | Joined: {{ info.date_joined | date:"d M Y" }}</p>
+      </div>
+    </div>
+
+
+    <!-- Settings Content -->
+    <div class="profile-content">
+      <div id="settings" class="section">
+        <br>
+        <h2>Settings</h2>
+        <p>Manage your account settings, change your password, and update your preferences.</p>
+
+        <br>
+        <br>
+        <br>
+
+        <div class='section'>
+            <a href='#'>Change Password</a> | 
+            <a href='#'>Change Profile Picture</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
+
+{% endblock %}

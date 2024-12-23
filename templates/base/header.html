@@ -25,6 +25,45 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
 </head>
 
+<!-- dropdown styling for logout link -->
+
+<style>
+    /* Container for dropdown */
+    .dropdown {
+      position: relative; /* Required for positioning the dropdown */
+      display: inline-block; /* Keeps the <a> inline */
+    }
+
+    /* Dropdown content (hidden by default) */
+    .dropdown-content {
+      display: none; /* Hidden initially */
+      position: absolute; /* Positioned relative to the dropdown */
+      background-color: #f9f9f9; /* Background for the dropdown */
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow */
+      padding: 10px;
+      z-index: 1; /* Ensure it appears on top */
+      min-width: 160px; /* Width of the dropdown */
+    }
+
+    /* Show dropdown on hover */
+    .dropdown:hover .dropdown-content {
+      display: block; /* Show the dropdown */
+    }
+
+    /* Style for individual dropdown links */
+    .dropdown-content a {
+      color: black; /* Text color */
+      text-decoration: none; /* Remove underline */
+      display: block; /* Block level for easy clicking */
+      padding: 8px 12px; /* Add padding */
+    }
+
+    /* Hover effect for dropdown links */
+    .dropdown-content a:hover {
+      background-color: #f1f1f1; /* Slightly darker background */
+    }
+  </style>
+
 <body>
     <!-- Page Preloder -->
     <div id="preloder">
@@ -65,7 +104,18 @@
             </div>
             <div class="header__top__right__auth">
                 {% if user.is_authenticated %}
-                <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
+    
+                <div class="dropdown">
+                    <!-- Trigger link -->
+                    <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
+                
+                    <!-- Dropdown content -->
+                    <div class="dropdown-content">
+                      <a href="{% url 'account:profile_page' %}">Profile</a>
+                      <a href="{% url 'account:settings_page' %}">Settings</a>
+                    </div>
+                </div>
+                
                 {% else %}
                 <a href="{% url 'account:login_page' %}"><i class="fa fa-user"></i> Login</a>
                 {% endif %}
@@ -135,7 +185,18 @@
                             </div>
                             <div class="header__top__right__auth">
                                 {% if user.is_authenticated %}
-                                <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
+                               
+                                    <div class="dropdown">
+                                        <!-- Trigger link -->
+                                        <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
+                                    
+                                        <!-- Dropdown content -->
+                                        <div class="dropdown-content">
+                                          <a href="{% url 'account:profile_page' %}">Profile</a>
+                                          <a href="{% url 'account:settings_page' %}">Settings</a>
+                                        </div>
+                                    </div>
+
                                 {% else %}
                                 <a href="{% url 'account:login_page' %}"><i class="fa fa-user"></i> Login</a>
                                 {% endif %}

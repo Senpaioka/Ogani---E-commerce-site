@@ -45,3 +45,13 @@ class RegistrationForm(forms.ModelForm):
         self.fields['city'].widget.attrs['placeholder'] = 'City You Live In'
         self.fields['country'].widget.attrs['placeholder'] = 'Country Name'
         self.fields['birth_date'].widget.attrs['placeholder'] = 'Your Birth Date'
+
+
+
+
+
+class UpdateUserInfo(forms.ModelForm):
+
+    class Meta:
+        model = UserAccount
+        exclude = ['password', 'confirm_password', 'is_active', 'is_staff', 'is_admin'] 
