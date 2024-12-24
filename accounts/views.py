@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
-from accounts.forms import RegistrationForm, UpdateUserInfo
+from accounts.forms import RegistrationForm, UpdateUserInfo, ChangePasswordForm, ChangePictureForm
 from accounts.models import UserAccount
-from django.contrib.auth import authenticate
 from django.contrib.auth import update_session_auth_hash
 
 
@@ -180,6 +179,77 @@ def user_settings_page(request):
 
     context = {
         'info': user_info,
+    }
+
+    return render(request, html_template_name, context)
+
+
+
+
+
+def change_password_page(request):
+
+    html_template_name = 'accounts/change_password.html'
+
+    current_user = request.user
+
+    if current_user.is_authenticated: 
+        instance = get_object_or_404(UserAccount, username=current_user)
+           
+
+        if request.method == 'POST':
+            form = ChangePasswordForm(request.POST, instance=instance)
+
+            if form.is_valid():
+                
+                update_form = form.save(commit=False)
+                update_form.set_password(form.cleaned_data["confirm_password"])
+                update_form.save()
+                update_session_auth_hash(request, current_user)
+                auth.logout(request)
+
+                return redirect('account:login_page')
+
+
+        else:
+            form = ChangePasswordForm() 
+
+    
+    context = {
+        'form': form,
+    }
+
+    return render(request, html_template_name, context)
+
+
+
+
+
+
+
+def change_picture_page(request):
+
+    html_template_name = 'accounts/change_picture.html'
+
+    current_user = request.user
+
+    if current_user.is_authenticated: 
+        instance = get_object_or_404(UserAccount, username=current_user)
+           
+
+        if request.method == 'POST':
+            form = ChangePictureForm(request.POST, request.FILES, instance=instance)
+
+            if form.is_valid():
+                form.save()
+            
+            return redirect('account:profile_page')
+
+        else:
+            form = ChangePictureForm()
+
+    context = {
+        'form': form,
     }
 
     return render(request, html_template_name, context)

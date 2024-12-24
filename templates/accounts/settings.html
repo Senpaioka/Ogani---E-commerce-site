@@ -1,5 +1,7 @@
 {% extends 'index.html' %}
 
+{% block title %} Settings {% endblock %}
+
 {% load static %}
 
 
@@ -84,7 +86,11 @@
   <div class="container">
     <!-- Profile Header -->
     <div class="profile-header">
-      <img src="{{ info.profile_picture.url }}" alt="Profile Picture">
+      {% if info.profile_picture %}
+        <img src="{{ info.profile_picture.url }}" alt="Profile Picture">
+      {% else %}
+        <img src="#" alt="Profile Picture">
+      {% endif %}
       <div>
         <h1>{{ info.full_name }}</h1>
         <p>@{{ info.username }} | Joined: {{ info.date_joined | date:"d M Y" }}</p>
@@ -104,8 +110,8 @@
         <br>
 
         <div class='section'>
-            <a href='#'>Change Password</a> | 
-            <a href='#'>Change Profile Picture</a>
+            <a href='{% url "account:password_page" %}'>Change Password</a> | 
+            <a href='{% url "account:picture_page" %}'>Change Profile Picture</a>
         </div>
       </div>
     </div>

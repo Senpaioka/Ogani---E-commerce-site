@@ -17,6 +17,9 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = UserAccount
         fields = ['first_name', 'last_name', 'username', 'email', 'phone', 'address', 'city', 'country', 'birth_date']
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date'}), 
+        }
 
 
 
@@ -55,3 +58,51 @@ class UpdateUserInfo(forms.ModelForm):
     class Meta:
         model = UserAccount
         exclude = ['password', 'confirm_password', 'is_active', 'is_staff', 'is_admin'] 
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date'}), 
+        }
+
+
+
+
+
+
+
+# not re-using RegistrationForm
+class ChangePasswordForm(forms.ModelForm):
+
+    password = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={
+        'placeholder': 'Enter Password',
+    }))
+
+    confirm_password = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={
+        'placeholder': 'Password confirmation'
+    }))
+
+
+    class Meta:
+        model = UserAccount
+        fields = ['password', 'confirm_password']
+
+        
+    def clean(self):
+        cleaned_data = super(ChangePasswordForm, self).clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        if password != confirm_password:
+
+            raise forms.ValidationError(
+                "Password does not match!"
+            )
+
+
+
+
+
+# using RegistrationForm
+class ChangePictureForm(forms.ModelForm):
+
+    class Meta:
+        model = UserAccount
+        fields = ['profile_picture']

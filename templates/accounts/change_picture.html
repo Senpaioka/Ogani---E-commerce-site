@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+
+{% block title %} Change Picture {% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Change Profile Picture</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        
+        <div class="checkout__form">
+            <h4>Update Your Profile Picture</h4>
+            <form action="{% url 'account:picture_page' %}" method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+
+                        <div class="row">
+                            <div class="checkout__input">
+                                <p>Upload Your Photo<span>*</span></p>
+                                {{ form.profile_picture }}
+                            </div>   
+                        </div>
+                        
+                        
+                        <br>
+                        <br>
+                        <button type="submit" class="site-btn">Set Picture</button>
+                        
+            </form>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->
+
+{% endblock %}
