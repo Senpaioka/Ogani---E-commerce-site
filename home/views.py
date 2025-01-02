@@ -3,6 +3,7 @@ from product.models import Product, ProductCategory
 from home.search_form import ProductSearchForm
 from django.db.models import Q
 from django.core.paginator import Paginator
+from blog.models import BlogModel
 
 # Create your views here.
 
@@ -18,10 +19,16 @@ def home_view(request):
     # enabling search field
     user_search_key = ProductSearchForm()
 
+    # getting 3 blog
+
+    getting_blogs = BlogModel.objects.all()[:3]
+
+
     context = {
         'categories': all_categories,
         'products': all_products,
         'search_form': user_search_key,
+        'blogs': getting_blogs,
     }
 
     return render(request, html_file_name, context)

@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from blog.models import BlogModel, BlogCategory
 from django.core.paginator import Paginator
 from blog.blog_search import BlogSearchForm
 from django.db.models import Q
+from blog.blog_form import BlogPostForm
 
 # Create your views here.
 
@@ -10,7 +11,7 @@ def blog_page(request):
 
     html_template_name = 'blog/blog.html'
 
-    all_blogs = BlogModel.objects.all()
+    all_blogs = BlogModel.objects.all().order_by('-created_at')
 
     paginator = Paginator(all_blogs, 6)
     page_number = request.GET.get('page')
@@ -21,11 +22,17 @@ def blog_page(request):
     # form functionality
     blog_search_field = BlogSearchForm()
 
+    # latest blogs
+    latest_blogs = BlogModel.objects.all().order_by('-created_at')[:3]
+
+
+
     context = {
         'blogs': all_blogs,
         'pages': page_obj,
         'categories': category_list,
         'form': blog_search_field,
+        'recent_blogs': latest_blogs,
     }
 
     return render(request, html_template_name, context)
@@ -55,11 +62,15 @@ def blog_details_page(request, blog_id):
     # form functionality
     blog_search_field = BlogSearchForm()
 
+    # latest blogs
+    latest_blogs = BlogModel.objects.all().order_by('-created_at')[:3]
+
     context = {
         'blog': get_blog,
         'read_more': recommended_blogs,
         'categories': category_list,
         'form': blog_search_field,
+        'recent_blogs': latest_blogs,
     }
 
     return render(request, html_template_name, context)
@@ -133,5 +144,51 @@ def blog_search_functionality(request):
     }
 
     return render(request, html_template_name, context)
+
+
+
+
+
+
+
+def blog_post_page(request):
+
+    html_template_name = 'blog/blog_post.html'
+
+    blog_post_form = BlogPostForm()
+
+    context = {
+        'form': blog_post_form,
+    }
+
+    return render(request, html_template_name, context)
+
+
+
+
+
+
+
+def publish_blog_view(request):
+
+    current_user = request.user
+
+    if current_user.is_authenticated:
+        
+        if request.method == 'POST':
+            
+            get_blog = BlogPostForm(request.POST, request.FILES)
+            
+            if get_blog.is_valid():
+                get_blog.cleaned_data.get('title')
+                get_blog.cleaned_data.get('blog_body')
+
+                saving_blog = get_blog.save(commit=False)
+                saving_blog.author = current_user
+                saving_blog.save()
+
+
+    return redirect('blog:blog_page')
+
 
 

@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
+    # plugins
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -143,7 +146,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Media files 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+CKEDITOR_UPLOAD_PATH = '/blog/'
+
 
 
 # custom authentication model
 AUTH_USER_MODEL = "accounts.UserAccount"
+
+
+
