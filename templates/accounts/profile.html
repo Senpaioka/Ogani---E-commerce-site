@@ -149,6 +149,80 @@
         <p>Manage your account settings, change your password, and update your preferences.</p>
         <a href="{% url 'account:settings_page'%}" class="btn">Go to Settings</a>
       </div>
+      <br>
+      <br>
+
+      <!-- blog history -->
+      <div id="" class="section">
+        <h2>Blog History</h2>
+        <br>
+        
+        <section class="shoping-cart spad">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <div class="shoping__cart__table">
+                          <table>
+                              <thead>
+                                  <tr>
+                                      <th class="shoping__product">Blogs</th>
+                                      <th>Edit</th>
+                                      <th>Delete</th>
+                                  </tr>
+                              </thead>
+
+                              <tbody>
+                              {% if user_blogs %}
+                                {% for blog in user_blogs %}
+                                  <tr>
+                                      <td class="shoping__cart__item">
+                                          <img src="{{ blog.blog_thumb.url }}" style="width:100px; height:80px;"  alt="">
+                                          <a href="{% url 'blog:blog_details' blog.id %}"><h5>{{ blog.title }}</h5></a>
+                                          <p>Author: {{ blog.author }} | Updated at: {{ blog.edited_at }}</p>
+                                      </td> 
+                                 
+                                      <td class="shoping__cart__total">
+                                          <a href="{% url 'blog:update_blog' blog.id %}" class="fa fa-pencil-square-o" style="background-color: green; color: white; border: none; padding: 10px 10px;"></a>
+                                      </td>
+
+                                      <td class="shoping__cart__total">
+                                          <a href="{% url 'blog:delete_blog' blog.id %}" class="fa fa-trash" style="background-color: red; color: white; border: none; padding: 10px 10px;"></a>
+                                      </td>                
+                                  </tr>
+                                    {% endfor %}
+
+                                  {% else %}
+
+                                  <tr>
+                                    <td class="shoping__cart__item">
+                                        <div class="shoping__cart__btns">
+    
+                                            
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <h3>No Blogs Found</h3>
+                                            <br>
+                                            <br>
+                                            <br>
+    
+                                        </div>
+                                    </td>
+                                </tr>
+                                  
+                                  {% endif %}
+                              </tbody>
+                              
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+  
+    </div>
+      <br>
+
     </div>
   </div>
 

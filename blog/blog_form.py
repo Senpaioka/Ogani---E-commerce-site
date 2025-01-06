@@ -21,4 +21,24 @@ class BlogPostForm(forms.ModelForm):
         self.fields['blog_body'].required = True
 
 
+
+
+
+
+
+
+
+
+class UpdateBlogForm(forms.ModelForm):
+    
+    blog_body = forms.CharField(widget=CKEditorWidget())
+
+    class Meta():
+        model = BlogModel
+        fields = ['title', 'blog_category', 'blog_img', 'blog_thumb', 'blog_body']
+        exclude = ['author']
+
+
+
+
         

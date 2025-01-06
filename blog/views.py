@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from blog.models import BlogModel, BlogCategory
 from django.core.paginator import Paginator
 from blog.blog_search import BlogSearchForm
 from django.db.models import Q
-from blog.blog_form import BlogPostForm
-
+from blog.blog_form import BlogPostForm, UpdateBlogForm
+import datetime
 # Create your views here.
 
 def blog_page(request):
@@ -189,6 +189,57 @@ def publish_blog_view(request):
 
 
     return redirect('blog:blog_page')
+
+
+
+
+
+
+def update_blog_view(request, blog_id):
+
+    html_template_name = 'blog/blog_update.html'
+
+    current_user = request.user
+
+    if current_user.is_authenticated:
+
+        instance = BlogModel.objects.get(pk=blog_id)
+
+        if request.method == 'POST':
+            update_blog = UpdateBlogForm(request.POST, request.FILES, instance=instance)
+            saving_blog = update_blog.save(commit=False)
+            saving_blog.author = current_user
+            saving_blog.edited_at = datetime.datetime.now()
+            saving_blog.save()
+
+            return redirect('blog:blog_page')
+        else:
+            update_blog = UpdateBlogForm(instance=instance)
+
+
+
+    context = {
+        'form': update_blog,
+        'blog_id_value': blog_id,
+    }
+
+    return render(request, html_template_name, context)
+
+
+
+
+
+def delete_blog_view(request, blog_id):
+
+    current_user = request.user
+
+    if current_user.is_authenticated:
+
+        get_blog = BlogModel.objects.get(pk=blog_id)
+        get_blog.delete()
+        return redirect('blog:blog_page')
+
+
 
 
 

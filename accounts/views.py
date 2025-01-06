@@ -3,7 +3,7 @@ from django.contrib import auth
 from accounts.forms import RegistrationForm, UpdateUserInfo, ChangePasswordForm, ChangePictureForm
 from accounts.models import UserAccount
 from django.contrib.auth import update_session_auth_hash
-
+from blog.models import BlogModel
 
 # Create your views here.
 
@@ -117,9 +117,12 @@ def user_profile_page(request):
     if current_user.is_authenticated:
         user_info = UserAccount.objects.get(username=current_user)
 
+        get_blogs = BlogModel.objects.filter(author=current_user).order_by('-edited_at')
+
 
     context = {
         'info': user_info,
+        'user_blogs': get_blogs,
     }
 
     return render(request, html_template_name, context)

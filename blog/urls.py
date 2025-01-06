@@ -12,4 +12,6 @@ urlpatterns = [
     path('blog_search/', views.blog_search_functionality, name='blog_search'),
     path('blog_post/', views.blog_post_page, name='blog_post'),
     path('publish_blog/', views.publish_blog_view, name='blog_publish'),
+    path('update_blog/<int:blog_id>/', views.update_blog_view, name='update_blog'),
+    path('delete_blog/<int:blog_id>/', views.delete_blog_view, name='delete_blog'),
 ]
