@@ -124,10 +124,18 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="{% url 'home:home_page' %}">Home</a></li>
-                <li><a href="{% url 'product:store_page' %}">Shop</a></li>
-                <li><a href="{% url 'blog:blog_page' %}">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li class="{% if request.path == '/' %}active{% endif %}">
+                    <a href="{% url 'home:home_page' %}">Home</a>
+                </li>
+                <li class="{% if request.path == '/product/store/' %}active{% endif %}">
+                    <a href="{% url 'product:store_page' %}">Shop</a>
+                </li>
+                <li class="{% if request.path == '/blog/' %}active{% endif %}">
+                    <a href="{% url 'blog:blog_page' %}">Blog</a>
+                </li>
+                <li class="{% if request.path == '/contact/contact_page/' %}active{% endif %}">
+                    <a href="{% url 'contact:contact_page' %}">Contact</a>
+                </li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -210,10 +218,18 @@
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="{% url 'home:home_page' %}">Home</a></li>
-                            <li><a href="{% url 'product:store_page' %}">Shop</a></li>
-                            <li><a href="{% url 'blog:blog_page' %}">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li class="{% if request.path == '/' %}active{% endif %}">
+                                <a href="{% url 'home:home_page' %}">Home</a>
+                            </li>
+                            <li class="{% if request.path == '/product/store/' %}active{% endif %}">
+                                <a href="{% url 'product:store_page' %}">Shop</a>
+                            </li>
+                            <li class="{% if request.path == '/blog/' %}active{% endif %}">
+                                <a href="{% url 'blog:blog_page' %}">Blog</a>
+                            </li>
+                            <li class="{% if request.path == '/contact/contact_page/' %}active{% endif %}">
+                                <a href="{% url 'contact:contact_page' %}">Contact</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -243,3 +259,5 @@
         </div>
     </header>
     <!-- Header Section End -->
+
+

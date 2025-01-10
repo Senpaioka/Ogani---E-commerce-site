@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
+    'contact.apps.ContactConfig',
     # plugins
     'ckeditor',
     'ckeditor_uploader',
@@ -77,6 +78,7 @@ TEMPLATES = [
                 'processors.cart_product_count.product_in_cart_count',
                 'processors.wishlist_tracker.wishlist_counter',
                 'processors.money_counter.cart_total',
+                'processors.make_newsletter_form_available.newsletter_for_all_app',
             ],
         },
     },
