@@ -147,7 +147,11 @@
                         <li>Tax <span>{{ tax }}</span><p> (10% tax)</p></li>
                         <li>Total <span>${{ final_price }}</span></li>
                     </ul>
-                    <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                    {% if all_products %}
+                    <a href="{% url 'payment:checkout' %}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                    {% else %}
+                    <a class="btn disabled primary-btn" href="#" >PROCEED TO CHECKOUT</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
