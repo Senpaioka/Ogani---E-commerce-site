@@ -60,15 +60,17 @@
                                 <div class="checkout__order__subtotal">Subtotal <span>${{ total_without_tax }}</span></div>
                                 <div class="checkout__order__total">Total <span>${{ cart_total }}</span><p>(Tax Included)</p></div>
                                 
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                                <!--<button type="submit" class="site-btn">PLACE ORDER</button> -->
+                                {{ paypal.render }}
                             </div>
                         </div>
                     </div>
             </div>
         </div>
     </section>
+
     <!-- Checkout Section End -->
-
-
+    
 
 {% endblock %}
+

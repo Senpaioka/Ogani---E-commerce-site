@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # plugins
     'ckeditor',
     'ckeditor_uploader',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,11 @@ AUTH_USER_MODEL = "accounts.UserAccount"
 
 
 
+# paypal config
+PAYPAL_TEST = True
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET')
+RECEIVER_EMAIL = config('RECEIVER_EMAIL')
+
+# blocking browser popup during payment
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'

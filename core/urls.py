@@ -28,6 +28,7 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('contact/', include('contact.urls')),
     path('payment/', include('payment.urls')),
+    path('paypal/', include("paypal.standard.ipn.urls")),
 ]
 
 
