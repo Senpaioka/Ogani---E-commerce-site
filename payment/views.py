@@ -2,6 +2,8 @@ from django.shortcuts import render, HttpResponse
 from django.urls import reverse
 from cart.models import CartProduct
 from accounts.models import UserAccount
+from payment.models import PurchaseHistory
+from product.models import Product
 import datetime
 from django.conf import settings
 import uuid
@@ -62,6 +64,17 @@ def payment_success_view(request):
     current_user = request.user
     if current_user.is_authenticated:
         get_cart_products = CartProduct.objects.filter(user=current_user)
+        
+        for item in get_cart_products:
+            get_product = Product.objects.get(product_name=item.product)
+            # creating purchase history
+            PurchaseHistory.objects.create(
+                user = current_user,
+                product = get_product,
+                is_purchased = True
+            ).save()
+
+        # deleting cart product
         get_cart_products.delete()
     context = {}
     return render(request, html_template_name, context)

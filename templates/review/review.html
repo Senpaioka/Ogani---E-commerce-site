@@ -1,0 +1,69 @@
+{% extends 'index.html' %}
+
+{% block title %} Post a Review {% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Review Product</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        
+        <div class="checkout__form">
+            <h4>Write Product Review</h4>
+            <br>
+            <form action="{% url 'review:publish_review' id %}" method='POST'>
+                {% csrf_token %}
+               
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+
+                        <div class="checkout__input">
+                            <p>Please Select Your Score:<span>*</span></p>
+                            <select name="rating" required>
+                                <option value="" disabled selected>Select your rating</option>
+                                <option value="1">1 - Poor</option>
+                                <option value="2">2 - Fair</option>
+                                <option value="3">3 - Good</option>
+                                <option value="4">4 - Very Good</option>
+                                <option value="5">5 - Excellent</option>
+                            </select>
+                        </div>
+                        
+                        <br>
+                        <br>
+                        <br>
+                        
+                        <div class="checkout__input">
+                            <p>Write Review:<span></span></p>
+                            <textarea id="text_value" name="text_value" rows="4" cols="50" value=""></textarea>
+                        </div>
+                        
+                        <br>
+                        <button type="submit" class="site-btn">Post Review</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->
+
+{% endblock %}

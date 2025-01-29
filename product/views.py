@@ -2,6 +2,8 @@ from django.shortcuts import render
 from product.models import Product, ProductCategory, ProductGallery
 from django.core.paginator import Paginator
 from cart.models import UserWishList
+from payment.models import PurchaseHistory
+from review.models import ProductReview
 # Create your views here.
 
 
@@ -57,11 +59,43 @@ def single_product_page(request, product_id):
     # returning only first 4 item for display
     related_category_product = Product.objects.filter(product_category=selected_product.product_category)[:4]
 
+
+    # check if user purchase a product or not
+
+    purchase_checker = PurchaseHistory.objects.filter(product__product_name=selected_product)
+    is_user_purchased = False
+    if purchase_checker:
+        for value in purchase_checker:
+            if value.user == current_user and value.is_purchased == True:
+                is_user_purchased = True
+            
+    # get all product specific reviews
+    get_reviews = ProductReview.objects.filter(product__pk=product_id)
+    review_count = 0
+    if get_reviews:
+        review_count = get_reviews.count()
+
+
+    # star counting functionality
+    star_total = 0
+    star_avg = 0
+    if get_reviews:
+        for user_stars in get_reviews:
+            star_total += user_stars.star 
+            star_avg = round(star_total / review_count)
+
+    
+
+
     context = {
         'product': selected_product,
         'small_image': thumb_img,
         'related_products': related_category_product,
         'check_wishlist': wishlist_or_not,
+        'purchased_user': is_user_purchased,
+        'all_review': get_reviews,
+        'review_count': review_count,
+        'avg_star': star_avg,
     }
 
     return render(request, html_file_name, context)

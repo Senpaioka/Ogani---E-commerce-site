@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'contact.apps.ContactConfig',
     'payment.apps.PaymentConfig',
+    'review.apps.ReviewConfig',
     # plugins
     'ckeditor',
     'ckeditor_uploader',
