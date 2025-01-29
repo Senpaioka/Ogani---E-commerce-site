@@ -4,6 +4,7 @@ from home.search_form import ProductSearchForm
 from django.db.models import Q
 from django.core.paginator import Paginator
 from blog.models import BlogModel
+from review.models import ProductReview
 
 # Create your views here.
 
@@ -20,8 +21,18 @@ def home_view(request):
     user_search_key = ProductSearchForm()
 
     # getting 3 blog
-
     getting_blogs = BlogModel.objects.all()[:3]
+
+    # getting latest products
+    latest_product_one = Product.objects.all().order_by('updated_at')[:3]
+    latest_product_two = Product.objects.all().order_by('updated_at')[4:7]
+
+    # getting top rated products
+    top_products = ProductReview.objects.all().order_by('star')[:3]
+
+    # getting reviewed products
+    reviewed_product = ProductReview.objects.all().order_by('created_at')[:3]
+
 
 
     context = {
@@ -29,6 +40,10 @@ def home_view(request):
         'products': all_products,
         'search_form': user_search_key,
         'blogs': getting_blogs,
+        'new_product_one': latest_product_one,
+        'new_product_two': latest_product_two,
+        'top_product': top_products,
+        'latest_reviewed': reviewed_product,
     }
 
     return render(request, html_file_name, context)
@@ -58,12 +73,16 @@ def product_search_view(request):
     else:
         get_user_keyword = ProductSearchForm()
 
-
+    # getting latest products
+    latest_product_one = Product.objects.all().order_by('updated_at')[:3]
+    latest_product_two = Product.objects.all().order_by('updated_at')[4:7]
 
     context = {
     'paged_result': search_results,
     'keyword': user_input,
     'total_result': result,
+    'new_product_one': latest_product_one,
+    'new_product_two': latest_product_two,
     }
 
     return render(request, html_template_name, context)

@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from codelib.user_session import _user_session_key
 from cart.models import CartID, CartProduct, UserWishList
 from product.models import Product
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-
+@login_required
 def main_cart_page(request):
 
     html_template_name = 'cart/cart.html'
@@ -42,7 +43,7 @@ def main_cart_page(request):
 
 
 
-
+@login_required
 def add_product_into_cart(request, product_id):
 
     current_user = request.user
@@ -102,7 +103,7 @@ def add_product_into_cart(request, product_id):
 
 
 
-
+@login_required
 def increase_product_quantity(request, product_id):
 
     current_user = request.user
@@ -127,7 +128,7 @@ def increase_product_quantity(request, product_id):
 
 
 
-
+@login_required
 def decrease_product_quantity(request, product_id):
 
     current_user = request.user
@@ -152,7 +153,7 @@ def decrease_product_quantity(request, product_id):
 
 
 
-
+@login_required
 def delete_cart_product(request, product_id):
 
     current_user = request.user
@@ -176,7 +177,7 @@ def delete_cart_product(request, product_id):
 
 
 # wishlist functionality
-
+@login_required
 def wishlist_main_page(request):
 
     html_template_name = 'cart/wishlist.html'
@@ -200,7 +201,7 @@ def wishlist_main_page(request):
 
 
 
-
+@login_required
 def wishlist_add_product(request, product_id):
 
     current_user = request.user
@@ -238,7 +239,7 @@ def wishlist_add_product(request, product_id):
 
 
 
-
+@login_required
 def remove_wishlist_product(request, product_id):
 
     current_user = request.user

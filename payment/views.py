@@ -10,11 +10,11 @@ import uuid
 # paypal
 from paypal.standard.forms import PayPalPaymentsForm
 from processors.money_counter import cart_total
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-
+@login_required
 def checkout_page(request):
 
     html_template_name = 'payment/checkout.html'

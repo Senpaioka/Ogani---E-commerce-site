@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from product.models import Product
 from review.models import ProductReview
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+
+@login_required
 def review_page_view(request, product_id):
 
     html_template_name = 'review/review.html'    
@@ -18,7 +20,7 @@ def review_page_view(request, product_id):
 
 
 
-
+@login_required
 def review_publish_view(request, product_id):
     
     get_product = get_object_or_404(Product, id=product_id)

@@ -18,12 +18,18 @@ def product_store_page(request):
     paginator = Paginator(all_products, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
+    # getting latest products
+    latest_product_one = Product.objects.all().order_by('updated_at')[:3]
+    latest_product_two = Product.objects.all().order_by('updated_at')[4:7]
     
 
     context = {
         'categories': all_categories,
         'products': all_products,
         'pages': page_obj,
+        'new_product_one': latest_product_one,
+        'new_product_two': latest_product_two,
     }
 
     return render(request, html_file_name, context)
@@ -114,10 +120,16 @@ def product_by_category_page(request, category_name):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # getting latest products
+    latest_product_one = Product.objects.all().order_by('updated_at')[:3]
+    latest_product_two = Product.objects.all().order_by('updated_at')[4:7]
+
     context = {
         'category_product': product_by_category,
         'category': selected_category,
         'pages': page_obj,
+        'new_product_one': latest_product_one,
+        'new_product_two': latest_product_two,
     }
 
     return render(request, html_file_name, context)

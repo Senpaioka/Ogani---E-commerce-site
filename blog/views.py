@@ -5,6 +5,7 @@ from blog.blog_search import BlogSearchForm
 from django.db.models import Q
 from blog.blog_form import BlogPostForm, UpdateBlogForm
 import datetime
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def blog_page(request):
@@ -150,7 +151,7 @@ def blog_search_functionality(request):
 
 
 
-
+@login_required
 def blog_post_page(request):
 
     html_template_name = 'blog/blog_post.html'
@@ -168,7 +169,7 @@ def blog_post_page(request):
 
 
 
-
+@login_required
 def publish_blog_view(request):
 
     current_user = request.user
@@ -194,7 +195,7 @@ def publish_blog_view(request):
 
 
 
-
+@login_required
 def update_blog_view(request, blog_id):
 
     html_template_name = 'blog/blog_update.html'
@@ -228,7 +229,7 @@ def update_blog_view(request, blog_id):
 
 
 
-
+@login_required
 def delete_blog_view(request, blog_id):
 
     current_user = request.user

@@ -4,7 +4,7 @@ from accounts.forms import RegistrationForm, UpdateUserInfo, ChangePasswordForm,
 from accounts.models import UserAccount
 from django.contrib.auth import update_session_auth_hash
 from blog.models import BlogModel
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def registration_page(request):
@@ -107,7 +107,7 @@ def logout_view(request):
 
 
 
-
+@login_required
 def user_profile_page(request):
 
     html_template_name = 'accounts/profile.html'
