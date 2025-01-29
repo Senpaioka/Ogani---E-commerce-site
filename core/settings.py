@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*'],
-ALLOWED_HOSTS = [os.environ.get('ogani-e-commerce-site.onrender.com', 'localhost'), '127.0.0.1']
+ALLOWED_HOSTS = [os.environ.get('https://ogani-e-commerce-site.onrender.com', 'localhost'), '127.0.0.1']
 
 # Application definition
 
