@@ -22,10 +22,6 @@ def contact_page_view(request):
 
 
 
-
-
-
-
 def contact_message_save(request):
 
     current_user = request.user
