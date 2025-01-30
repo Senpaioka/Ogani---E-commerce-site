@@ -41,4 +41,18 @@ class BlogModel(models.Model):
         return self.title
     
 
+
+class BlogCommentModel(models.Model):
+
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    blog = models.ForeignKey(BlogModel, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+    
+
     

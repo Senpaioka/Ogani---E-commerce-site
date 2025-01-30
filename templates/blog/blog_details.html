@@ -110,6 +110,59 @@
     </section>
     <!-- Blog Details Section End -->
 
+
+    <section class="blog-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-5 order-md-1 order-2"></div>
+                <!-- comment input -->
+                <div class="col-lg-8 col-md-7 order-md-1 order-1">
+                    <div class="blog__details__text">
+                        <form action="{% url 'blog:add_comment' blog_id %}" method='POST'>
+                        {% csrf_token %}
+                            <div class="checkout__input">
+                                <h3>Comment:</h3>
+                                <input type="text" placeholder='Leave a comment', name='comment' required>
+                            </div>
+                            {% if user.is_authenticated %}
+                            <button type="submit" class="site-btn">Comment</button>
+                            {% else %}
+                            <button type="submit" class="site-btn" disabled>Login</button>
+                            {%endif%}
+                        </form>
+                    </div>
+                    <!-- showing comment -->
+                     <br>
+                     <br>
+                     <br>
+                    {% if comments %}
+                    <div class="blog__details__content">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="blog__details__widget">
+                                    {% for comment in comments %}
+                                    <div class="blog__details__author__pic">
+                                        <img src="{{ comment.user.profile_picture.url }}" alt="">
+                                    </div>
+                                    <div class="blog__details__author__text">
+                                        <h6>{{ comment.user.username }}</h6>
+                                        <span>{{ comment.created_at }}</span>
+                                        <br>
+                                        <br>
+                                        <p>{{ comment.comment }}</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                        <p>No comment found.</p>
+                    {% endif %}
+                </div>
+            </div>
+    </section>
+
     <!-- Related Blog Section Begin -->
     <section class="related-blog spad">
         <div class="container">

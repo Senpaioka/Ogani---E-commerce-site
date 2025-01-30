@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from blog.models import BlogModel, BlogCategory
+from blog.models import BlogModel, BlogCategory, BlogCommentModel
 from django.core.paginator import Paginator
 from blog.blog_search import BlogSearchForm
 from django.db.models import Q
 from blog.blog_form import BlogPostForm, UpdateBlogForm
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.utils.html import escape
+from django.http import HttpResponseRedirect, HttpResponse
 # Create your views here.
 
 def blog_page(request):
@@ -66,12 +68,17 @@ def blog_details_page(request, blog_id):
     # latest blogs
     latest_blogs = BlogModel.objects.all().order_by('-created_at')[:3]
 
+    # getting all blog comments
+    get_comment = BlogCommentModel.objects.filter(blog__pk=blog_id)
+
     context = {
         'blog': get_blog,
         'read_more': recommended_blogs,
         'categories': category_list,
         'form': blog_search_field,
         'recent_blogs': latest_blogs,
+        'blog_id': blog_id,
+        'comments': get_comment,
     }
 
     return render(request, html_template_name, context)
@@ -97,12 +104,16 @@ def category_blog_page(request, category_id):
     # form functionality
     blog_search_field = BlogSearchForm()
 
+    # latest blogs
+    latest_blogs = BlogModel.objects.all().order_by('-created_at')[:3]
+
 
 
     context = {
         'pages': page_obj,
         'categories': category_list,
         'form': blog_search_field,
+        'recent_blogs': latest_blogs,
     }
 
     return render(request, html_template_name, context)
@@ -243,4 +254,24 @@ def delete_blog_view(request, blog_id):
 
 
 
+@login_required
+def comment_adding_view(request, blog_id):
 
+    get_blog = BlogModel.objects.get(pk=blog_id)
+    current_user = request.user
+
+    if current_user.is_authenticated:
+        if request.method == 'POST':
+            get_comment = request.POST.get('comment', ' ').strip()
+            get_comment = escape(get_comment)
+        
+            if len(get_comment) > 250: 
+                return HttpResponse("Comment is too long!", status=400)
+            
+            BlogCommentModel.objects.create(
+                user = current_user,
+                blog = get_blog,
+                comment = get_comment,
+            ).save()
+        
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
