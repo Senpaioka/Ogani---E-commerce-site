@@ -66,7 +66,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
-# TEMPLATES_DIR = 'templates'
 
 TEMPLATES = [
     {

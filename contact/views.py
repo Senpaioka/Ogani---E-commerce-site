@@ -7,7 +7,7 @@ from contact.contact_form import ContactForm, NewsLetterForm
 
 def contact_page_view(request):
 
-    html_template_name = 'contact\index.html'
+    html_template_name = 'contact/contact.html'
 
     contact_info = ContactInfoModel.objects.all()[0]
 
