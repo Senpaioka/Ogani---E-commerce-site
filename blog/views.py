@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from blog.models import BlogModel, BlogCategory, BlogCommentModel
+from blog.models import BlogModel, BlogCategory, BlogCommentModel, BlogCommentTracker
 from django.core.paginator import Paginator
 from blog.blog_search import BlogSearchForm
 from django.db.models import Q
@@ -14,8 +14,12 @@ def blog_page(request):
 
     html_template_name = 'blog/blog.html'
 
-    all_blogs = BlogModel.objects.all().order_by('-created_at')
+    # showing blogs
+    blogs_with_comments = BlogCommentTracker.objects.all()
 
+    # paginator
+    all_blogs = BlogModel.objects.all().order_by('-created_at')
+    
     paginator = Paginator(all_blogs, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -29,13 +33,13 @@ def blog_page(request):
     latest_blogs = BlogModel.objects.all().order_by('-created_at')[:3]
 
 
-
     context = {
-        'blogs': all_blogs,
+        
         'pages': page_obj,
         'categories': category_list,
         'form': blog_search_field,
         'recent_blogs': latest_blogs,
+        'commented_blogs': blogs_with_comments, 
     }
 
     return render(request, html_template_name, context)
@@ -268,10 +272,39 @@ def comment_adding_view(request, blog_id):
             if len(get_comment) > 250: 
                 return HttpResponse("Comment is too long!", status=400)
             
-            BlogCommentModel.objects.create(
+
+            # getting target blog
+
+            comment_obj = BlogCommentModel.objects.filter(blog__pk=blog_id)
+
+            if comment_obj.exists():
+                # increase existing comment
+                get_previous_comment_count = BlogCommentTracker.objects.get(blog__pk=blog_id)
+    
+                BlogCommentModel.objects.create(
                 user = current_user,
                 blog = get_blog,
                 comment = get_comment,
-            ).save()
+                ).save()
+                
+                get_previous_comment_count.comment_count += 1
+                get_previous_comment_count.save()
+
+            
+            else:
+                # newly creating comment
+                BlogCommentModel.objects.create(
+                user = current_user,
+                blog = get_blog,
+                comment = get_comment,
+                ).save()
+
+                BlogCommentTracker.objects.create(
+                    blog = get_blog,
+                    comment_count = 1,
+                )
+
+            # tracking comments and count
+            
         
     return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))

@@ -55,4 +55,10 @@ class BlogCommentModel(models.Model):
 
     
 
-    
+class BlogCommentTracker(models.Model):
+
+    blog = models.ForeignKey(BlogModel, on_delete=models.CASCADE)
+    comment_count = models.IntegerField()
+
+    def __str__(self):
+        return self.blog.title

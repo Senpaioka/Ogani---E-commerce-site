@@ -62,7 +62,17 @@
                             <div class="blog__item__text">
                                 <ul>
                                     <li><i class="fa fa-calendar-o"></i> {{ blog.edited_at | date:'d M y'}} </li>
-                                    <li><i class="fa fa-comment-o"></i> 5</li>
+                                    {% if commented_blogs %}
+                                        {% for data in commented_blogs %}
+                                            {% if data.blog.id == blog.id %}       
+                                            <li><i class="fa fa-comment-o"></i> {{ data.comment_count}}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                            <li><i class="fa fa-comment-o"></i> 0</li>
+                                    {% endif %}
+                                    
+                                    
                                 </ul>
                                 <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
                                 <p>{{ blog.blog_body | truncatechars:100 | striptags }}</p>
