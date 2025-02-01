@@ -3,7 +3,7 @@ from product.models import Product, ProductCategory
 from home.search_form import ProductSearchForm
 from django.db.models import Q
 from django.core.paginator import Paginator
-from blog.models import BlogModel
+from blog.models import BlogModel, BlogCommentTracker
 from review.models import ProductReview
 
 # Create your views here.
@@ -21,7 +21,8 @@ def home_view(request):
     user_search_key = ProductSearchForm()
 
     # getting 3 blog
-    getting_blogs = BlogModel.objects.all()[:3]
+    getting_blogs = BlogModel.objects.all().order_by('-created_at')[:3]
+    blogs_with_comments = BlogCommentTracker.objects.all()[:3]
 
     # getting latest products
     latest_product_one = Product.objects.all().order_by('updated_at')[:3]
@@ -44,6 +45,7 @@ def home_view(request):
         'new_product_two': latest_product_two,
         'top_product': top_products,
         'latest_reviewed': reviewed_product,
+        'commented_blogs': blogs_with_comments, 
     }
 
     return render(request, html_file_name, context)
