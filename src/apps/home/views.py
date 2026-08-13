@@ -14,25 +14,25 @@ def home_view(request):
 
     # returning all category queryset
     all_categories = ProductCategory.objects.all()
-    # returning all product queryset
-    all_products = Product.objects.all()
+    # returning all product queryset with category joined to prevent N+1 queries
+    all_products = Product.objects.select_related('product_category').all()
 
     # enabling search field
     user_search_key = ProductSearchForm()
 
-    # getting 3 blog
-    getting_blogs = BlogModel.objects.all().order_by('-created_at')[:3]
-    blogs_with_comments = BlogCommentTracker.objects.all()[:3]
+    # getting 3 blog with author and category joined
+    getting_blogs = BlogModel.objects.select_related('author', 'blog_category').order_by('-created_at')[:3]
+    blogs_with_comments = BlogCommentTracker.objects.select_related('blog', 'blog__author', 'blog__blog_category').all()[:3]
 
     # getting latest products
-    latest_product_one = Product.objects.all().order_by('updated_at')[:3]
-    latest_product_two = Product.objects.all().order_by('updated_at')[4:7]
+    latest_product_one = Product.objects.select_related('product_category').order_by('-updated_at')[:3]
+    latest_product_two = Product.objects.select_related('product_category').order_by('-updated_at')[3:6]
 
-    # getting top rated products
-    top_products = ProductReview.objects.all().order_by('star')[:3]
+    # getting top rated products with joined relations
+    top_products = ProductReview.objects.select_related('product', 'product__product_category', 'user').order_by('-star')[:3]
 
     # getting reviewed products
-    reviewed_product = ProductReview.objects.all().order_by('created_at')[:3]
+    reviewed_product = ProductReview.objects.select_related('product', 'product__product_category', 'user').order_by('-created_at')[:3]
 
 
 
@@ -57,27 +57,24 @@ def product_search_view(request):
 
     html_template_name = 'home/search.html'
 
-    # getting user's search words
-
     get_user_keyword = ProductSearchForm(request.GET or None)
-    result = []
+    result = Product.objects.none()
+    user_input = ''
+    search_results = None
 
     if get_user_keyword.is_valid():
         user_input = get_user_keyword.cleaned_data.get('search_key')
-        result = Product.objects.filter(
+        result = Product.objects.select_related('product_category').filter(
             Q(product_name__icontains=user_input) | Q(product_info__icontains=user_input) | Q(product_description__icontains=user_input)
         )
 
         paginator = Paginator(result, 6) 
         page_number = request.GET.get('page')
         search_results = paginator.get_page(page_number)
-    
-    else:
-        get_user_keyword = ProductSearchForm()
 
     # getting latest products
-    latest_product_one = Product.objects.all().order_by('updated_at')[:3]
-    latest_product_two = Product.objects.all().order_by('updated_at')[4:7]
+    latest_product_one = Product.objects.select_related('product_category').order_by('-updated_at')[:3]
+    latest_product_two = Product.objects.select_related('product_category').order_by('-updated_at')[3:6]
 
     context = {
     'paged_result': search_results,

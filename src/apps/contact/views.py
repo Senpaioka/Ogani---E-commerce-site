@@ -9,7 +9,7 @@ def contact_page_view(request):
 
     html_template_name = 'contact/contact.html'
 
-    contact_info = ContactInfoModel.objects.all()[0]
+    contact_info = ContactInfoModel.objects.first()
 
     contact_form = ContactForm()
 

@@ -37,7 +37,7 @@ def review_publish_view(request, product_id):
                 product = get_product,
                 star = rating_value,
                 review = review_value,
-            ).save()
+            )
 
     return redirect('home:home_page')
 
