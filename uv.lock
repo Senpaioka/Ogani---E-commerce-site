@@ -217,6 +217,34 @@ wheels = [
 ]
 
 [[package]]
+name = "django-stubs"
+version = "6.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "django-stubs-ext" },
+    { name = "types-pyyaml" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/65/34/e9f03764b32f56c02168814385ddc6d0e49a7b3e4381e8e3f6f5f34f39ff/django_stubs-6.1.0.tar.gz", hash = "sha256:b6aecc5c738a103135f76ba160a6f75e3b27dcf0200c64d7226018cdbc2340dd", size = 293018, upload-time = "2026-08-12T10:55:28.817Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a8/cf/064d7c48642309f3397b17ff14f3159c5225eb9321185a10039c0e846848/django_stubs-6.1.0-py3-none-any.whl", hash = "sha256:63b23ccca2616d464ed7e37d1ce44960315cb3cecab75b23c928467ef125e560", size = 557040, upload-time = "2026-08-12T10:55:26.959Z" },
+]
+
+[[package]]
+name = "django-stubs-ext"
+version = "6.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e6/40/75dd6650c5fc345b9edaebe42085811096e31a502fdbe17a52ffb9640d03/django_stubs_ext-6.1.0.tar.gz", hash = "sha256:d5635a481f5bdf2e04d533a8b602d3b9a28f073deffc85b83048dd20032e4d20", size = 6848, upload-time = "2026-08-12T10:54:44.47Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ed/41/10b8d576651af4f1dc6bdfb0d8a203e8b3a55d60ae36ba305d0edcdb594f/django_stubs_ext-6.1.0-py3-none-any.whl", hash = "sha256:57273506823274700a707c8f404dfb52a12c4554daf1468dfb2bff857bb22074", size = 10404, upload-time = "2026-08-12T10:54:42.979Z" },
+]
+
+[[package]]
 name = "gunicorn"
 version = "23.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -446,6 +474,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "django-stubs" },
     { name = "mypy" },
     { name = "ruff" },
 ]
@@ -486,6 +515,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "django-stubs", specifier = ">=6.1.0" },
     { name = "mypy", specifier = ">=2.3.0" },
     { name = "ruff", specifier = ">=0.16.2" },
 ]
@@ -663,6 +693,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/57/61/5bc3aff85dc5bf98291b37cf469dab74b3d0aef2dd88eade9070a200af05/sqlparse-0.5.2.tar.gz", hash = "sha256:9e37b35e16d1cc652a2545f0997c1deb23ea28fa1f3eefe609eee3063c3b105f", size = 84951, upload-time = "2024-11-14T10:06:31.941Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7a/13/5f6654c9d915077fae255686ca6fa42095b62b7337e3e1aa9e82caa6f43a/sqlparse-0.5.2-py3-none-any.whl", hash = "sha256:e99bc85c78160918c3e1d9230834ab8d80fc06c59d03f8db2618f65f65dda55e", size = 44407, upload-time = "2024-11-14T10:06:25.268Z" },
+]
+
+[[package]]
+name = "types-pyyaml"
+version = "6.0.12.20260724"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/3f/6f/a28f44bcd56bebed42b028a2894c79853e2f5e6b5279e633cb3f287a05e7/types_pyyaml-6.0.12.20260724.tar.gz", hash = "sha256:3c1ce1bb73cd5ec02e90390c2b1f00e810d241d8825fd73ff359696839271b6b", size = 17893, upload-time = "2026-07-24T04:58:43.453Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8b/42/0337fefc615e20ee55d1c8f71b774a9b2b734a04669139c20753b27a2a3a/types_pyyaml-6.0.12.20260724-py3-none-any.whl", hash = "sha256:d57db930a4b2efbc57cf430ec8882765d246929432fa253092f383902329a453", size = 20312, upload-time = "2026-07-24T04:58:42.486Z" },
 ]
 
 [[package]]
