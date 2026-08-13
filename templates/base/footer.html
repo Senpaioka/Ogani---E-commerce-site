@@ -1,86 +1,338 @@
-   {% load static %}
-   
-   <!-- Footer Section Begin -->
-    <footer class="footer spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="footer__about">
-                        <div class="footer__about__logo">
-                            <a href="{% url 'home:home_page' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+{% load static %}
+
+<!-- Custom Scoped Styles for Modern Footer -->
+<style>
+    .footer {
+        background: #141c12;
+        color: #a8b8a5;
+        padding-top: 70px;
+        padding-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+        border-top: 4px solid var(--ogani-primary, #7fad39);
+    }
+
+    .footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(127, 173, 57, 0.4), transparent);
+    }
+
+    .footer__about__logo {
+        margin-bottom: 20px;
+    }
+
+    .footer__about__logo img {
+        max-height: 48px;
+        filter: brightness(0) invert(1);
+    }
+
+    .footer__about p {
+        font-size: 14.5px;
+        line-height: 1.7;
+        color: #d2ded0 !important;
+        margin-bottom: 22px;
+    }
+
+    .footer__contact__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer__contact__list li {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        margin-bottom: 14px !important;
+        font-size: 15px !important;
+        color: #ffffff !important;
+    }
+
+    .footer__contact__list li span {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        font-size: 15px !important;
+    }
+
+    .footer__contact__icon {
+        width: 34px !important;
+        height: 34px !important;
+        border-radius: 50% !important;
+        background: rgba(127, 173, 57, 0.25) !important;
+        color: #7fad39 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 15px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .footer__widget h6 {
+        color: #ffffff !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        margin-bottom: 24px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .footer__widget h6::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 35px;
+        height: 3px;
+        background: #7fad39;
+        border-radius: 2px;
+    }
+
+    .footer__widget ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer__widget ul li {
+        margin-bottom: 10px;
+    }
+
+    .footer__widget ul li a {
+        color: #c5d4c2 !important;
+        font-size: 14.5px !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+
+    .footer__widget ul li a:hover {
+        color: #7fad39 !important;
+        transform: translateX(4px) !important;
+    }
+
+    .footer__newsletter__form {
+        position: relative;
+        margin-top: 15px;
+        margin-bottom: 24px;
+    }
+
+    .footer__newsletter__form input,
+    .footer__newsletter__form input[type="email"],
+    .footer__newsletter__form input[type="text"] {
+        width: 100% !important;
+        height: 50px !important;
+        background: #ffffff !important;
+        border: 2px solid rgba(127, 173, 57, 0.4) !important;
+        border-radius: 50px !important;
+        padding: 0 140px 0 22px !important;
+        font-size: 15px !important;
+        color: #1c1c1c !important;
+        font-weight: 600 !important;
+        outline: none !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .footer__newsletter__form input::placeholder {
+        color: #666666 !important;
+        opacity: 1 !important;
+        font-weight: 400 !important;
+    }
+
+    .footer__newsletter__form input:focus {
+        border-color: #7fad39 !important;
+        box-shadow: 0 0 15px rgba(127, 173, 57, 0.3) !important;
+        background: #ffffff !important;
+        color: #1c1c1c !important;
+    }
+
+    .footer__newsletter__form button {
+        position: absolute !important;
+        right: 4px !important;
+        top: 4px !important;
+        height: 42px !important;
+        border-radius: 50px !important;
+        padding: 0 25px !important;
+        background: linear-gradient(135deg, #7fad39 0%, #52801e 100%) !important;
+        border: none !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        font-size: 13px !important;
+        letter-spacing: 1px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .footer__newsletter__form button:hover {
+        opacity: 0.95 !important;
+        box-shadow: 0 4px 15px rgba(127, 173, 57, 0.4) !important;
+    }
+
+    .footer__social__icons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .footer__social__icons a {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        color: #d1dcd0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer__social__icons a:hover {
+        background: #7fad39;
+        color: #fff;
+        transform: translateY(-4px);
+        box-shadow: 0 6px 18px rgba(127, 173, 57, 0.35);
+    }
+
+    .footer__bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        margin-top: 50px;
+        padding-top: 25px;
+    }
+
+    .footer__copyright__text p {
+        color: #7d907a;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .footer__copyright__text a {
+        color: #7fad39;
+        font-weight: 600;
+    }
+
+    .footer__payment__img img {
+        max-height: 26px;
+    }
+</style>
+
+<!-- Footer Section Begin -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <!-- Col 1: About & Contact -->
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <div class="footer__about">
+                    <div class="footer__about__logo">
+                        <a href="{% url 'home:home_page' %}">
+                            <img src="{% static 'img/logo.png' %}" alt="Ogani Logo">
+                        </a>
+                    </div>
+                    <p>Your trusted source for 100% organic, farm-fresh produce delivered fast directly to your home.</p>
+                    <ul class="footer__contact__list">
+                        <li>
+                            <div class="footer__contact__icon"><i class="fa fa-map-marker"></i></div>
+                            <span>60-49 Road 11378, New York</span>
+                        </li>
+                        <li>
+                            <div class="footer__contact__icon"><i class="fa fa-phone"></i></div>
+                            <span>+65 11.188.888</span>
+                        </li>
+                        <li>
+                            <div class="footer__contact__icon"><i class="fa fa-envelope"></i></div>
+                            <span>hello@ogani.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Col 2: Useful Links -->
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <div class="footer__widget">
+                    <h6>Quick Navigation</h6>
+                    <div class="row">
+                        <div class="col-6">
+                            <ul>
+                                <li><a href="{% url 'home:home_page' %}"><i class="fa fa-angle-right"></i> Home</a></li>
+                                <li><a href="{% url 'product:store_page' %}"><i class="fa fa-angle-right"></i> Shop Store</a></li>
+                                <li><a href="{% url 'blog:blog_page' %}"><i class="fa fa-angle-right"></i> Fresh Blog</a></li>
+                                <li><a href="{% url 'contact:contact_page' %}"><i class="fa fa-angle-right"></i> Contact Us</a></li>
+                            </ul>
                         </div>
-                        <ul>
-                            <li>Address: 60-49 Road 11378 New York</li>
-                            <li>Phone: +65 11.188.888</li>
-                            <li>Email: hello@colorlib.com</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
-                    <div class="footer__widget">
-                        <h6>Useful Links</h6>
-                        <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">About Our Shop</a></li>
-                            <li><a href="#">Secure Shopping</a></li>
-                            <li><a href="#">Delivery infomation</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Our Sitemap</a></li>
-                        </ul>
-                        <ul>
-                            <li><a href="#">Who We Are</a></li>
-                            <li><a href="#">Our Services</a></li>
-                            <li><a href="#">Projects</a></li>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">Innovation</a></li>
-                            <li><a href="#">Testimonials</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-12">
-                    <div class="footer__widget">
-                        <h6>Join Our Newsletter Now</h6>
-                        <p>Get E-mail updates about our latest shop and special offers.</p>
-                        <form action="{% url 'contact:newsletter_subscribe' %}" method='POST'>
-                            {% csrf_token %}
-                            {{ newsletter_form.email }}
-                            <button type="submit" class="site-btn">Subscribe</button>
-                        </form>
-                        <div class="footer__widget__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        <div class="col-6">
+                            <ul>
+                                <li><a href="#"><i class="fa fa-angle-right"></i> About Us</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i> Privacy Policy</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i> Secure Shopping</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right"></i> Terms & Support</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="footer__copyright">
-                        <div class="footer__copyright__text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
-                        <div class="footer__copyright__payment"><img src="{% static 'img/payment-item.png' %}" alt=""></div>
+
+            <!-- Col 3: Newsletter & Socials -->
+            <div class="col-lg-4 col-md-12">
+                <div class="footer__widget">
+                    <h6>Join Our Newsletter</h6>
+                    <p style="color: #92a48f; font-size: 14px;">Subscribe to get updates on seasonal harvests, discount coupons, and daily offers.</p>
+                    <form action="{% url 'contact:newsletter_subscribe' %}" method="POST" class="footer__newsletter__form">
+                        {% csrf_token %}
+                        {{ newsletter_form.email }}
+                        <button type="submit">SUBSCRIBE</button>
+                    </form>
+                    <div class="mt-4">
+                        <span style="color: #ffffff; font-size: 14px; font-weight: 600; display: block; margin-bottom: 12px;">Follow Us:</span>
+                        <div class="footer__social__icons">
+                            <a href="#" title="Facebook"><i class="fa fa-facebook"></i></a>
+                            <a href="#" title="Instagram"><i class="fa fa-instagram"></i></a>
+                            <a href="#" title="Twitter"><i class="fa fa-twitter"></i></a>
+                            <a href="#" title="Pinterest"><i class="fa fa-pinterest"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </footer>
-    <!-- Footer Section End -->
 
-    <!-- Js Plugins -->
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
-    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
-    <script src="{% static 'js/jquery.slicknav.js' %}"></script>
-    <script src="{% static 'js/mixitup.min.js' %}"></script>
-    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    <!-- ckeditor -->
-    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+        <!-- Bottom Copyright Row -->
+        <div class="footer__bottom">
+            <div class="row align-items-center">
+                <div class="col-lg-7 col-md-6 mb-3 mb-md-0">
+                    <div class="footer__copyright__text">
+                        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> Ogani Market. All rights reserved. Built for 100% organic living.</p>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6 text-md-right">
+                    <div class="footer__payment__img">
+                        <img src="{% static 'img/payment-item.png' %}" alt="Payment Gateways">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer Section End -->
+
+<!-- Js Plugins -->
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/jquery.slicknav.js' %}"></script>
+<script src="{% static 'js/mixitup.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<!-- ckeditor -->
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 
 </body>
 

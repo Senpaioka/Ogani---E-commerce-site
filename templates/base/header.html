@@ -30,39 +30,53 @@
 <style>
     /* Container for dropdown */
     .dropdown {
-      position: relative; /* Required for positioning the dropdown */
-      display: inline-block; /* Keeps the <a> inline */
+        position: relative;
+        /* Required for positioning the dropdown */
+        display: inline-block;
+        /* Keeps the <a> inline */
     }
 
     /* Dropdown content (hidden by default) */
     .dropdown-content {
-      display: none; /* Hidden initially */
-      position: absolute; /* Positioned relative to the dropdown */
-      background-color: #f9f9f9; /* Background for the dropdown */
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow */
-      padding: 10px;
-      z-index: 1; /* Ensure it appears on top */
-      min-width: 160px; /* Width of the dropdown */
+        display: none;
+        /* Hidden initially */
+        position: absolute;
+        /* Positioned relative to the dropdown */
+        background-color: #f9f9f9;
+        /* Background for the dropdown */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        /* Add shadow */
+        padding: 10px;
+        z-index: 1;
+        /* Ensure it appears on top */
+        min-width: 160px;
+        /* Width of the dropdown */
     }
 
     /* Show dropdown on hover */
     .dropdown:hover .dropdown-content {
-      display: block; /* Show the dropdown */
+        display: block;
+        /* Show the dropdown */
     }
 
     /* Style for individual dropdown links */
     .dropdown-content a {
-      color: black; /* Text color */
-      text-decoration: none; /* Remove underline */
-      display: block; /* Block level for easy clicking */
-      padding: 8px 12px; /* Add padding */
+        color: black;
+        /* Text color */
+        text-decoration: none;
+        /* Remove underline */
+        display: block;
+        /* Block level for easy clicking */
+        padding: 8px 12px;
+        /* Add padding */
     }
 
     /* Hover effect for dropdown links */
     .dropdown-content a:hover {
-      background-color: #f1f1f1; /* Slightly darker background */
+        background-color: #f1f1f1;
+        /* Slightly darker background */
     }
-  </style>
+</style>
 
 <body>
     <!-- Page Preloder -->
@@ -79,8 +93,8 @@
         <div class="humberger__menu__cart">
             <ul>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'cart:wishlist_page' %}"><i class="fa fa-heart"></i> <span>{{ count_wishlist }}</span></a></li>
-                <li><a href="{% url 'cart:cart_page' %}"><i class="fa fa-shopping-bag"></i> <span>{{ counter }}</span></a></li>
+                <li><a href="{% url 'cart:wishlist_page' %}"><i class="fa fa-heart"></i> <span>{{ count_wishlist|default:"0" }}</span></a></li>
+                <li><a href="{% url 'cart:cart_page' %}"><i class="fa fa-shopping-bag"></i> <span>{{ counter|default:"0" }}</span></a></li>
                 {% else %}
                 <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
                 <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
@@ -104,19 +118,19 @@
             </div>
             <div class="header__top__right__auth">
                 {% if user.is_authenticated %}
-    
+
                 <div class="dropdown">
                     <!-- Trigger link -->
                     <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
-                
+
                     <!-- Dropdown content -->
                     <div class="dropdown-content">
-                      <a href="{% url 'account:profile_page' %}">Profile</a>
-                      <a href="{% url 'account:settings_page' %}">Settings</a>
-                      <a href="{% url 'blog:blog_post' %}">Blog Posting</a>
+                        <a href="{% url 'account:profile_page' %}">Profile</a>
+                        <a href="{% url 'account:settings_page' %}">Settings</a>
+                        <a href="{% url 'blog:blog_post' %}">Blog Posting</a>
                     </div>
                 </div>
-                
+
                 {% else %}
                 <a href="{% url 'account:login_page' %}"><i class="fa fa-user"></i> Login</a>
                 {% endif %}
@@ -147,7 +161,7 @@
         </div>
         <div class="humberger__menu__contact">
             <ul>
-                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+                <li><i class="fa fa-envelope"></i> hello@ogani.com</li>
                 <li>Free Shipping for all Order of $99</li>
             </ul>
         </div>
@@ -162,7 +176,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
-                                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+                                <li><i class="fa fa-envelope"></i> hello@ogani.com</li>
                                 <li>Free Shipping for all Order of $99</li>
                             </ul>
                         </div>
@@ -186,18 +200,18 @@
                             </div>
                             <div class="header__top__right__auth">
                                 {% if user.is_authenticated %}
-                               
-                                    <div class="dropdown">
-                                        <!-- Trigger link -->
-                                        <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
-                                    
-                                        <!-- Dropdown content -->
-                                        <div class="dropdown-content">
-                                          <a href="{% url 'account:profile_page' %}">Profile</a>
-                                          <a href="{% url 'account:settings_page' %}">Settings</a>
-                                          <a href="{% url 'blog:blog_post' %}">Blog Posting</a>
-                                        </div>
+
+                                <div class="dropdown">
+                                    <!-- Trigger link -->
+                                    <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
+
+                                    <!-- Dropdown content -->
+                                    <div class="dropdown-content">
+                                        <a href="{% url 'account:profile_page' %}">Profile</a>
+                                        <a href="{% url 'account:settings_page' %}">Settings</a>
+                                        <a href="{% url 'blog:blog_post' %}">Blog Posting</a>
                                     </div>
+                                </div>
 
                                 {% else %}
                                 <a href="{% url 'account:login_page' %}"><i class="fa fa-user"></i> Login</a>
@@ -237,13 +251,13 @@
                     <div class="header__cart">
                         <ul>
                             {% if user.is_authenticated %}
-                            <li><a href="{% url 'cart:wishlist_page' %}"><i class="fa fa-heart"></i> <span>{{ count_wishlist }}</span></a></li>
-                            <li><a href="{% url 'cart:cart_page' %}"><i class="fa fa-shopping-bag"></i> <span>{{ counter }}</span></a></li>
+                            <li><a href="{% url 'cart:wishlist_page' %}"><i class="fa fa-heart"></i> <span>{{ count_wishlist|default:"0" }}</span></a></li>
+                            <li><a href="{% url 'cart:cart_page' %}"><i class="fa fa-shopping-bag"></i> <span>{{ counter|default:"0" }}</span></a></li>
                             {% else %}
                             <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
                             <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
                             {% endif %}
-                            
+
                         </ul>
                         {% if user.is_authenticated %}
                         <div class="header__cart__price">item: <span>${{ cart_total }}</span></div>
@@ -259,5 +273,3 @@
         </div>
     </header>
     <!-- Header Section End -->
-
-

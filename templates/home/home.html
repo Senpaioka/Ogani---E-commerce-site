@@ -1,11 +1,688 @@
 {% extends 'index.html' %}
 
-{% block title %} Home {% endblock %}
+{% block title %} Home - Ogani Fresh & Organic Market {% endblock %}
 
 {% load static %}
 
 {% block content %}
 
+<!-- Custom Scoped Styles for Modern Homepage Enhancements -->
+<style>
+    :root {
+        --ogani-primary: #7fad39;
+        --ogani-primary-dark: #648f28;
+        --ogani-dark: #1c1c1c;
+        --ogani-light-bg: #f8faf6;
+        --ogani-gradient: linear-gradient(135deg, #7fad39 0%, #52801e 100%);
+        --ogani-hero-gradient: linear-gradient(135deg, rgba(127, 173, 57, 0.08) 0%, rgba(248, 250, 246, 0.8) 100%);
+        --card-radius: 16px;
+        --soft-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        --hover-shadow: 0 20px 40px rgba(127, 173, 57, 0.15);
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Hero Section Enhancements */
+    .hero {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .hero__categories {
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        box-shadow: var(--soft-shadow);
+        border: 1px solid rgba(127, 173, 57, 0.15);
+        background: #fff;
+    }
+
+    .hero__categories__all {
+        background: var(--ogani-gradient) !important;
+        padding: 16px 24px;
+        border-radius: var(--card-radius) var(--card-radius) 0 0;
+    }
+
+    .hero__categories ul {
+        padding: 10px 0;
+    }
+
+    .hero__categories ul li a {
+        padding: 12px 24px;
+        transition: var(--transition);
+        font-weight: 500;
+        color: #444;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .hero__categories ul li a:hover {
+        background-color: rgba(127, 173, 57, 0.08);
+        color: var(--ogani-primary);
+        padding-left: 30px;
+    }
+
+    .hero__search {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .hero__search__form {
+        float: none !important;
+        flex: 1;
+        height: 50px !important;
+        border-radius: 50px !important;
+        overflow: hidden !important;
+        border: 2px solid rgba(127, 173, 57, 0.3) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+        transition: var(--transition);
+        background: #fff;
+    }
+
+    .hero__search__form:focus-within {
+        border-color: var(--ogani-primary) !important;
+        box-shadow: 0 6px 22px rgba(127, 173, 57, 0.2) !important;
+    }
+
+    .hero__search__form form {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+    }
+
+    .hero__search__form form .hero__search__categories {
+        width: auto !important;
+        float: none !important;
+        padding: 0 20px 0 24px !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        color: #1c1c1c !important;
+        border-right: 1px solid #e2e6dc !important;
+        white-space: nowrap !important;
+        position: relative !important;
+        background: #fbfdf9 !important;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .hero__search__form form .hero__search__categories span {
+        position: static !important;
+        right: auto !important;
+        top: auto !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        color: #1c1c1c !important;
+        display: inline-block !important;
+        line-height: 1 !important;
+    }
+
+    .hero__search__form form .hero__search__categories i,
+    .hero__search__form form .hero__search__categories .arrow_carrot-down {
+        position: static !important;
+        right: auto !important;
+        top: auto !important;
+        font-size: 13px !important;
+        color: #555 !important;
+        display: inline-block !important;
+        line-height: 1 !important;
+    }
+
+    @media (max-width: 767.98px) {
+        .hero__search__form form .hero__search__categories {
+            display: none !important;
+        }
+    }
+
+    .hero__search__form form .hero__search__categories::after {
+        display: none !important;
+    }
+
+    .hero__search__form form input {
+        flex: 1 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        padding: 0 20px !important;
+        font-size: 15px !important;
+        color: #333 !important;
+        outline: none !important;
+        background: transparent !important;
+    }
+
+    .hero__search__form form button.site-btn {
+        position: relative !important;
+        right: auto !important;
+        top: auto !important;
+        height: 100% !important;
+        border-radius: 0 50px 50px 0 !important;
+        padding: 0 35px !important;
+        font-weight: 800 !important;
+        font-size: 14px !important;
+        letter-spacing: 1px !important;
+        background: var(--ogani-gradient) !important;
+        border: none !important;
+        color: #fff !important;
+        cursor: pointer !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: var(--transition) !important;
+    }
+
+    .hero__search__form button.site-btn:hover {
+        opacity: 0.95;
+    }
+
+    .hero__search__phone {
+        float: none !important;
+        display: flex !important;
+        align-items: center !important;
+        background: #fff !important;
+        padding: 6px 20px 6px 8px !important;
+        border-radius: 50px !important;
+        box-shadow: var(--soft-shadow) !important;
+        border: 1px solid #eaeef2 !important;
+        white-space: nowrap !important;
+        flex-shrink: 0;
+    }
+
+    .hero__search__phone__icon {
+        float: none !important;
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        border-radius: 50% !important;
+        background: rgba(127, 173, 57, 0.12) !important;
+        color: var(--ogani-primary) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 18px !important;
+        line-height: 1 !important;
+        margin-right: 14px !important;
+    }
+
+    .hero__search__phone__text {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+
+    .hero__search__phone__text h5 {
+        font-size: 16px !important;
+        font-weight: 800 !important;
+        color: #1c1c1c !important;
+        margin: 0 0 2px 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    .hero__search__phone__text span {
+        font-size: 12px !important;
+        color: #6f6f6f !important;
+        margin: 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    .hero__item {
+        border-radius: 24px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .hero__item::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.4) 60%, rgba(255,255,255,0) 100%);
+        pointer-events: none;
+    }
+
+    .hero__text {
+        position: relative;
+        z-index: 2;
+        padding-left: 20px;
+    }
+
+    .hero__text span {
+        background: rgba(127, 173, 57, 0.15);
+        color: var(--ogani-primary-dark);
+        padding: 6px 16px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 2px;
+        display: inline-block;
+        margin-bottom: 12px;
+    }
+
+    .hero__text h2 {
+        font-weight: 800;
+        color: #252525;
+        line-height: 1.25;
+    }
+
+    .primary-btn {
+        background: var(--ogani-gradient) !important;
+        border-radius: 50px !important;
+        padding: 14px 36px !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px;
+        box-shadow: 0 8px 20px rgba(127, 173, 57, 0.35);
+        transition: var(--transition) !important;
+        border: none !important;
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(127, 173, 57, 0.45);
+    }
+
+    /* Trust Features Bar */
+    .trust-features {
+        margin-top: 30px;
+        margin-bottom: 40px;
+    }
+
+    .feature-card {
+        background: #fff;
+        padding: 24px 20px;
+        border-radius: var(--card-radius);
+        box-shadow: var(--soft-shadow);
+        border: 1px solid #f2f5ed;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: var(--transition);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--hover-shadow);
+        border-color: rgba(127, 173, 57, 0.3);
+    }
+
+    .feature-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: rgba(127, 173, 57, 0.12);
+        color: var(--ogani-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .feature-text h6 {
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: #252525;
+    }
+
+    .feature-text p {
+        margin: 0;
+        font-size: 13px;
+        color: #6f6f6f;
+    }
+
+    /* Category Cards */
+    .categories__item {
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        box-shadow: var(--soft-shadow);
+        transition: var(--transition);
+        position: relative;
+        height: 270px;
+    }
+
+    .categories__item:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--hover-shadow);
+    }
+
+    .categories__item h5 {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+        margin: 0;
+    }
+
+    .categories__item h5 a {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(8px);
+        color: #252525 !important;
+        border-radius: 12px;
+        padding: 12px 20px !important;
+        font-weight: 700;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        transition: var(--transition);
+        display: block;
+        text-align: center;
+    }
+
+    .categories__item:hover h5 a {
+        background: var(--ogani-gradient) !important;
+        color: #fff !important;
+    }
+
+    /* Section Title Polish */
+    .section-title h2 {
+        font-weight: 800;
+        position: relative;
+        display: inline-block;
+    }
+
+    .section-title h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70px;
+        height: 4px;
+        background: var(--ogani-gradient);
+        border-radius: 4px;
+    }
+
+    /* Filter Controls Pill Redesign */
+    .featured__controls ul {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 40px;
+    }
+
+    .featured__controls ul li {
+        margin: 0 !important;
+        padding: 10px 24px !important;
+        border-radius: 30px !important;
+        background: #f5f7f2;
+        color: #555;
+        font-weight: 600;
+        transition: var(--transition);
+        cursor: pointer;
+    }
+
+    .featured__controls ul li.active,
+    .featured__controls ul li:hover {
+        background: var(--ogani-gradient) !important;
+        color: #fff !important;
+        box-shadow: 0 6px 18px rgba(127, 173, 57, 0.3);
+    }
+
+    .featured__controls ul li::after {
+        display: none !important;
+    }
+
+    /* Product Card Redesign */
+    .featured__item {
+        background: #fff;
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        box-shadow: var(--soft-shadow);
+        border: 1px solid #f0f4ea;
+        transition: var(--transition);
+        margin-bottom: 30px;
+    }
+
+    .featured__item:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--hover-shadow);
+        border-color: rgba(127, 173, 57, 0.3);
+    }
+
+    .featured__item__pic {
+        border-radius: var(--card-radius) var(--card-radius) 0 0;
+        position: relative;
+        height: 240px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .featured__item__pic__hover {
+        bottom: -50px;
+        transition: var(--transition);
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .featured__item:hover .featured__item__pic__hover {
+        bottom: 20px;
+    }
+
+    .featured__item__pic__hover li {
+        list-style: none !important;
+        display: inline-block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .featured__item__pic__hover li a {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        background: #ffffff !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        line-height: 1 !important;
+        border: 1px solid #eef2e6 !important;
+        transition: var(--transition) !important;
+        text-decoration: none !important;
+    }
+
+    .featured__item__pic__hover li a i {
+        position: static !important;
+        font-size: 16px !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        color: #1c1c1c !important;
+        transition: var(--transition) !important;
+    }
+
+    .featured__item__pic__hover li a:hover {
+        background: var(--ogani-primary) !important;
+        border-color: var(--ogani-primary) !important;
+        transform: scale(1.12) !important;
+    }
+
+    .featured__item__pic__hover li a:hover i {
+        color: #ffffff !important;
+        transform: rotate(360deg);
+    }
+
+    .featured__item__text {
+        padding: 20px 15px;
+        text-align: center;
+    }
+
+    .featured__item__text h6 a {
+        font-weight: 700;
+        color: #252525;
+        transition: var(--transition);
+        font-size: 16px;
+    }
+
+    .featured__item__text h6 a:hover {
+        color: var(--ogani-primary);
+    }
+
+    .featured__item__text h5 {
+        color: var(--ogani-primary-dark);
+        font-weight: 800;
+        margin-top: 8px;
+        font-size: 20px;
+    }
+
+    /* Banners Section */
+    .banner__pic {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--soft-shadow);
+        transition: var(--transition);
+    }
+
+    .banner__pic:hover {
+        transform: scale(1.02);
+        box-shadow: var(--hover-shadow);
+    }
+
+    .banner__pic img {
+        width: 100%;
+        border-radius: 20px;
+    }
+
+    /* Mini Product Lists (Latest / Top Rated / Reviewed) */
+    .latest-product__text {
+        background: #fff;
+        padding: 24px 20px;
+        border-radius: var(--card-radius);
+        box-shadow: var(--soft-shadow);
+        border: 1px solid #f2f5ed;
+    }
+
+    .latest-product__text h4 {
+        font-weight: 700;
+        font-size: 20px;
+        color: #252525;
+        margin-bottom: 25px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .latest-product__text h4::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: var(--ogani-primary);
+        border-radius: 3px;
+    }
+
+    .latest-product__item {
+        border-radius: 12px;
+        padding: 10px;
+        transition: var(--transition);
+        display: flex !important;
+        align-items: center;
+    }
+
+    .latest-product__item:hover {
+        background: rgba(127, 173, 57, 0.06);
+        transform: translateX(5px);
+    }
+
+    .latest-product__item__pic {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .latest-product__item__pic img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .latest-product__item__text h6 {
+        font-weight: 700;
+        color: #252525;
+    }
+
+    .latest-product__item__text span {
+        color: var(--ogani-primary-dark);
+        font-weight: 800;
+        font-size: 16px;
+    }
+
+    /* Blog Section */
+    .blog__item {
+        background: #fff;
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        box-shadow: var(--soft-shadow);
+        border: 1px solid #f0f4ea;
+        transition: var(--transition);
+        margin-bottom: 30px;
+    }
+
+    .blog__item:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--hover-shadow);
+        border-color: rgba(127, 173, 57, 0.3);
+    }
+
+    .blog__item__pic {
+        border-radius: var(--card-radius) var(--card-radius) 0 0;
+        overflow: hidden;
+        height: 220px;
+    }
+
+    .blog__item__pic img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+
+    .blog__item:hover .blog__item__pic img {
+        transform: scale(1.08);
+    }
+
+    .blog__item__text {
+        padding: 24px 20px;
+    }
+
+    .blog__item__text ul li {
+        color: #888;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .blog__item__text h5 a {
+        font-weight: 700;
+        color: #252525;
+        transition: var(--transition);
+        line-height: 1.4;
+    }
+
+    .blog__item__text h5 a:hover {
+        color: var(--ogani-primary);
+    }
+
+    .blog__item__text p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-top: 10px;
+    }
+</style>
 
     <!-- Hero Section Begin -->
     <section class="hero">
@@ -15,33 +692,32 @@
                     <div class="hero__categories">
                         <div class="hero__categories__all">
                             <i class="fa fa-bars"></i>
-                            <span>All departments</span>
+                            <span>All Departments</span>
                         </div>
                         <ul>
-
                             {% for category in categories %}
-                                <li><a href="{% url 'product:category_page' category.product_category %}">{{ category.product_category | capfirst }}</a></li>
+                                <li>
+                                    <a href="{% url 'product:category_page' category.product_category %}">
+                                        <span>{{ category.product_category | capfirst }}</span>
+                                        <i class="fa fa-angle-right" style="opacity: 0.5;"></i>
+                                    </a>
+                                </li>
                             {% endfor %}
-
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-9">
                     <div class="hero__search">
                         <div class="hero__search__form">
-        
-                            <!-- if method is 'GET' request, using {% csrf_token %} is not necessary-->
+                            <!-- search form -->
                             <form action="{% url 'home:search_product' %}" method="GET">
-                                <div class="hero__search__categories">
-                                    All Categories
-                                    <span class="arrow_carrot-down"></span>
+                                <div class="hero__search__categories d-none d-md-flex">
+                                    <span>All Categories</span>
+                                    <i class="fa fa-angle-down" style="font-size: 13px; color: #666;"></i>
                                 </div>
-
                                 {{ search_form.search_key }}
-
                                 <button type="submit" class="site-btn">SEARCH</button>
                             </form>
-
                         </div>
                         <div class="hero__search__phone">
                             <div class="hero__search__phone__icon">
@@ -49,20 +725,69 @@
                             </div>
                             <div class="hero__search__phone__text">
                                 <h5>+65 11.188.888</h5>
-                                <span>support 24/7 time</span>
+                                <span>Support 24/7 Time</span>
                             </div>
                         </div>
                     </div>
                     <div class="hero__item set-bg" data-setbg="{% static 'img/hero/banner.jpg' %}">
                         <div class="hero__text">
-                            <span>FRUIT FRESH</span>
-                            <h2>Vegetable <br />100% Organic</h2>
-                            <p>Free Pickup and Delivery Available</p>
+                            <span>100% ORGANIC & FRESH</span>
+                            <h2>Fresh Vegetables <br />& Everyday Essentials</h2>
+                            <p>Free Pickup and Rapid Home Delivery Available</p>
                             <a href="{% url 'product:store_page' %}" class="primary-btn">SHOP NOW</a>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Trust Features Bar -->
+            <div class="row trust-features">
+                <div class="col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa fa-truck"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h6>Free Shipping</h6>
+                            <p>For all orders over $99</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa fa-leaf"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h6>100% Organic</h6>
+                            <p>Farm fresh produce</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa fa-shield"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h6>100% Secure Payment</h6>
+                            <p>Protected transactions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 mb-3 mb-lg-0">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa fa-headphones"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h6>24/7 Support</h6>
+                            <p>Dedicated customer care</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
     <!-- Hero Section End -->
@@ -71,18 +796,21 @@
     <section class="categories">
         <div class="container">
             <div class="row">
+                <div class="col-lg-12 mb-4">
+                    <div class="section-title text-center">
+                        <h2>Top Categories</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="categories__slider owl-carousel">
-
                     {% for category in categories %}
-
                     <div class="col-lg-3">
                         <div class="categories__item set-bg" data-setbg="{{ category.category_image.url }}">
-                            <h5><a href="{% url 'product:category_page' category.product_category %}">{{ category.product_category }}</a></h5>
+                            <h5><a href="{% url 'product:category_page' category.product_category %}">{{ category.product_category | capfirst }}</a></h5>
                         </div>
                     </div>
-
                     {% endfor %}
-                    
                 </div>
             </div>
         </div>
@@ -94,33 +822,28 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="section-title">
-                        <h2>Featured Product</h2>
+                    <div class="section-title text-center">
+                        <h2>Featured Products</h2>
                     </div>
-                    <div class="featured__controls">
+                    <div class="featured__controls mt-4">
                         <ul>
-                            <li class="active" data-filter="*">All</li>
-
+                            <li class="active" data-filter="*">All Products</li>
                             {% for category in categories %}
-                                <li data-filter=".{{category.product_category}}">{{ category.product_category }}</li>
+                                <li data-filter=".{{category.product_category}}">{{ category.product_category | capfirst }}</li>
                             {% endfor %}
-
                         </ul>
                     </div>
                 </div>
             </div>
             
-            
-            <div class="row featured__filter">
-
+            <div class="row featured__filter mt-2">
                 {% for product in products %}
-
                 <div class="col-lg-3 col-md-4 col-sm-6 mix {{ product.product_category }}">
                     <div class="featured__item">
                         <div class="featured__item__pic set-bg" data-setbg="{{ product.product_image.url }}">
                             <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="{% url 'product:single_product' product.id %}"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="#" title="Add to Wishlist"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="{% url 'product:single_product' product.id %}" title="View Details / Add to Cart"><i class="fa fa-shopping-cart"></i></a></li>
                             </ul>
                         </div>
                         <div class="featured__item__text">
@@ -129,25 +852,24 @@
                         </div>
                     </div>
                 </div>
-
                 {% endfor %}
-                
+            </div>
         </div>
     </section>
     <!-- Featured Section End -->
 
     <!-- Banner Begin -->
-    <div class="banner">
+    <div class="banner mb-5">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-6 mb-3 mb-md-0">
                     <div class="banner__pic">
-                        <img src="{% static 'img/banner/banner-1.jpg' %}" alt="">
+                        <img src="{% static 'img/banner/banner-1.jpg' %}" alt="Promotional Banner 1">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="banner__pic">
-                        <img src="{% static 'img/banner/banner-2.jpg' %}" alt="">
+                        <img src="{% static 'img/banner/banner-2.jpg' %}" alt="Promotional Banner 2">
                     </div>
                 </div>
             </div>
@@ -159,19 +881,18 @@
     <section class="latest-product spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                     <div class="latest-product__text">
                         <h4>Latest Products</h4>
                         <div class="latest-product__slider owl-carousel">
-
                             <div class="latest-prdouct__slider__item">    
                                 {% for item in new_product_one %}
                                 <a href="{% url 'product:single_product' item.id %}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="{{ item.product_image.url }}" alt="">
+                                        <img src="{{ item.product_image.url }}" alt="{{ item.product_name }}">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>{{ item.product_name }}</h6>
+                                        <h6>{{ item.product_name | capfirst }}</h6>
                                         <span>${{ item.product_price }}</span>
                                     </div>
                                 </a>
@@ -182,56 +903,55 @@
                                 {% for item in new_product_two %}
                                 <a href="{% url 'product:single_product' item.id %}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="{{ item.product_image.url }}" alt="">
+                                        <img src="{{ item.product_image.url }}" alt="{{ item.product_name }}">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>{{ item.product_name }}</h6>
+                                        <h6>{{ item.product_name | capfirst }}</h6>
                                         <span>${{ item.product_price }}</span>
                                     </div>
                                 </a>
                                 {% endfor %}
                             </div>
-                            
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
+
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                     <div class="latest-product__text">
                         <h4>Top Rated Products</h4>
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
-                                
                                {% for item in top_product %}
                                <a href="{% url 'product:single_product' item.product.id %}" class="latest-product__item">
-                                <div class="latest-product__item__pic">
-                                    <img src="{{ item.product.product_image.url }}" alt="">
-                                </div>
-                                <div class="latest-product__item__text">
-                                    <h6>{{ item.product.product_name }}</h6>
-                                    <span>${{ item.product.product_price }}</span>
-                                </div>
-                            </a>
+                                    <div class="latest-product__item__pic">
+                                        <img src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}">
+                                    </div>
+                                    <div class="latest-product__item__text">
+                                        <h6>{{ item.product.product_name | capfirst }}</h6>
+                                        <span>${{ item.product.product_price }}</span>
+                                    </div>
+                                </a>
                                 {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6">
                     <div class="latest-product__text">
                         <h4>Review Products</h4>
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
-                                
                                 {% for item in latest_reviewed %}
                                 <a href="{% url 'product:single_product' item.product.id %}" class="latest-product__item">
-                                 <div class="latest-product__item__pic">
-                                     <img src="{{ item.product.product_image.url }}" alt="">
-                                 </div>
-                                 <div class="latest-product__item__text">
-                                     <h6>{{ item.product.product_name }}</h6>
-                                     <span>${{ item.product.product_price }}</span>
-                                 </div>
-                             </a>
+                                     <div class="latest-product__item__pic">
+                                         <img src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}">
+                                     </div>
+                                     <div class="latest-product__item__text">
+                                         <h6>{{ item.product.product_name | capfirst }}</h6>
+                                         <span>${{ item.product.product_price }}</span>
+                                     </div>
+                                 </a>
                                  {% endfor %}
                              </div>
                         </div>
@@ -247,35 +967,31 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="section-title from-blog__title">
+                    <div class="section-title text-center from-blog__title mb-5">
                         <h2>From The Blog</h2>
                     </div>
                 </div>
             </div>
             <div class="row">
-            {% for blog in blogs%}
+            {% for blog in blogs %}
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="blog__item">
                         <div class="blog__item__pic">
-                            <img src="{{ blog.blog_thumb.url }}" alt="">
+                            <img src="{{ blog.blog_thumb.url }}" alt="{{ blog.title }}">
                         </div>
                         <div class="blog__item__text">
-                            <ul>
-                                <li><i class="fa fa-calendar-o"></i> {{ blog.edited_at | date:'d M y'}} </li>
+                            <ul class="d-flex gap-3 mb-2">
+                                <li class="mr-3"><i class="fa fa-calendar-o text-success mr-1"></i> {{ blog.edited_at | date:'d M Y'}}</li>
                                 {% if commented_blogs %}
                                     {% for data in commented_blogs %}
                                         {% if data.blog.id == blog.id %}       
-                                        <li><i class="fa fa-comment-o"></i> {{ data.comment_count}}</li>
+                                        <li><i class="fa fa-comment-o text-success mr-1"></i> {{ data.comment_count }}</li>
                                         {% endif %}
                                     {% endfor %}
                                 {% else %}
-                                        <li><i class="fa fa-comment-o"></i> 0</li>
+                                        <li><i class="fa fa-comment-o text-success mr-1"></i> 0</li>
                                 {% endif %}
                             </ul>
-                            {% comment %} <ul>
-                                <li><i class="fa fa-calendar-o"></i> {{ blog.created_at | date:"M d, Y"}}</li>
-                                <li><i class="fa fa-comment-o"></i> 5</li>
-                            </ul> {% endcomment %}
                             <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
                             <p>{{ blog.blog_body | truncatechars:100 | striptags }}</p>
                         </div>
@@ -287,5 +1003,4 @@
     </section>
     <!-- Blog Section End -->
 
-
-    {% endblock %}
+{% endblock %}
