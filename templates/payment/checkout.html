@@ -60,8 +60,17 @@
                                 <div class="checkout__order__subtotal">Subtotal <span>${{ total_without_tax }}</span></div>
                                 <div class="checkout__order__total">Total <span>${{ cart_total }}</span><p>(Tax Included)</p></div>
                                 
-                                <!--<button type="submit" class="site-btn">PLACE ORDER</button> -->
-                                {{ paypal.render }}
+                                {% if error %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                                {% endif %}
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="site-btn btn-block" style="background-color: #0070ba; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 4px;">
+                                        PAY WITH PAYPAL
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

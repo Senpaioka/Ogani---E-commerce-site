@@ -116,9 +116,10 @@ AUTH_USER_MODEL = 'accounts.UserAccount'
 # CKEditor config
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
-# PayPal settings
-PAYPAL_RECEIVER_EMAIL = config('PAYPAL_RECEIVER_EMAIL', default='sb-8h2b436384594@business.example.com')
-PAYPAL_TEST = config('PAYPAL_TEST', cast=bool, default=True)
+# PayPal REST API settings
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID', default='')
+PAYPAL_CLIENT_SECRET = config('PAYPAL_CLIENT_SECRET', default='')
+PAYPAL_MODE = config('PAYPAL_MODE', default='sandbox')
 
 # Email settings
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')

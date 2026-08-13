@@ -1,3 +1,7 @@
+super_user: senpaioka
+email: senpaioka@mail.com
+password: 1234
+
 username: admin
 email: admin@mail.com
 password: 1234
