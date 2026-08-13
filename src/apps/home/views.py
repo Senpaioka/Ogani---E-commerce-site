@@ -63,25 +63,25 @@ def product_search_view(request):
     search_results = None
 
     if get_user_keyword.is_valid():
-        user_input = get_user_keyword.cleaned_data.get('search_key')
+        user_input = get_user_keyword.cleaned_data.get('search_key') or ''
         result = Product.objects.select_related('product_category').filter(
             Q(product_name__icontains=user_input) | Q(product_info__icontains=user_input) | Q(product_description__icontains=user_input)
-        )
+        ).order_by('-id')
 
-        paginator = Paginator(result, 6) 
-        page_number = request.GET.get('page')
-        search_results = paginator.get_page(page_number)
+    paginator = Paginator(result, 6)
+    page_number = request.GET.get('page')
+    search_results = paginator.get_page(page_number)
 
     # getting latest products
     latest_product_one = Product.objects.select_related('product_category').order_by('-updated_at')[:3]
     latest_product_two = Product.objects.select_related('product_category').order_by('-updated_at')[3:6]
 
     context = {
-    'paged_result': search_results,
-    'keyword': user_input,
-    'total_result': result,
-    'new_product_one': latest_product_one,
-    'new_product_two': latest_product_two,
+        'paged_result': search_results,
+        'keyword': user_input,
+        'total_result': result,
+        'new_product_one': latest_product_one,
+        'new_product_two': latest_product_two,
     }
 
-    return render(request, html_template_name, context)
+    return render(request, html_template_name, context)
