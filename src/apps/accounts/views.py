@@ -62,6 +62,11 @@ def registration_page(request):
 
 def login_page(request):
     html_template_name = 'accounts/login.html'
+    error_message = None
+    next_url = request.POST.get('next') or request.GET.get('next', '')
+
+    if request.user.is_authenticated:
+        return redirect('home:home_page')
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -69,11 +74,22 @@ def login_page(request):
 
         user = auth.authenticate(request, username=username, password=password)
         
-        if user:
-            auth.login(request, user)
-            return redirect('home:home_page')
+        if user is not None:
+            if user.is_active:
+                auth.login(request, user)
+                if next_url:
+                    return redirect(next_url)
+                return redirect('home:home_page')
+            else:
+                error_message = 'Account is disabled.'
+        else:
+            error_message = 'Invalid username or password.'
 
-    return render(request, html_template_name)
+    context = {
+        'error_message': error_message,
+        'next': next_url,
+    }
+    return render(request, html_template_name, context)
 
 
 def logout_view(request):
@@ -131,19 +147,17 @@ def user_settings_page(request):
 @login_required
 def change_password_page(request):
     html_template_name = 'accounts/change_password.html'
-    instance = request.user
 
     if request.method == 'POST':
-        form = ChangePasswordForm(request.POST, instance=instance)
+        form = ChangePasswordForm(request.POST, user=request.user)
         if form.is_valid():
-            update_form = form.save(commit=False)
-            update_form.set_password(form.cleaned_data["confirm_password"])
-            update_form.save()
+            new_password = form.cleaned_data['password']
+            request.user.set_password(new_password)
+            request.user.save()
             update_session_auth_hash(request, request.user)
-            auth.logout(request)
-            return redirect('account:login_page')
+            return redirect('account:profile_page')
     else:
-        form = ChangePasswordForm(instance=instance)
+        form = ChangePasswordForm(user=request.user)
 
     context = {
         'form': form,

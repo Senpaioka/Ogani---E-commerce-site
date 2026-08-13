@@ -29,20 +29,30 @@
             <form action="{% url 'account:registration_page' %}" method='POST'>
                 {% csrf_token %}
                
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            <p class="m-0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
 
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="checkout__input">
-                                    <p>Fist Name<span>*</span></p>
+                                    <p>First Name<span>*</span></p>
                                     {{ form.first_name }}
+                                    {% if form.first_name.errors %}<div class="text-danger"><small>{{ form.first_name.errors.0 }}</small></div>{% endif %}
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Last Name<span>*</span></p>
                                     {{ form.last_name }}
+                                    {% if form.last_name.errors %}<div class="text-danger"><small>{{ form.last_name.errors.0 }}</small></div>{% endif %}
                                 </div>
                             </div>
                         </div>
@@ -50,6 +60,7 @@
                         <div class="checkout__input">
                             <p>Username<span>*</span></p>
                             {{ form.username }}
+                            {% if form.username.errors %}<div class="text-danger"><small>{{ form.username.errors.0 }}</small></div>{% endif %}
                         </div>
 
                         <div class="row">
@@ -57,12 +68,14 @@
                                 <div class="checkout__input">
                                     <p>Email<span>*</span></p>
                                     {{ form.email }}
+                                    {% if form.email.errors %}<div class="text-danger"><small>{{ form.email.errors.0 }}</small></div>{% endif %}
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Phone<span>*</span></p>
                                     {{ form.phone }}
+                                    {% if form.phone.errors %}<div class="text-danger"><small>{{ form.phone.errors.0 }}</small></div>{% endif %}
                                 </div>
                             </div>     
                         </div>
@@ -70,6 +83,7 @@
                         <div class="checkout__input">
                             <p>Address<span>*</span></p>
                             {{ form.address }}
+                            {% if form.address.errors %}<div class="text-danger"><small>{{ form.address.errors.0 }}</small></div>{% endif %}
                         </div>
 
                        
@@ -78,12 +92,14 @@
                                 <div class="checkout__input">
                                     <p>City<span>*</span></p>
                                     {{ form.city }}
+                                    {% if form.city.errors %}<div class="text-danger"><small>{{ form.city.errors.0 }}</small></div>{% endif %}
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Country<span>*</span></p>
                                     {{ form.country }}
+                                    {% if form.country.errors %}<div class="text-danger"><small>{{ form.country.errors.0 }}</small></div>{% endif %}
                                 </div>
                             </div>     
                         </div>
@@ -91,6 +107,7 @@
                         <div class="checkout__input">
                             <p>Birth Date</p>
                             {{ form.birth_date }}
+                            {% if form.birth_date.errors %}<div class="text-danger"><small>{{ form.birth_date.errors.0 }}</small></div>{% endif %}
                         </div>
 
 
@@ -99,12 +116,20 @@
                                 <div class="checkout__input">
                                     <p>Password<span>*</span></p>
                                     {{ form.password }}
+                                    {% if form.password.errors %}
+                                        <div class="text-danger">
+                                            {% for err in form.password.errors %}
+                                                <small class="d-block">{{ err }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Confirm Password<span>*</span></p>
                                     {{ form.confirm_password }}
+                                    {% if form.confirm_password.errors %}<div class="text-danger"><small>{{ form.confirm_password.errors.0 }}</small></div>{% endif %}
                                 </div>
                             </div>     
                         </div>

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from typing import ClassVar
 
 # Create your models here.
@@ -28,8 +28,6 @@ class UserAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
-
-     
      
     def create_superuser(self, first_name, last_name, username, email, city, country, password):
         
@@ -44,19 +42,15 @@ class UserAccountManager(BaseUserManager):
         )
 
         user.is_admin = True
+        user.is_superuser = True
         user.is_active = True
         user.is_staff = True
 
         user.save(using=self._db)
         return user
 
-         
 
-
-
-
-
-class UserAccount(AbstractBaseUser):
+class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     profile_picture = models.ImageField(upload_to='profile/img', null=True, blank=True)
     first_name = models.CharField(max_length=20)
@@ -70,14 +64,12 @@ class UserAccount(AbstractBaseUser):
     
     birth_date = models.DateField(null=True, blank=True)
     date_joined     = models.DateTimeField(auto_now_add=True)
-    last_login      = models.DateTimeField(auto_now_add=True)
+    last_login      = models.DateTimeField(blank=True, null=True)
     
     is_admin        = models.BooleanField(default=False)
     is_staff        = models.BooleanField(default=False)
-    is_active        = models.BooleanField(default=False)
+    is_active       = models.BooleanField(default=False)
 
-
-    
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'city', 'country']
 
@@ -89,8 +81,3 @@ class UserAccount(AbstractBaseUser):
     def __str__(self):
         return self.username
 
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
-
-    def has_module_perms(self, add_label):
-        return True
