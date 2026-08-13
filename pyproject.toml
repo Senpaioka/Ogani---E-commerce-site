@@ -1,0 +1,36 @@
+[project]
+name = "ogani-e-commerce-site"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "apimatic-core==0.2.18",
+    "apimatic-core-interfaces==0.1.6",
+    "apimatic-requests-client-adapter==0.1.7",
+    "asgiref==3.12.1",
+    "cachecontrol==0.12.14",
+    "certifi==2024.12.14",
+    "charset-normalizer==3.4.1",
+    "django==6.1",
+    "django-ckeditor==6.7.2",
+    "django-js-asset==3.0.1",
+    "django-paypal==2.1",
+    "gunicorn==23.0.0",
+    "idna==3.10",
+    "jsonpickle==3.3.0",
+    "jsonpointer==2.4",
+    "msgpack==1.1.0",
+    "packaging==24.2",
+    "paypal-server-sdk==0.6.1",
+    "pillow==11.0.0",
+    "psycopg2-binary==2.9.10",
+    "python-dateutil==2.9.0.post0",
+    "python-decouple==3.8",
+    "pytz==2024.2",
+    "requests==2.32.3",
+    "setuptools==75.8.0",
+    "six==1.17.0",
+    "sqlparse==0.5.2",
+    "tzdata==2024.2",
+    "urllib3==2.3.0",
+    "whitenoise==6.8.2",
+]
