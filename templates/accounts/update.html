@@ -1,10 +1,202 @@
 {% extends 'index.html' %}
 
-{% block title %} Update Info {% endblock %}
+{% block title %} Update Personal Details | Ogani {% endblock %}
 
 {% load static %}
 
 {% block content %}
+
+<!-- Custom Styling for Redesigned Auth Pages -->
+<style>
+    .auth-section {
+        background-color: #f8fafc;
+        padding: 50px 0 80px 0;
+    }
+    
+    .auth-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+        border: 1px solid #eef2f6;
+        overflow: hidden;
+        margin: 0 auto;
+        max-width: 900px;
+    }
+
+    .auth-card-header {
+        background: linear-gradient(135deg, #7fad39 0%, #6b9830 100%);
+        padding: 35px 40px;
+        color: #ffffff;
+        position: relative;
+    }
+
+    .auth-card-header h3 {
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 26px;
+    }
+
+    .auth-card-header p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .auth-features-badges {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .auth-badge {
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(5px);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .auth-card-body {
+        padding: 40px;
+    }
+
+    .auth-form-group {
+        margin-bottom: 22px;
+    }
+
+    .auth-form-group label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .auth-form-group label span {
+        color: #e11d48;
+    }
+
+    .auth-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .auth-input-wrapper .input-icon {
+        position: absolute;
+        left: 15px;
+        color: #94a3b8;
+        font-size: 15px;
+        pointer-events: none;
+        transition: color 0.2s ease;
+        z-index: 2;
+    }
+
+    .auth-input-wrapper input,
+    .auth-input-wrapper select,
+    .auth-input-wrapper textarea {
+        width: 100%;
+        height: 48px;
+        padding: 10px 16px 10px 42px;
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #1e293b;
+        transition: all 0.25s ease;
+        outline: none;
+    }
+
+    .auth-input-wrapper input:focus,
+    .auth-input-wrapper select:focus,
+    .auth-input-wrapper textarea:focus {
+        background: #ffffff;
+        border-color: #7fad39;
+        box-shadow: 0 0 0 4px rgba(127, 173, 57, 0.15);
+    }
+
+    .auth-input-wrapper input:focus + .input-icon,
+    .auth-input-wrapper:focus-within .input-icon {
+        color: #7fad39;
+    }
+
+    .auth-error-msg {
+        color: #e11d48;
+        font-size: 12px;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .auth-btn-submit {
+        background: #7fad39;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        padding: 14px 30px;
+        border-radius: 8px;
+        border: none;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(127, 173, 57, 0.3);
+    }
+
+    .auth-btn-submit:hover {
+        background: #6b9830;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(127, 173, 57, 0.4);
+    }
+
+    .auth-btn-submit:active {
+        transform: translateY(0);
+    }
+
+    .auth-footer-prompt {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #e2e8f0;
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    .auth-footer-prompt a {
+        color: #7fad39;
+        font-weight: 700;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .auth-footer-prompt a:hover {
+        color: #6b9830;
+        text-decoration: underline;
+    }
+
+    .auth-alert-danger {
+        background-color: #fff1f2;
+        border-left: 4px solid #e11d48;
+        color: #9f1239;
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+</style>
 
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
@@ -12,7 +204,11 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="breadcrumb__text">
-                    <h2>Update Information</h2>
+                    <h2>Update Profile Details</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home:home_page' %}">Home</a>
+                        <span>Edit Info</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -20,91 +216,171 @@
 </section>
 <!-- Breadcrumb Section End -->
 
-<!-- Checkout Section Begin -->
-<section class="checkout spad">
+<!-- Update Form Section Begin -->
+<section class="auth-section">
     <div class="container">
-        
-        <div class="checkout__form">
-            <h4>Personal Information</h4>
-            <form action="{% url 'account:update_page' %}" method='POST'>
-                {% csrf_token %}
-               
-                <div class="row">
-                    <div class="col-lg-8 col-md-6">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <h3>Update Personal Information</h3>
+                <p>Keep your account details up to date for seamless order delivery and communication.</p>
+                <div class="auth-features-badges">
+                    <span class="auth-badge"><i class="fa fa-user"></i> Personal Account</span>
+                    <span class="auth-badge"><i class="fa fa-map-marker"></i> Delivery Address</span>
+                </div>
+            </div>
 
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Fist Name<span>*</span></p>
+            <div class="auth-card-body">
+                {% if form.non_field_errors %}
+                    <div class="auth-alert-danger">
+                        {% for error in form.non_field_errors %}
+                            <p class="m-0"><i class="fa fa-exclamation-circle"></i> {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <form action="{% url 'account:update_page' %}" method="POST">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <!-- First Name -->
+                        <div class="col-md-6">
+                            <div class="auth-form-group">
+                                <label for="{{ form.first_name.id_for_label }}">First Name <span>*</span></label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fa fa-user input-icon"></i>
                                     {{ form.first_name }}
                                 </div>
+                                {% if form.first_name.errors %}
+                                    <div class="auth-error-msg"><i class="fa fa-info-circle"></i> {{ form.first_name.errors.0 }}</div>
+                                {% endif %}
                             </div>
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Last Name<span>*</span></p>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="col-md-6">
+                            <div class="auth-form-group">
+                                <label for="{{ form.last_name.id_for_label }}">Last Name <span>*</span></label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fa fa-user input-icon"></i>
                                     {{ form.last_name }}
                                 </div>
+                                {% if form.last_name.errors %}
+                                    <div class="auth-error-msg"><i class="fa fa-info-circle"></i> {{ form.last_name.errors.0 }}</div>
+                                {% endif %}
                             </div>
-                        </div>
-
-                        <div class="checkout__input">
-                            <p>Username<span>*</span></p>
-                            {{ form.username }}
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Email<span>*</span></p>
-                                    {{ form.email }}
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Phone<span>*</span></p>
-                                    {{ form.phone }}
-                                </div>
-                            </div>     
-                        </div>
-
-                        <div class="checkout__input">
-                            <p>Address<span>*</span></p>
-                            {{ form.address }}
-                        </div>
-
-                       
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>City<span>*</span></p>
-                                    {{ form.city }}
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Country<span>*</span></p>
-                                    {{ form.country }}
-                                </div>
-                            </div>     
-                        </div>
-                        
-                        <div class="checkout__input">
-                            <p>Birth Date</p>
-                            {{ form.birth_date }}
-                        </div>
-                        
-                        
-                        <br>
-                        <br>
-                        <button type="submit" class="site-btn">Update</button>
-                        
                         </div>
                     </div>
+
+                    <!-- Username -->
+                    <div class="auth-form-group">
+                        <label for="{{ form.username.id_for_label }}">Username <span>*</span></label>
+                        <div class="auth-input-wrapper">
+                            <i class="fa fa-at input-icon"></i>
+                            {{ form.username }}
+                        </div>
+                        {% if form.username.errors %}
+                            <div class="auth-error-msg"><i class="fa fa-info-circle"></i> {{ form.username.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <div class="auth-form-group">
+                                <label for="{{ form.email.id_for_label }}">Email Address <span>*</span></label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fa fa-envelope input-icon"></i>
+                                    {{ form.email }}
+                                </div>
+                                {% if form.email.errors %}
+                                    <div class="auth-error-msg"><i class="fa fa-info-circle"></i> {{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-md-6">
+                            <div class="auth-form-group">
+                                <label for="{{ form.phone.id_for_label }}">Phone Number <span>*</span></label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fa fa-phone input-icon"></i>
+                                    {{ form.phone }}
+                                </div>
+                                {% if form.phone.errors %}
+                                    <div class="auth-error-msg"><i class="fa fa-info-circle"></i> {{ form.phone.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="auth-form-group">
+                        <label for="{{ form.address.id_for_label }}">Shipping Address <span>*</span></label>
+                        <div class="auth-input-wrapper">
+                            <i class="fa fa-map-marker input-icon"></i>
+                            {{ form.address }}
+                        </div>
+                        {% if form.address.errors %}
+                            <div class="auth-error-msg"><i class="fa fa-info-circle"></i> {{ form.address.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <!-- City -->
+                        <div class="col-md-6">
+                            <div class="auth-form-group">
+                                <label for="{{ form.city.id_for_label }}">City <span>*</span></label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fa fa-building input-icon"></i>
+                                    {{ form.city }}
+                                </div>
+                                {% if form.city.errors %}
+                                    <div class="auth-error-msg"><i class="fa fa-info-circle"></i> {{ form.city.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Country -->
+                        <div class="col-md-6">
+                            <div class="auth-form-group">
+                                <label for="{{ form.country.id_for_label }}">Country <span>*</span></label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fa fa-globe input-icon"></i>
+                                    {{ form.country }}
+                                </div>
+                                {% if form.country.errors %}
+                                    <div class="auth-error-msg"><i class="fa fa-info-circle"></i> {{ form.country.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Birth Date -->
+                    <div class="auth-form-group">
+                        <label for="{{ form.birth_date.id_for_label }}">Date of Birth</label>
+                        <div class="auth-input-wrapper">
+                            <i class="fa fa-calendar input-icon"></i>
+                            {{ form.birth_date }}
+                        </div>
+                        {% if form.birth_date.errors %}
+                            <div class="auth-error-msg"><i class="fa fa-info-circle"></i> {{ form.birth_date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="auth-btn-submit">
+                            <i class="fa fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+
+                <div class="auth-footer-prompt">
+                    Done updating? <a href="{% url 'account:profile_page' %}">Back to Profile Dashboard</a>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </section>
-<!-- Checkout Section End -->
+<!-- Update Form Section End -->
 
-{% endblock %}
+{% endblock %}

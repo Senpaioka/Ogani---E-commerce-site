@@ -1,10 +1,198 @@
 {% extends 'index.html' %}
 
-{% block title %} Change Picture {% endblock %}
+{% block title %} Change Profile Picture | Ogani {% endblock %}
 
 {% load static %}
 
 {% block content %}
+
+<!-- Custom Styling for Redesigned Auth Pages -->
+<style>
+    .auth-section {
+        background-color: #f8fafc;
+        padding: 60px 0 90px 0;
+    }
+    
+    .auth-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+        border: 1px solid #eef2f6;
+        overflow: hidden;
+        margin: 0 auto;
+        max-width: 580px;
+    }
+
+    .auth-card-header {
+        background: linear-gradient(135deg, #7fad39 0%, #6b9830 100%);
+        padding: 35px 40px;
+        color: #ffffff;
+        text-align: center;
+    }
+
+    .auth-card-header h3 {
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 26px;
+    }
+
+    .auth-card-header p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .auth-features-badges {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
+
+    .auth-badge {
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(5px);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .auth-card-body {
+        padding: 40px;
+    }
+
+    .auth-upload-zone {
+        border: 2px dashed #cbd5e1;
+        background-color: #f8fafc;
+        border-radius: 14px;
+        padding: 35px 20px;
+        text-align: center;
+        transition: all 0.25s ease;
+        position: relative;
+        cursor: pointer;
+        margin-bottom: 25px;
+    }
+
+    .auth-upload-zone:hover {
+        border-color: #7fad39;
+        background-color: rgba(127, 173, 57, 0.04);
+    }
+
+    .auth-upload-icon-box {
+        width: 70px;
+        height: 70px;
+        background: #ffffff;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        color: #7fad39;
+        font-size: 28px;
+    }
+
+    .auth-upload-zone p {
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 6px;
+        font-size: 15px;
+    }
+
+    .auth-upload-zone small {
+        color: #94a3b8;
+        font-size: 12px;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .auth-upload-zone input[type="file"] {
+        display: block;
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+        font-size: 13px;
+        color: #475569;
+    }
+
+    .auth-error-msg {
+        color: #e11d48;
+        font-size: 12px;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .auth-btn-submit {
+        background: #7fad39;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        padding: 14px 30px;
+        border-radius: 8px;
+        border: none;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(127, 173, 57, 0.3);
+    }
+
+    .auth-btn-submit:hover {
+        background: #6b9830;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(127, 173, 57, 0.4);
+    }
+
+    .auth-btn-submit:active {
+        transform: translateY(0);
+    }
+
+    .auth-footer-prompt {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 22px;
+        border-top: 1px solid #e2e8f0;
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    .auth-footer-prompt a {
+        color: #7fad39;
+        font-weight: 700;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .auth-footer-prompt a:hover {
+        color: #6b9830;
+        text-decoration: underline;
+    }
+
+    .auth-alert-danger {
+        background-color: #fff1f2;
+        border-left: 4px solid #e11d48;
+        color: #9f1239;
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+</style>
 
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
@@ -12,7 +200,11 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="breadcrumb__text">
-                    <h2>Change Profile Picture</h2>
+                    <h2>Profile Picture</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home:home_page' %}">Home</a>
+                        <span>Change Photo</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -20,31 +212,61 @@
 </section>
 <!-- Breadcrumb Section End -->
 
-<!-- Checkout Section Begin -->
-<section class="checkout spad">
+<!-- Picture Upload Section Begin -->
+<section class="auth-section">
     <div class="container">
-        
-        <div class="checkout__form">
-            <h4>Update Your Profile Picture</h4>
-            <form action="{% url 'account:picture_page' %}" method='POST' enctype="multipart/form-data">
-                {% csrf_token %}
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <h3>Update Profile Picture</h3>
+                <p>Upload a fresh image to personalize your Ogani account profile.</p>
+                <div class="auth-features-badges">
+                    <span class="auth-badge"><i class="fa fa-camera"></i> JPG / PNG Supported</span>
+                    <span class="auth-badge"><i class="fa fa-image"></i> High Resolution</span>
+                </div>
+            </div>
 
-                        <div class="row">
-                            <div class="checkout__input">
-                                <p>Upload Your Photo<span>*</span></p>
-                                {{ form.profile_picture }}
-                            </div>   
+            <div class="auth-card-body">
+                {% if form.non_field_errors %}
+                    <div class="auth-alert-danger">
+                        {% for error in form.non_field_errors %}
+                            <p class="m-0"><i class="fa fa-exclamation-circle"></i> {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <form action="{% url 'account:picture_page' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="auth-upload-zone">
+                        <div class="auth-upload-icon-box">
+                            <i class="fa fa-cloud-upload"></i>
                         </div>
-                        
-                        
-                        <br>
-                        <br>
-                        <button type="submit" class="site-btn">Set Picture</button>
-                        
-            </form>
+                        <p>Choose an Image File</p>
+                        <small>PNG, JPG, JPEG or WEBP formats allowed</small>
+
+                        {{ form.profile_picture }}
+
+                        {% if form.profile_picture.errors %}
+                            <div class="auth-error-msg">
+                                <i class="fa fa-info-circle"></i> {{ form.profile_picture.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="auth-btn-submit">
+                            <i class="fa fa-upload"></i> Upload & Save Picture
+                        </button>
+                    </div>
+                </form>
+
+                <div class="auth-footer-prompt">
+                    Return to home page? <a href="{% url 'home:home_page' %}">Back to Home</a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
-<!-- Checkout Section End -->
+<!-- Picture Upload Section End -->
 
-{% endblock %}
+{% endblock %}

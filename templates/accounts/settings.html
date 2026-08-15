@@ -1,123 +1,301 @@
 {% extends 'index.html' %}
 
-{% block title %} Settings {% endblock %}
+{% block title %} Account Settings | Ogani {% endblock %}
 
 {% load static %}
 
-
 {% block content %}
 
-<style>   
-
-    /* Header Section */
-    .profile-header {
-      display: flex;
-      align-items: center;
-      padding: 20px;
-      background: #F3F6FA;
-      color: #fff;
+<!-- Custom Styling for Redesigned Settings Page -->
+<style>
+    .settings-section {
+        background-color: #f8fafc;
+        padding: 50px 0 80px 0;
     }
 
-    .profile-header img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid #fff;
-      margin-right: 20px;
+    .profile-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+        border: 1px solid #eef2f6;
+        overflow: hidden;
+        margin-bottom: 35px;
     }
 
-    .profile-header h1 {
-      font-size: 24px;
-      margin-bottom: 5px;
+    .profile-banner-header {
+        background: linear-gradient(135deg, #7fad39 0%, #5c8427 100%);
+        padding: 35px 30px;
+        color: #ffffff;
     }
 
-    .profile-header p {
-      font-size: 14px;
+    .profile-header-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
     }
 
-    /* Navigation Section */
-    .profile-nav {
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      border-top: 1px solid #ddd;
-      border-bottom: 1px solid #ddd;
+    .profile-avatar {
+        width: 85px;
+        height: 85px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        background: #ffffff;
     }
 
-    .profile-nav a {
-      text-decoration: none;
-      color: #252525;
-      font-weight: bold;
+    .profile-avatar-fallback {
+        width: 85px;
+        height: 85px;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        background: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        color: #64748b;
     }
 
-    .profile-nav a:hover {
-      color: #7fad39;
+    .profile-header-info h3 {
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 22px;
+        margin-bottom: 4px;
     }
 
-    /* Main Content */
-    .profile-content {
-      padding: 20px;
+    .profile-header-info p {
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 13px;
+        margin-bottom: 0;
     }
 
-    .section {
-      margin-bottom: 20px;
+    .profile-header-actions {
+        margin-left: auto;
     }
 
-    .section h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: #7fad39;
+    .profile-action-btn {
+        padding: 9px 18px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none !important;
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        backdrop-filter: blur(5px);
+        transition: all 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .section a {
-      font-size: 16px;
-      color: #555;
+    .profile-action-btn:hover {
+        background: #ffffff;
+        color: #7fad39;
     }
 
-
-    .section a:hover {
-      color: #7fad39;
+    /* Settings Action Grid Cards */
+    .settings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 25px;
     }
-  </style>
 
-</head>
-<body>
+    .settings-item-card {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid #eef2f6;
+        padding: 28px 24px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        transition: all 0.25s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 
-  <div class="container">
-    <!-- Profile Header -->
-    <div class="profile-header">
-      {% if info.profile_picture %}
-        <img src="{{ info.profile_picture.url }}" alt="Profile Picture">
-      {% else %}
-        <img src="#" alt="Profile Picture">
-      {% endif %}
-      <div>
-        <h1>{{ info.full_name }}</h1>
-        <p>@{{ info.username }} | Joined: {{ info.date_joined | date:"d M Y" }}</p>
-      </div>
-    </div>
+    .settings-item-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+        border-color: rgba(127, 173, 57, 0.3);
+    }
 
+    .settings-item-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 18px;
+    }
 
-    <!-- Settings Content -->
-    <div class="profile-content">
-      <div id="settings" class="section">
-        <br>
-        <h2>Settings</h2>
-        <p>Manage your account settings, change your password, and update your preferences.</p>
+    .settings-item-icon.green {
+        background: rgba(127, 173, 57, 0.12);
+        color: #7fad39;
+    }
 
-        <br>
-        <br>
-        <br>
+    .settings-item-icon.blue {
+        background: rgba(37, 99, 235, 0.12);
+        color: #2563eb;
+    }
 
-        <div class='section'>
-            <a href='{% url "account:password_page" %}'>Change Password</a> | 
-            <a href='{% url "account:picture_page" %}'>Change Profile Picture</a>
+    .settings-item-icon.purple {
+        background: rgba(147, 51, 234, 0.12);
+        color: #9333ea;
+    }
+
+    .settings-item-icon.amber {
+        background: rgba(217, 119, 6, 0.12);
+        color: #d97706;
+    }
+
+    .settings-item-card h4 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+
+    .settings-item-card p {
+        font-size: 13.5px;
+        color: #64748b;
+        margin-bottom: 22px;
+        line-height: 1.5;
+        flex-grow: 1;
+    }
+
+    .settings-card-btn {
+        background: #f8fafc;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-size: 13.5px;
+        font-weight: 600;
+        text-decoration: none !important;
+        text-align: center;
+        transition: all 0.25s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .settings-item-card:hover .settings-card-btn {
+        background: #7fad39;
+        color: #ffffff;
+        border-color: #7fad39;
+    }
+</style>
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Account Settings</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home:home_page' %}">Home</a>
+                        <span>Settings</span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</section>
+<!-- Breadcrumb Section End -->
 
-</body>
-</html>
+<!-- Settings Section Begin -->
+<section class="settings-section">
+    <div class="container">
+        
+        <!-- User Info Header -->
+        <div class="profile-card">
+            <div class="profile-banner-header">
+                <div class="profile-header-content">
+                    <div>
+                        {% if info.profile_picture %}
+                            <img src="{{ info.profile_picture.url }}" alt="Profile Picture" class="profile-avatar">
+                        {% else %}
+                            <div class="profile-avatar-fallback">
+                                <i class="fa fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
 
-{% endblock %}
+                    <div class="profile-header-info">
+                        <h3>{{ info.full_name | title }}</h3>
+                        <p><i class="fa fa-at"></i> {{ info.username }} &nbsp;|&nbsp; Member since {{ info.date_joined | date:"d M Y" }}</p>
+                    </div>
+
+                    <div class="profile-header-actions">
+                        <a href="{% url 'account:profile_page' %}" class="profile-action-btn">
+                            <i class="fa fa-user-circle"></i> View Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Cards Grid -->
+        <div class="settings-grid">
+            
+            <!-- Security Card -->
+            <div class="settings-item-card">
+                <div class="settings-item-icon green">
+                    <i class="fa fa-key"></i>
+                </div>
+                <h4>Password & Security</h4>
+                <p>Update your account password regularly to keep your credentials and personal info safe.</p>
+                <a href="{% url 'account:password_page' %}" class="settings-card-btn">
+                    <i class="fa fa-lock"></i> Change Password
+                </a>
+            </div>
+
+            <!-- Profile Picture Card -->
+            <div class="settings-item-card">
+                <div class="settings-item-icon blue">
+                    <i class="fa fa-camera"></i>
+                </div>
+                <h4>Profile Picture</h4>
+                <p>Upload or update your profile picture to customize your presence across Ogani.</p>
+                <a href="{% url 'account:picture_page' %}" class="settings-card-btn">
+                    <i class="fa fa-image"></i> Change Picture
+                </a>
+            </div>
+
+            <!-- Update Info Card -->
+            <div class="settings-item-card">
+                <div class="settings-item-icon purple">
+                    <i class="fa fa-user"></i>
+                </div>
+                <h4>Personal Details</h4>
+                <p>Modify your contact details, phone number, shipping address, and location details.</p>
+                <a href="{% url 'account:update_page' %}" class="settings-card-btn">
+                    <i class="fa fa-pencil"></i> Edit Details
+                </a>
+            </div>
+
+            <!-- Account Dashboard Card -->
+            <div class="settings-item-card">
+                <div class="settings-item-icon amber">
+                    <i class="fa fa-tachometer"></i>
+                </div>
+                <h4>Profile Overview</h4>
+                <p>Return to your main profile dashboard to view your activity, wishlist, and blog posts.</p>
+                <a href="{% url 'account:profile_page' %}" class="settings-card-btn">
+                    <i class="fa fa-arrow-right"></i> Go to Profile
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+<!-- Settings Section End -->
+
+{% endblock %}

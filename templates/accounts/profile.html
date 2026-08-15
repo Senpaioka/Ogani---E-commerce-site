@@ -1,232 +1,549 @@
 {% extends 'index.html' %}
 
-{% block title %} Profile {% endblock %}
+{% block title %} My Profile | Ogani {% endblock %}
 
 {% load static %}
 
-
 {% block content %}
 
-<style>   
-
-    /* Header Section */
-    .profile-header {
-      display: flex;
-      align-items: center;
-      padding: 20px;
-      background: #F3F6FA;
-      color: #fff;
+<!-- Custom Styling for Redesigned Profile Page -->
+<style>
+    .profile-section {
+        background-color: #f8fafc;
+        padding: 50px 0 80px 0;
     }
 
-    .profile-header img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid #fff;
-      margin-right: 20px;
+    .profile-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+        border: 1px solid #eef2f6;
+        overflow: hidden;
+        margin-bottom: 30px;
     }
 
-    .profile-header h1 {
-      font-size: 24px;
-      margin-bottom: 5px;
+    .profile-banner-header {
+        background: linear-gradient(135deg, #7fad39 0%, #5c8427 100%);
+        padding: 40px 30px;
+        color: #ffffff;
+        position: relative;
     }
 
-    .profile-header p {
-      font-size: 14px;
+    .profile-header-content {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        flex-wrap: wrap;
     }
 
-    /* Navigation Section */
-    .profile-nav {
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      border-top: 1px solid #ddd;
-      border-bottom: 1px solid #ddd;
+    .profile-avatar-wrapper {
+        position: relative;
     }
 
-    .profile-nav a {
-      text-decoration: none;
-      color: #252525;
-      font-weight: bold;
+    .profile-avatar {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        background: #ffffff;
     }
 
-    .profile-nav a:hover {
-      color: #7fad39;
+    .profile-avatar-fallback {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        border: 4px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        background: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 45px;
+        color: #64748b;
     }
 
-    /* Main Content */
-    .profile-content {
-      padding: 20px;
+    .profile-header-info h2 {
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 26px;
+        margin-bottom: 6px;
     }
 
-    .section {
-      margin-bottom: 20px;
+    .profile-header-info p {
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 14px;
+        margin-bottom: 0;
     }
 
-    .section h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: #7fad39;
+    .profile-header-actions {
+        margin-left: auto;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
     }
 
-    .section p {
-      font-size: 14px;
-      color: #555;
+    .profile-action-btn {
+        padding: 9px 18px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none !important;
+        transition: all 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    /* Buttons */
-    .btn {
-      display: inline-block;
-      padding: 10px 20px;
-      margin-top: 10px;
-      background: #7fad39;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      cursor: pointer;
+    .profile-action-btn-light {
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        backdrop-filter: blur(5px);
     }
 
-    .btn:hover {
-      background: #7fad39;
+    .profile-action-btn-light:hover {
+        background: #ffffff;
+        color: #7fad39;
     }
-  </style>
 
-</head>
-<body>
+    .profile-action-btn-success {
+        background: #ffffff;
+        color: #7fad39;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
 
-  <div class="container">
-    <!-- Profile Header -->
-    <div class="profile-header">
+    .profile-action-btn-success:hover {
+        background: #f8fafc;
+        color: #5c8427;
+        transform: translateY(-2px);
+    }
 
-      {% if info.profile_picture %}
-        <img src="{{ info.profile_picture.url }}" alt="Profile Picture">
-      {% else %}
-        <img src="#" alt="Profile Picture">
-      {% endif %}
+    .profile-action-btn-danger {
+        background: rgba(225, 29, 72, 0.85);
+        color: #ffffff;
+    }
 
-      <div>
-        <h1>{{ info.full_name }}</h1>
-        <p>@{{ info.username }} | Joined: {{ info.date_joined | date:"d M Y" }}</p>
-      </div>
+    .profile-action-btn-danger:hover {
+        background: #e11d48;
+        color: #ffffff;
+    }
+
+    /* Stats Overview Cards */
+    .profile-stat-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 22px 25px;
+        border: 1px solid #eef2f6;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        margin-bottom: 25px;
+    }
+
+    .profile-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    }
+
+    .profile-stat-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .profile-stat-icon.green {
+        background: rgba(127, 173, 57, 0.12);
+        color: #7fad39;
+    }
+
+    .profile-stat-icon.blue {
+        background: rgba(37, 99, 235, 0.12);
+        color: #2563eb;
+    }
+
+    .profile-stat-icon.amber {
+        background: rgba(217, 119, 6, 0.12);
+        color: #d97706;
+    }
+
+    .profile-stat-details h4 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 2px;
+    }
+
+    .profile-stat-details p {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 0;
+        font-weight: 500;
+    }
+
+    /* Section Cards */
+    .profile-details-card {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid #eef2f6;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    }
+
+    .profile-section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 22px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .profile-section-title i {
+        color: #7fad39;
+    }
+
+    .profile-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+    }
+
+    .profile-info-item {
+        background: #f8fafc;
+        padding: 14px 18px;
+        border-radius: 10px;
+        border: 1px solid #f1f5f9;
+    }
+
+    .profile-info-item .label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #94a3b8;
+        font-weight: 600;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .profile-info-item .value {
+        font-size: 15px;
+        font-weight: 600;
+        color: #334155;
+    }
+
+    /* Blog History Table Styling */
+    .profile-blog-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+    .profile-blog-table th {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        padding: 10px 15px;
+        font-weight: 600;
+        border: none;
+    }
+
+    .profile-blog-table tbody tr {
+        background: #ffffff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        border-radius: 10px;
+        transition: transform 0.2s ease;
+    }
+
+    .profile-blog-table tbody td {
+        padding: 14px 15px;
+        vertical-align: middle;
+        border-top: 1px solid #f1f5f9;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .profile-blog-table tbody td:first-child {
+        border-left: 1px solid #f1f5f9;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+    .profile-blog-table tbody td:last-child {
+        border-right: 1px solid #f1f5f9;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .profile-blog-item-thumb {
+        width: 70px;
+        height: 55px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .profile-blog-title {
+        font-weight: 700;
+        color: #1e293b;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .profile-blog-title:hover {
+        color: #7fad39;
+    }
+
+    .profile-blog-meta {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-top: 2px;
+    }
+
+    .btn-action-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        transition: opacity 0.2s ease;
+    }
+
+    .btn-action-edit {
+        background: #7fad39;
+    }
+
+    .btn-action-delete {
+        background: #e11d48;
+    }
+
+    .btn-action-icon:hover {
+        opacity: 0.85;
+    }
+
+    .empty-state-box {
+        text-align: center;
+        padding: 40px 20px;
+        color: #94a3b8;
+    }
+
+    .empty-state-box i {
+        font-size: 45px;
+        color: #cbd5e1;
+        margin-bottom: 12px;
+    }
+</style>
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>My Profile</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home:home_page' %}">Home</a>
+                        <span>Profile Dashboard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</section>
+<!-- Breadcrumb Section End -->
 
-    <!-- Profile Navigation -->
-    <div class="profile-nav">
-      <a href="#about">About</a>
-      <a href="#activity">Activity</a>
-      <a href="#settings">Settings</a>
-      <a href="{% url 'account:logout' %}">Logout</a>
-    </div>
-
-    <!-- Profile Content -->
-    <div class="profile-content">
-      <!-- About Section -->
-      <div id="about" class="section">
-        <h2>About</h2>
-        <br>
-        <p>Name: {{ info.full_name | title}}</p>
-        <p>Username: {{ info.username }}</p>
-        <p>Email: {{ info.email }}</p>
-        <p>Phone: {{ info.phone }}</p>
-        <p>Address: {{ info.address | title}}</p>
-        <p>Location: {{ info.city | capfirst }}, {{ info.country | capfirst}}</p>
-
-        <a href="{% url 'account:update_page'%}" class="btn">Update Info</a>
-      </div>
-      <br>
-      <!-- Activity Section -->
-      <div id="activity" class="section">
-        <h2>Recent Activity</h2>
-        <br>
-        <p>Product In Wishlist: <b>{{ count_wishlist }}</b></p>
-        <p>Product In Cart: <b>{{ counter }}</b></p>
-      </div>
-      <br>
-      <!-- Settings Section -->
-      <div id="settings" class="section">
-        <h2>Settings</h2>
-        <br>
-        <p>Manage your account settings, change your password, and update your preferences.</p>
-        <a href="{% url 'account:settings_page'%}" class="btn">Go to Settings</a>
-      </div>
-      <br>
-      <br>
-
-      <!-- blog history -->
-      <div id="" class="section">
-        <h2>Blog History</h2>
-        <br>
+<!-- Profile Dashboard Section Begin -->
+<section class="profile-section">
+    <div class="container">
         
-        <section class="shoping-cart spad">
-          <div class="container">
-              <div class="row">
-                  <div class="col-lg-12">
-                      <div class="shoping__cart__table">
-                          <table>
-                              <thead>
-                                  <tr>
-                                      <th class="shoping__product">Blogs</th>
-                                      <th>Edit</th>
-                                      <th>Delete</th>
-                                  </tr>
-                              </thead>
+        <!-- Profile Header Card -->
+        <div class="profile-card">
+            <div class="profile-banner-header">
+                <div class="profile-header-content">
+                    <div class="profile-avatar-wrapper">
+                        {% if info.profile_picture %}
+                            <img src="{{ info.profile_picture.url }}" alt="Profile Picture" class="profile-avatar">
+                        {% else %}
+                            <div class="profile-avatar-fallback">
+                                <i class="fa fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
 
-                              <tbody>
-                              {% if user_blogs %}
-                                {% for blog in user_blogs %}
-                                  <tr>
-                                      <td class="shoping__cart__item">
-                                          <img src="{{ blog.blog_thumb.url }}" style="width:100px; height:80px;"  alt="">
-                                          <a href="{% url 'blog:blog_details' blog.id %}"><h5>{{ blog.title }}</h5></a>
-                                          <p>Author: {{ blog.author }} | Updated at: {{ blog.edited_at }}</p>
-                                      </td> 
-                                 
-                                      <td class="shoping__cart__total">
-                                          <a href="{% url 'blog:update_blog' blog.id %}" class="fa fa-pencil-square-o" style="background-color: green; color: white; border: none; padding: 10px 10px;"></a>
-                                      </td>
+                    <div class="profile-header-info">
+                        <h2>{{ info.full_name | title }}</h2>
+                        <p><i class="fa fa-at"></i> {{ info.username }} &nbsp;|&nbsp; <i class="fa fa-calendar"></i> Member since: {{ info.date_joined | date:"d M Y" }}</p>
+                    </div>
 
-                                      <td class="shoping__cart__total">
-                                          <a href="{% url 'blog:delete_blog' blog.id %}" class="fa fa-trash" style="background-color: red; color: white; border: none; padding: 10px 10px;"></a>
-                                      </td>                
-                                  </tr>
-                                    {% endfor %}
+                    <div class="profile-header-actions">
+                        <a href="{% url 'blog:blog_post' %}" class="profile-action-btn profile-action-btn-success">
+                            <i class="fa fa-pencil-square-o"></i> Write a Blog
+                        </a>
+                        <a href="{% url 'account:update_page' %}" class="profile-action-btn profile-action-btn-light">
+                            <i class="fa fa-edit"></i> Edit Profile
+                        </a>
+                        <a href="{% url 'account:picture_page' %}" class="profile-action-btn profile-action-btn-light">
+                            <i class="fa fa-camera"></i> Photo
+                        </a>
+                        <a href="{% url 'account:settings_page' %}" class="profile-action-btn profile-action-btn-light">
+                            <i class="fa fa-cog"></i> Settings
+                        </a>
+                        <a href="{% url 'account:logout' %}" class="profile-action-btn profile-action-btn-danger">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                  {% else %}
+        <!-- Quick Activity Stats Cards -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-stat-card">
+                    <div class="profile-stat-icon green">
+                        <i class="fa fa-heart"></i>
+                    </div>
+                    <div class="profile-stat-details">
+                        <h4>{{ count_wishlist }}</h4>
+                        <p>Wishlist Items</p>
+                    </div>
+                </div>
+            </div>
 
-                                  <tr>
-                                    <td class="shoping__cart__item">
-                                        <div class="shoping__cart__btns">
-    
-                                            
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <h3>No Blogs Found</h3>
-                                            <br>
-                                            <br>
-                                            <br>
-    
+            <div class="col-md-4">
+                <div class="profile-stat-card">
+                    <div class="profile-stat-icon blue">
+                        <i class="fa fa-shopping-bag"></i>
+                    </div>
+                    <div class="profile-stat-details">
+                        <h4>{{ counter }}</h4>
+                        <p>Cart Items</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="profile-stat-card">
+                    <div class="profile-stat-icon amber">
+                        <i class="fa fa-pencil"></i>
+                    </div>
+                    <div class="profile-stat-details">
+                        <h4>{{ user_blogs|length }}</h4>
+                        <p>Blogs Published</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Information Section -->
+        <div class="profile-details-card">
+            <div class="profile-section-title">
+                <i class="fa fa-user-circle"></i> Personal Details
+            </div>
+            <div class="profile-info-grid">
+                <div class="profile-info-item">
+                    <div class="label"><i class="fa fa-id-card"></i> Full Name</div>
+                    <div class="value">{{ info.full_name | title }}</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="label"><i class="fa fa-at"></i> Username</div>
+                    <div class="value">{{ info.username }}</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="label"><i class="fa fa-envelope"></i> Email Address</div>
+                    <div class="value">{{ info.email }}</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="label"><i class="fa fa-phone"></i> Phone Number</div>
+                    <div class="value">{{ info.phone }}</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="label"><i class="fa fa-map-marker"></i> Address</div>
+                    <div class="value">{{ info.address | title }}</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="label"><i class="fa fa-globe"></i> Location</div>
+                    <div class="value">{{ info.city | capfirst }}, {{ info.country | capfirst }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blog History Section -->
+        <div class="profile-details-card">
+            <div class="profile-section-title d-flex align-items-center justify-content-between">
+                <div><i class="fa fa-newspaper-o"></i> My Blog Posts</div>
+                <a href="{% url 'blog:blog_post' %}" class="profile-action-btn profile-action-btn-success" style="font-size: 13px;">
+                    <i class="fa fa-plus-circle"></i> Write New Post
+                </a>
+            </div>
+
+            {% if user_blogs %}
+                <div class="table-responsive">
+                    <table class="profile-blog-table">
+                        <thead>
+                            <tr>
+                                <th>Article Info</th>
+                                <th class="text-center" style="width: 100px;">Edit</th>
+                                <th class="text-center" style="width: 100px;">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for blog in user_blogs %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            {% if blog.blog_thumb %}
+                                                <img src="{{ blog.blog_thumb.url }}" alt="{{ blog.title }}" class="profile-blog-item-thumb mr-3">
+                                            {% endif %}
+                                            <div>
+                                                <a href="{% url 'blog:blog_details' blog.id %}" class="profile-blog-title">{{ blog.title }}</a>
+                                                <div class="profile-blog-meta">Updated: {{ blog.edited_at | date:"d M Y" }}</div>
+                                            </div>
                                         </div>
                                     </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'blog:update_blog' blog.id %}" class="btn-action-icon btn-action-edit" title="Edit Article">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'blog:delete_blog' blog.id %}" class="btn-action-icon btn-action-delete" title="Delete Article">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
                                 </tr>
-                                  
-                                  {% endif %}
-                              </tbody>
-                              
-                          </table>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </section>
-  
-    </div>
-      <br>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state-box">
+                    <i class="fa fa-folder-open-o"></i>
+                    <p class="m-0 font-weight-bold mb-3">No blog articles published yet</p>
+                    <a href="{% url 'blog:blog_post' %}" class="profile-action-btn profile-action-btn-success" style="background: #7fad39; color: #ffffff;">
+                        <i class="fa fa-plus-circle"></i> Write Your First Article
+                    </a>
+                </div>
+            {% endif %}
+        </div>
 
     </div>
-  </div>
+</section>
+<!-- Profile Dashboard Section End -->
 
-</body>
-</html>
-
-{% endblock %}
+{% endblock %}
