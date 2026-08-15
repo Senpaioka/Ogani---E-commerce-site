@@ -297,16 +297,16 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="{% if request.path == '/' %}active{% endif %}">
+                <li class="{% if request.path == '/' or request.resolver_match.url_name == 'home_page' %}active{% endif %}">
                     <a href="{% url 'home:home_page' %}">Home</a>
                 </li>
-                <li class="{% if request.path == '/product/store/' %}active{% endif %}">
+                <li class="{% if request.resolver_match.app_name == 'product' or '/product' in request.path %}active{% endif %}">
                     <a href="{% url 'product:store_page' %}">Shop</a>
                 </li>
-                <li class="{% if request.path == '/blog/' %}active{% endif %}">
+                <li class="{% if request.resolver_match.app_name == 'blog' or '/blog' in request.path %}active{% endif %}">
                     <a href="{% url 'blog:blog_page' %}">Blog</a>
                 </li>
-                <li class="{% if request.path == '/contact/contact_page/' %}active{% endif %}">
+                <li class="{% if request.resolver_match.app_name == 'contact' or '/contact' in request.path %}active{% endif %}">
                     <a href="{% url 'contact:contact_page' %}">Contact</a>
                 </li>
             </ul>
@@ -388,16 +388,16 @@
                 <div class="col-lg-6">
                     <nav class="header__menu text-center">
                         <ul>
-                            <li class="{% if request.path == '/' %}active{% endif %}">
+                            <li class="{% if request.path == '/' or request.resolver_match.url_name == 'home_page' %}active{% endif %}">
                                 <a href="{% url 'home:home_page' %}">Home</a>
                             </li>
-                            <li class="{% if request.path == '/product/store/' %}active{% endif %}">
+                            <li class="{% if request.resolver_match.app_name == 'product' or '/product' in request.path %}active{% endif %}">
                                 <a href="{% url 'product:store_page' %}">Shop</a>
                             </li>
-                            <li class="{% if request.path == '/blog/' %}active{% endif %}">
+                            <li class="{% if request.resolver_match.app_name == 'blog' or '/blog' in request.path %}active{% endif %}">
                                 <a href="{% url 'blog:blog_page' %}">Blog</a>
                             </li>
-                            <li class="{% if request.path == '/contact/contact_page/' %}active{% endif %}">
+                            <li class="{% if request.resolver_match.app_name == 'contact' or '/contact' in request.path %}active{% endif %}">
                                 <a href="{% url 'contact:contact_page' %}">Contact</a>
                             </li>
                         </ul>
