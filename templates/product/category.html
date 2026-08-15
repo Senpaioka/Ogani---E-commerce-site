@@ -1,141 +1,345 @@
 {% extends 'index.html' %}
 
-{% block title %} Category {% endblock %}
+{% block title %} Category: {{ category | capfirst }} {% endblock %}
 
 {% load static %}
 
 {% block content %}
+<style>
+    /* Category Page Custom Redesign */
+    .category-page-container {
+        padding: 50px 0 80px 0;
+        background: #fbfbfb;
+    }
 
+    /* Sidebar Widget */
+    .sidebar-widget-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        padding: 24px;
+        margin-bottom: 30px;
+        border: 1px solid #f0f0f0;
+    }
 
- <!-- Product Section Begin -->
- <section class="product spad">
+    .sidebar-widget-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1c1c1c;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #7fad39;
+        display: inline-block;
+    }
+
+    .latest-product-item-wrap {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 16px;
+        text-decoration: none;
+        transition: transform 0.2s ease;
+    }
+
+    .latest-product-item-wrap:hover {
+        transform: translateX(4px);
+    }
+
+    .latest-product-thumb {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #f8f9fa;
+        flex-shrink: 0;
+    }
+
+    .latest-product-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .latest-product-info h6 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 4px;
+        transition: color 0.2s ease;
+    }
+
+    .latest-product-item-wrap:hover .latest-product-info h6 {
+        color: #7fad39;
+    }
+
+    .latest-product-info span {
+        font-size: 15px;
+        font-weight: 700;
+        color: #7fad39;
+    }
+
+    /* Category Header & Filter Bar */
+    .category-header-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 24px 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        margin-bottom: 30px;
+        border: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .category-title-main {
+        font-size: 26px;
+        font-weight: 800;
+        color: #1c1c1c;
+        margin: 0;
+    }
+
+    .category-title-main span {
+        color: #7fad39;
+    }
+
+    .products-count-badge {
+        background: #e8f5e9;
+        color: #2e7d32;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 6px 16px;
+        border-radius: 30px;
+    }
+
+    /* Product Grid Cards */
+    .category-product-card {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+        border: 1px solid #f0f0f0;
+        transition: all 0.3s ease;
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    .category-product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+    }
+
+    .category-product-img {
+        height: 250px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .category-product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .category-product-card:hover .category-product-overlay {
+        opacity: 1;
+    }
+
+    .action-circle-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #ffffff;
+        color: #1c1c1c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .action-circle-btn:hover {
+        background: #7fad39;
+        color: #ffffff;
+        transform: scale(1.1);
+    }
+
+    .category-product-details {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .category-product-name {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .category-product-name a {
+        color: #2d3748;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .category-product-name a:hover {
+        color: #7fad39;
+    }
+
+    .category-product-price {
+        font-size: 20px;
+        font-weight: 800;
+        color: #7fad39;
+    }
+
+    /* Modern Pagination */
+    .custom-pagination-wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .custom-pagination-wrap a, 
+    .custom-pagination-wrap span.current-page {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid #e0e0e0;
+        background: #ffffff;
+        color: #4a5568;
+    }
+
+    .custom-pagination-wrap a:hover {
+        border-color: #7fad39;
+        color: #7fad39;
+        box-shadow: 0 4px 12px rgba(127, 173, 57, 0.2);
+    }
+
+    .custom-pagination-wrap span.current-page {
+        background: #7fad39;
+        color: #ffffff;
+        border-color: #7fad39;
+        box-shadow: 0 4px 12px rgba(127, 173, 57, 0.3);
+    }
+</style>
+
+<section class="category-page-container">
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 col-md-5">
-                <div class="sidebar">
-                    
-                 
-                    <div class="sidebar__item">
-                        <div class="latest-product__text">
-                            <h4>Latest Products</h4>
-                            <div class="latest-product__slider owl-carousel">
-
-                                <div class="latest-prdouct__slider__item">  
-                                    {% for item in new_product_one %}
-                                    <a href="{% url 'product:single_product' item.id %}" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="{{ item.product_image.url }}" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>{{ item.product_name }}</h6>
-                                            <span>${{ item.product_price }}</span>
-                                        </div>
-                                    </a>
-                                {% endfor %}
-                                </div>
-
-                                <div class="latest-prdouct__slider__item">
-                                {% for item in new_product_two %}
-                                    <a href="{% url 'product:single_product' item.id %}" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="{{ item.product_image.url }}" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>{{ item.product_name }}</h6>
-                                            <span>${{ item.product_price }}</span>
-                                        </div>
-                                    </a>
-                                {% endfor %}
-                                </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-md-4">
+                <div class="sidebar-widget-card">
+                    <h4 class="sidebar-widget-title">Latest Products</h4>
+                    <div class="latest-product-slider">
+                        {% for item in new_product_one %}
+                        <a href="{% url 'product:single_product' item.id %}" class="latest-product-item-wrap">
+                            <div class="latest-product-thumb">
+                                <img src="{{ item.product_image.url }}" alt="{{ item.product_name }}">
                             </div>
-                        </div>
+                            <div class="latest-product-info">
+                                <h6>{{ item.product_name }}</h6>
+                                <span>${{ item.product_price }}</span>
+                            </div>
+                        </a>
+                        {% endfor %}
+
+                        {% for item in new_product_two %}
+                        <a href="{% url 'product:single_product' item.id %}" class="latest-product-item-wrap">
+                            <div class="latest-product-thumb">
+                                <img src="{{ item.product_image.url }}" alt="{{ item.product_name }}">
+                            </div>
+                            <div class="latest-product-info">
+                                <h6>{{ item.product_name }}</h6>
+                                <span>${{ item.product_price }}</span>
+                            </div>
+                        </a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
 
-
-
-
-
-            <div class="col-lg-9 col-md-7">
-
-                <div class="filter__item">
-
-                    <div class="section-title product__discount__title">
-                        <h2>Category: {{ category | capfirst }}</h2>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-4 col-md-5">
-                            <div class="filter__sort">
-                                <span>Sort By</span>
-                                <select>
-                                    <option value="0">Default</option>
-                                    <option value="0">Default</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4">
-                            <div class="filter__found">
-                                <h6><span>{{ category_product.count }}</span> Products found</h6>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-3">
-                            <div class="filter__option">
-                                <span class="icon_grid-2x2"></span>
-                                <span class="icon_ul"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    
-                    {% for product in category_product %}
-
-                    <div class="col-lg-4 col-md-6 col-sm-6">   
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="{{ product.product_image.url }}">
-                                <ul class="product__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6><a href="{% url 'product:single_product' product.id %}">{{ product.product_name | capfirst }}</a></h6>
-                                <h5>${{ product.product_price }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    {% endfor %}
+            <!-- Main Category Content -->
+            <div class="col-lg-9 col-md-8">
                 
+                <!-- Category Header Bar -->
+                <div class="category-header-card">
+                    <h2 class="category-title-main">Category: <span>{{ category | capfirst }}</span></h2>
+                    <span class="products-count-badge">{{ category_product.count }} Products Found</span>
                 </div>
 
-                <div class="product__pagination">
-
-                    <div class="pagination">
-                        <span class="step-links">
-                            {% if pages.has_previous %}
-                                <a href="?page=1">1</a>
-                            {% endif %}
-
-                            <span class="current">
-                                Page {{ page_obj.number }} of {{ pages.paginator.num_pages }}.
-                            </span>
-                    
-                    
-                            {% if pages.has_next %}
-                                <a href="?page={{ pages.next_page_number }}"><i class="fa fa-long-arrow-right"></i></a>
-                            {% endif %}
-                        </span>
+                <!-- Products Grid -->
+                <div class="row">
+                    {% for product in category_product %}
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="category-product-card">
+                            <div class="category-product-img" style="background-image: url('{{ product.product_image.url }}');">
+                                <div class="category-product-overlay">
+                                    <a href="{% url 'product:single_product' product.id %}" class="action-circle-btn" title="View Details">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'cart:add_cart' product.id %}" class="action-circle-btn" title="Add to Cart">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="category-product-details">
+                                <h6 class="category-product-name">
+                                    <a href="{% url 'product:single_product' product.id %}">{{ product.product_name | capfirst }}</a>
+                                </h6>
+                                <div class="category-product-price">${{ product.product_price }}</div>
+                            </div>
+                        </div>
                     </div>
-
+                    {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <i class="fa fa-folder-open-o text-muted mb-3" style="font-size: 48px;"></i>
+                        <h4 class="text-muted">No products found in this category.</h4>
+                    </div>
+                    {% endfor %}
                 </div>
+
+                <!-- Custom Pagination -->
+                {% if pages.paginator.num_pages > 1 %}
+                <div class="custom-pagination-wrap">
+                    {% if pages.has_previous %}
+                        <a href="?page=1" title="First Page"><i class="fa fa-angle-double-left"></i></a>
+                        <a href="?page={{ pages.previous_page_number }}" title="Previous"><i class="fa fa-angle-left"></i></a>
+                    {% endif %}
+
+                    <span class="current-page">{{ pages.number }}</span>
+
+                    {% if pages.has_next %}
+                        <a href="?page={{ pages.next_page_number }}" title="Next"><i class="fa fa-angle-right"></i></a>
+                        <a href="?page={{ pages.paginator.num_pages }}" title="Last Page"><i class="fa fa-angle-double-right"></i></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+
             </div>
         </div>
     </div>
 </section>
-<!-- Product Section End -->
-
-
 {% endblock %}
