@@ -1,84 +1,307 @@
 {% extends 'index.html' %}
 
-{% block title %} Publish Blog {% endblock %}
+{% block title %} Publish Article - Ogani Blog {% endblock %}
 
 {% load static %}
 
 {% block content %}
 
-<!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+<!-- Custom Styling for Blog Publish Redesign -->
+<style>
+    .publish-hero {
+        position: relative;
+        padding: 70px 0 60px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 0 0 24px 24px;
+        overflow: hidden;
+    }
+
+    .publish-hero::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(20, 83, 45, 0.75) 100%);
+        backdrop-filter: blur(4px);
+    }
+
+    .publish__hero__text {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .publish__hero__text h2 {
+        color: #ffffff;
+        font-size: 38px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .publish__hero__text p {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 16px;
+        margin: 0;
+    }
+
+    /* Form Container */
+    .publish-section {
+        padding: 50px 0 80px;
+        background: #f8fafc;
+    }
+
+    .publish__card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        padding: 35px;
+        border: 1px solid #f0f2f5;
+        margin-bottom: 30px;
+    }
+
+    .publish__card__title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 14px;
+        border-bottom: 2px solid #f1f5f9;
+    }
+
+    .publish__field {
+        margin-bottom: 24px;
+    }
+
+    .publish__field label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .publish__field label span {
+        color: #e11d48;
+        margin-left: 2px;
+    }
+
+    /* Universal Input Styling for Django Form Fields */
+    .publish__field input[type="text"],
+    .publish__field input[type="file"],
+    .publish__field select,
+    .publish__field textarea {
+        width: 100%;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 14px;
+        color: #1e293b;
+        background: #ffffff;
+        transition: all 0.25s ease;
+        outline: none;
+    }
+
+    .publish__field select {
+        height: 48px;
+    }
+
+    .publish__field textarea {
+        min-height: 250px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .publish__field input[type="text"]:focus,
+    .publish__field select:focus,
+    .publish__field textarea:focus {
+        border-color: #7fad39;
+        box-shadow: 0 0 0 4px rgba(127, 173, 57, 0.15);
+    }
+
+    /* Media Upload Field Card */
+    .media__upload__box {
+        background: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .media__upload__box:hover {
+        border-color: #7fad39;
+        background: #f1f8e9;
+    }
+
+    .media__upload__icon {
+        font-size: 28px;
+        color: #7fad39;
+        margin-bottom: 8px;
+    }
+
+    /* Sidebar Tips Card */
+    .tips__card {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 30px;
+    }
+
+    .tips__card h5 {
+        color: #166534;
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .tips__card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .tips__card li {
+        font-size: 13px;
+        color: #15803d;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        line-height: 1.5;
+    }
+
+    .tips__card li:last-child {
+        margin-bottom: 0;
+    }
+
+    .tips__card li i {
+        margin-top: 3px;
+        flex-shrink: 0;
+    }
+
+    /* Submit Button */
+    .publish__submit__btn {
+        width: 100%;
+        height: 52px;
+        background: #7fad39;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 16px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 14px rgba(127, 173, 57, 0.3);
+        transition: all 0.25s ease;
+    }
+
+    .publish__submit__btn:hover {
+        background: #6b962e;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(127, 173, 57, 0.4);
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="publish-hero set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="breadcrumb__text">
-                    <h2>Publish Article</h2>
-                </div>
-            </div>
+        <div class="publish__hero__text">
+            <h2>Publish New Article</h2>
+            <p>Share your stories, recipes, and insights with the vibrant Ogani community.</p>
         </div>
     </div>
 </section>
-<!-- Breadcrumb Section End -->
 
-<!-- Checkout Section Begin -->
-<section class="checkout spad">
+<!-- Form Section -->
+<section class="publish-section">
     <div class="container">
-        
-        <div class="checkout__form">
-            <h4>Write an article</h4>
-            <br>
-            <form action="{% url 'blog:blog_publish' %}" method='POST' enctype="multipart/form-data">
-                {% csrf_token %}
-               
-                <div class="row">
-                    <div class="col-lg-8 col-md-6">
+        <form action="{% url 'blog:blog_publish' %}" method='POST' enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="row">
+                <!-- Main Content Column -->
+                <div class="col-lg-8 col-md-7">
+                    <div class="publish__card">
+                        <h4 class="publish__card__title">
+                            <i class="fa fa-pencil-square-o" style="color: #7fad39;"></i> Article Content
+                        </h4>
 
-                        <div class="checkout__input">
-                            <p>Title of your article<span>*</span></p>
+                        <div class="publish__field">
+                            <label for="id_title">Article Title <span>*</span></label>
                             {{ form.title }}
                         </div>
-                        <br>
 
-                        <div class="checkout__input">
-                            <p>Select a category of your article<span>*</span></p>
+                        <div class="publish__field">
+                            <label for="id_blog_category">Category <span>*</span></label>
                             {{ form.blog_category }}
                         </div>
-                        
-                        <br>
-                        <br>
-                        <br>
 
-                        <div class="checkout__input">
-                            <p>Main Article<span>*</span></p>
+                        <div class="publish__field">
+                            <label for="id_blog_body">Body Content <span>*</span></label>
                             {{ form.blog_body }}
-                        </div>
-                        
-                        <br>
-                        <br>
-                        <br>
-
-                        <div class="checkout__input">
-                            <p>Upload Article Image<span>*</span></p>
-                            {{ form.blog_img }}
-                        </div>
-
-                        <br>
-                        <div class="checkout__input">
-                            <p>Upload thumbnails<span>*</span></p>
-                            {{ form.blog_thumb }}
-                        </div>
-                        
-                        <br>
-                        <br>
-                        <button type="submit" class="site-btn">Publish</button>
                         </div>
                     </div>
                 </div>
-            </form>
 
-        </div>
+                <!-- Sidebar Media & Publish Actions -->
+                <div class="col-lg-4 col-md-5">
+                    
+                    <!-- Media Upload Card -->
+                    <div class="publish__card">
+                        <h4 class="publish__card__title">
+                            <i class="fa fa-picture-o" style="color: #7fad39;"></i> Article Images
+                        </h4>
+
+                        <div class="publish__field">
+                            <label>Banner Image <span>*</span></label>
+                            <div class="media__upload__box">
+                                <div class="media__upload__icon"><i class="fa fa-cloud-upload"></i></div>
+                                {{ form.blog_img }}
+                            </div>
+                        </div>
+
+                        <div class="publish__field">
+                            <label>Thumbnail Image <span>*</span></label>
+                            <div class="media__upload__box">
+                                <div class="media__upload__icon"><i class="fa fa-image"></i></div>
+                                {{ form.blog_thumb }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Publishing Guidelines -->
+                    <div class="tips__card">
+                        <h5><i class="fa fa-lightbulb-o"></i> Writing Tips</h5>
+                        <ul>
+                            <li><i class="fa fa-check-circle"></i> Use a clear, catchy title for better reader engagement.</li>
+                            <li><i class="fa fa-check-circle"></i> Select the most accurate category for your post.</li>
+                            <li><i class="fa fa-check-circle"></i> Upload crisp high-res images for the banner and thumbnail.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Submit Action -->
+                    <button type="submit" class="publish__submit__btn">
+                        <i class="fa fa-paper-plane"></i> Publish Article
+                    </button>
+
+                </div>
+            </div>
+
+        </form>
     </div>
 </section>
-<!-- Checkout Section End -->
 
-{% endblock %}
+{% endblock %}

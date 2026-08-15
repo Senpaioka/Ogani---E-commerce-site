@@ -1,173 +1,396 @@
 {% extends 'index.html' %}
 
-{% block title %} Blog Search {% endblock %}
+{% block title %} Search Results for "{{ keyword }}" - Ogani Blog {% endblock %}
 
 {% load static %}
 
 {% block content %}
 
+<!-- Custom Styling for Blog Search Redesign -->
+<style>
+    .search-hero {
+        position: relative;
+        padding: 70px 0 60px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 0 0 24px 24px;
+        overflow: hidden;
+    }
 
- <!-- Product Section Begin -->
- <section class="product spad">
+    .search-hero::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(20, 83, 45, 0.75) 100%);
+        backdrop-filter: blur(4px);
+    }
+
+    .search__hero__content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        max-width: 750px;
+        margin: 0 auto;
+    }
+
+    .search__hero__badge {
+        display: inline-block;
+        background: rgba(127, 173, 57, 0.9);
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        padding: 5px 16px;
+        border-radius: 30px;
+        margin-bottom: 16px;
+    }
+
+    .search__hero__content h2 {
+        color: #ffffff;
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .search__input__wrapper {
+        position: relative;
+        max-width: 550px;
+        margin: 0 auto;
+    }
+
+    .search__input__wrapper input {
+        width: 100%;
+        height: 52px;
+        border-radius: 30px;
+        border: none;
+        padding: 0 60px 0 24px;
+        font-size: 15px;
+        outline: none;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .search__input__wrapper button {
+        position: absolute;
+        right: 6px;
+        top: 6px;
+        width: 40px;
+        height: 40px;
+        background: #7fad39;
+        border: none;
+        border-radius: 50%;
+        color: #ffffff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transition: background 0.25s ease;
+    }
+
+    .search__input__wrapper button:hover {
+        background: #6b962e;
+    }
+
+    /* Main Section */
+    .search-results-section {
+        padding: 60px 0 80px;
+        background: #f8fafc;
+    }
+
+    .results__header__bar {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 20px 28px;
+        margin-bottom: 35px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        border: 1px solid #f0f2f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .results__count__text {
+        font-size: 16px;
+        color: #475569;
+        margin: 0;
+    }
+
+    .results__count__text strong {
+        color: #1e293b;
+        font-size: 18px;
+    }
+
+    .results__badge {
+        background: #f1f8e9;
+        color: #7fad39;
+        font-weight: 700;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        border: 1px solid #dcedc8;
+    }
+
+    /* Article Card Grid */
+    .search__card {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f2f5;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 30px;
+    }
+
+    .search__card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .search__card__img {
+        position: relative;
+        height: 220px;
+        overflow: hidden;
+    }
+
+    .search__card__img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .search__card:hover .search__card__img img {
+        transform: scale(1.06);
+    }
+
+    .search__card__body {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .search__card__meta {
+        display: flex;
+        gap: 16px;
+        font-size: 13px;
+        color: #94a3b8;
+        margin-bottom: 12px;
+    }
+
+    .search__card__body h5 {
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 1.35;
+        margin-bottom: 12px;
+    }
+
+    .search__card__body h5 a {
+        color: #1e293b;
+        text-decoration: none;
+        transition: color 0.25s ease;
+    }
+
+    .search__card__body h5 a:hover {
+        color: #7fad39;
+    }
+
+    .search__card__body p {
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .search__read__btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #7fad39;
+        font-weight: 700;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .search__read__btn:hover {
+        color: #6b962e;
+        transform: translateX(4px);
+    }
+
+    /* Empty State */
+    .no__results__card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 60px 20px;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f2f5;
+    }
+
+    .no__results__icon {
+        font-size: 56px;
+        color: #cbd5e1;
+        margin-bottom: 16px;
+    }
+
+    .no__results__card h4 {
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 10px;
+    }
+
+    .no__results__card p {
+        color: #64748b;
+        max-width: 500px;
+        margin: 0 auto 24px;
+    }
+
+    /* Pagination */
+    .modern__pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 30px;
+    }
+
+    .modern__pagination a, 
+    .modern__pagination span.current-page {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .modern__pagination a {
+        background: #ffffff;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .modern__pagination a:hover {
+        background: #7fad39;
+        color: #ffffff;
+        border-color: #7fad39;
+    }
+
+    .modern__pagination span.current-page {
+        background: #7fad39;
+        color: #ffffff;
+        border: 1px solid #7fad39;
+        box-shadow: 0 4px 10px rgba(127, 173, 57, 0.3);
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="search-hero set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-5">
-                <div class="sidebar">
-                    
-                 
-                    <div class="sidebar__item">
-                        <div class="latest-product__text">
-                            <h4>Latest Products</h4>
-                            <div class="latest-product__slider owl-carousel">
-                                <div class="latest-prdouct__slider__item">
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="img/latest-product/lp-1.jpg" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="img/latest-product/lp-2.jpg" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="img/latest-product/lp-3.jpg" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="latest-prdouct__slider__item">
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="img/latest-product/lp-1.jpg" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="img/latest-product/lp-2.jpg" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="img/latest-product/lp-3.jpg" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>Crab Pool Security</h6>
-                                            <span>$30.00</span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
-            <div class="col-lg-9 col-md-7">
-
-                <div class="filter__item">
-
-                    <div class="section-title product__discount__title">
-                        <h2>Search Result For : {{ keyword | capfirst }}</h2>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-4 col-md-5">
-                            <div class="filter__sort">
-                                <span>Sort By</span>
-                                <select>
-                                    <option value="0">Default</option>
-                                    <option value="0">Default</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-4">
-                            <div class="filter__found">
-                                <h6><span>{{ total_result.count }}</span> Blogs found</h6>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-3">
-                            <div class="filter__option">
-                                <span class="icon_grid-2x2"></span>
-                                <span class="icon_ul"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    
-                    {% for blog in pages %}
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="blog__item">
-                            <div class="blog__item__pic">
-                                <img src="{{ blog.blog_thumb.url }}" alt="">
-                            </div>
-                            <div class="blog__item__text">
-                                <ul>
-                                    <li><i class="fa fa-calendar-o"></i> {{ blog.edited_at | date:'d M y'}} </li>
-                                    <li><i class="fa fa-comment-o"></i> 5</li>
-                                </ul>
-                                <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
-                                <p>{{ blog.blog_body | truncatechars:100 | striptags}}</p>
-                                
-                                <a href="{% url 'blog:blog_details' blog.id %}" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                
-                </div>
-
-                <div class="product__pagination">
-
-                    <div class="pagination">
-                        <span class="step-links">
-                            {% if pages.has_previous %}
-                                <a href="?page=1">1</a>
-                            {% endif %}
-
-                            <span class="current">
-                                Page {{ pages.number }} of {{ pages.paginator.num_pages }}.
-                            </span>
-                    
-                    
-                            {% if pages.has_next %}
-                                <a href="?page={{ pages.next_page_number }}"><i class="fa fa-long-arrow-right"></i></a>
-                            {% endif %}
-                        </span>
-                    </div>
-
-                </div>
+        <div class="search__hero__content">
+            <div class="search__hero__badge">Blog Search</div>
+            <h2>Search Results for "{{ keyword | capfirst }}"</h2>
+            
+            <div class="search__input__wrapper">
+                <form action="{% url 'blog:blog_search' %}" method='GET'>
+                    <input type="text" name="search_key" value="{{ keyword }}" placeholder="Search articles, recipes & tips...">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
             </div>
         </div>
     </div>
 </section>
-<!-- Product Section End -->
 
+<!-- Results Section -->
+<section class="search-results-section">
+    <div class="container">
+        
+        <!-- Results Header Bar -->
+        <div class="results__header__bar">
+            <p class="results__count__text">
+                Showing results for <strong>"{{ keyword | capfirst }}"</strong>
+            </p>
+            <span class="results__badge">
+                <i class="fa fa-file-text-o"></i> {{ total_result.count }} Article{% if total_result.count != 1 %}s{% endif %} Found
+            </span>
+        </div>
 
-{% endblock %}
+        <!-- Blog Grid -->
+        {% if pages %}
+        <div class="row">
+            {% for blog in pages %}
+            <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                <div class="search__card">
+                    <div class="search__card__img">
+                        {% if blog.blog_thumb %}
+                        <img src="{{ blog.blog_thumb.url }}" alt="{{ blog.title }}">
+                        {% else %}
+                        <img src="{% static 'img/blog/blog-1.jpg' %}" alt="{{ blog.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="search__card__body">
+                        <div class="search__card__meta">
+                            <span><i class="fa fa-calendar-o"></i> {{ blog.edited_at | date:'d M Y'}}</span>
+                            <span><i class="fa fa-comment-o"></i> 5</span>
+                        </div>
+                        <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
+                        <p>{{ blog.blog_body | striptags | truncatechars:100 }}</p>
+                        
+                        <a href="{% url 'blog:blog_details' blog.id %}" class="search__read__btn">
+                            Read Article <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination Controls -->
+        {% if pages.paginator.num_pages > 1 %}
+        <div class="modern__pagination">
+            {% if pages.has_previous %}
+                <a href="?search_key={{ keyword }}&page=1" title="First Page"><i class="fa fa-angle-double-left"></i></a>
+                <a href="?search_key={{ keyword }}&page={{ pages.previous_page_number }}"><i class="fa fa-angle-left"></i></a>
+            {% endif %}
+
+            <span class="current-page">{{ pages.number }}</span>
+
+            {% if pages.has_next %}
+                <a href="?search_key={{ keyword }}&page={{ pages.next_page_number }}"><i class="fa fa-angle-right"></i></a>
+                <a href="?search_key={{ keyword }}&page={{ pages.paginator.num_pages }}" title="Last Page"><i class="fa fa-angle-double-right"></i></a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="no__results__card">
+            <div class="no__results__icon">
+                <i class="fa fa-search-minus"></i>
+            </div>
+            <h4>No Articles Found</h4>
+            <p>We couldn't find any articles matching "<strong>{{ keyword }}</strong>". Try checking for spelling errors or search for a different topic.</p>
+            <a href="{% url 'blog:blog_page' %}" class="search__read__btn" style="justify-content: center; font-size: 15px;">
+                <i class="fa fa-arrow-left"></i> Back to Blog
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

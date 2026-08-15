@@ -1,112 +1,521 @@
 {% extends 'index.html' %}
 
-{% block title %} Filtered Blogs {% endblock %}
+{% block title %} Category Articles - Ogani Blog {% endblock %}
 
 {% load static %}
 
 {% block content %}
 
+<!-- Custom Styling for Category Blog Redesign -->
+<style>
+    .category-hero {
+        position: relative;
+        padding: 75px 0 65px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 0 0 24px 24px;
+        overflow: hidden;
+    }
 
- <!-- Blog Section Begin -->
- <section class="blog spad">
+    .category-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(20, 83, 45, 0.75) 100%);
+        backdrop-filter: blur(4px);
+    }
+
+    .category__hero__text {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        max-width: 750px;
+        margin: 0 auto;
+    }
+
+    .category__hero__badge {
+        display: inline-block;
+        background: rgba(127, 173, 57, 0.9);
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        padding: 5px 16px;
+        border-radius: 30px;
+        margin-bottom: 16px;
+    }
+
+    .category__hero__text h2 {
+        color: #ffffff;
+        font-size: 38px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .category__hero__text p {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 15px;
+        margin: 0;
+    }
+
+    /* Main Section Layout */
+    .category-feed-section {
+        padding: 60px 0 80px;
+        background: #f8fafc;
+    }
+
+    /* Sidebar Styling */
+    .sidebar__widget__card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 28px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f2f5;
+    }
+
+    .sidebar__widget__title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 22px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .sidebar__widget__title::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 45px;
+        height: 3px;
+        background: #7fad39;
+        border-radius: 2px;
+    }
+
+    .sidebar__search__box {
+        position: relative;
+    }
+
+    .sidebar__search__box input {
+        width: 100%;
+        height: 48px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 30px;
+        padding: 0 50px 0 20px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+    .sidebar__search__box input:focus {
+        border-color: #7fad39;
+        box-shadow: 0 0 0 4px rgba(127, 173, 57, 0.15);
+    }
+
+    .sidebar__search__box button {
+        position: absolute;
+        right: 6px;
+        top: 6px;
+        width: 36px;
+        height: 36px;
+        background: #7fad39;
+        border: none;
+        border-radius: 50%;
+        color: #ffffff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.25s ease;
+    }
+
+    .sidebar__search__box button:hover {
+        background: #6b962e;
+    }
+
+    .sidebar__cat__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar__cat__list li {
+        margin-bottom: 10px;
+    }
+
+    .sidebar__cat__list a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+        border-radius: 10px;
+        color: #475569;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.25s ease;
+        background: #f8fafc;
+        text-decoration: none;
+    }
+
+    .sidebar__cat__list a:hover {
+        background: #7fad39;
+        color: #ffffff;
+        transform: translateX(4px);
+    }
+
+    .recent__blog__item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+        text-decoration: none;
+        padding: 8px;
+        border-radius: 12px;
+        transition: background 0.25s ease;
+    }
+
+    .recent__blog__item:hover {
+        background: #f8fafc;
+    }
+
+    .recent__blog__img {
+        width: 75px;
+        height: 75px;
+        border-radius: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .recent__blog__info h6 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 6px;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        transition: color 0.25s ease;
+    }
+
+    .recent__blog__item:hover .recent__blog__info h6 {
+        color: #7fad39;
+    }
+
+    .recent__blog__info span {
+        font-size: 12px;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* Feed Article Cards */
+    .blog__card__item {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f2f5;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 30px;
+    }
+
+    .blog__card__item:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .blog__card__img {
+        position: relative;
+        height: 220px;
+        overflow: hidden;
+    }
+
+    .blog__card__img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .blog__card__item:hover .blog__card__img img {
+        transform: scale(1.06);
+    }
+
+    .blog__card__body {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .blog__card__meta {
+        display: flex;
+        gap: 16px;
+        font-size: 13px;
+        color: #94a3b8;
+        margin-bottom: 12px;
+    }
+
+    .blog__card__body h5 {
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 1.35;
+        margin-bottom: 12px;
+    }
+
+    .blog__card__body h5 a {
+        color: #1e293b;
+        text-decoration: none;
+        transition: color 0.25s ease;
+    }
+
+    .blog__card__body h5 a:hover {
+        color: #7fad39;
+    }
+
+    .blog__card__body p {
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .blog__card__btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #7fad39;
+        font-weight: 700;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .blog__card__btn:hover {
+        color: #6b962e;
+        transform: translateX(4px);
+    }
+
+    /* Empty State Card */
+    .category__empty__card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 60px 20px;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f0f2f5;
+        width: 100%;
+    }
+
+    .category__empty__icon {
+        font-size: 52px;
+        color: #cbd5e1;
+        margin-bottom: 16px;
+    }
+
+    .category__empty__card h4 {
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 10px;
+    }
+
+    .category__empty__card p {
+        color: #64748b;
+        margin-bottom: 24px;
+    }
+
+    /* Pagination */
+    .modern__pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    .modern__pagination a,
+    .modern__pagination span.current-page {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .modern__pagination a {
+        background: #ffffff;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .modern__pagination a:hover {
+        background: #7fad39;
+        color: #ffffff;
+        border-color: #7fad39;
+    }
+
+    .modern__pagination span.current-page {
+        background: #7fad39;
+        color: #ffffff;
+        border: 1px solid #7fad39;
+        box-shadow: 0 4px 10px rgba(127, 173, 57, 0.3);
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="category-hero set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+    <div class="container">
+        <div class="category__hero__text">
+            <div class="category__hero__badge">Category Archive</div>
+            <h2>Filtered Articles</h2>
+            <p>Discover articles curated under your selected category topic.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Category Feed Section -->
+<section class="category-feed-section">
     <div class="container">
         <div class="row">
+
+            <!-- Sidebar Column -->
             <div class="col-lg-4 col-md-5">
                 <div class="blog__sidebar">
-                    <div class="blog__sidebar__search">
 
-                        <form action="{% url 'blog:blog_search' %}" method='GET'>
-                            {{ form.search_key }}
-                            <button type="submit"><span class="icon_search"></span></button>
-                        </form>
-                        
+                    <!-- Search Widget -->
+                    <div class="sidebar__widget__card">
+                        <h4 class="sidebar__widget__title">Search Blog</h4>
+                        <div class="sidebar__search__box">
+                            <form action="{% url 'blog:blog_search' %}" method='GET'>
+                                {{ form.search_key }}
+                                <button type="submit"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
                     </div>
 
-                    <div class="blog__sidebar__item">
-                        <h4>Categories</h4>
-                        <ul>
+                    <!-- Categories Widget -->
+                    <div class="sidebar__widget__card">
+                        <h4 class="sidebar__widget__title">Categories</h4>
+                        <ul class="sidebar__cat__list">
                             {% for category in categories %}
-                            <li><a href="{% url 'blog:blog_by_category' category.id %}">{{ category.category}}</a></li>
+                            <li>
+                                <a href="{% url 'blog:blog_by_category' category.id %}">
+                                    <span>{{ category.category }}</span>
+                                    <i class="fa fa-chevron-right" style="font-size: 11px;"></i>
+                                </a>
+                            </li>
                             {% endfor %}
                         </ul>
                     </div>
 
-                    <div class="blog__sidebar__item">
-                        <h4>Recent News</h4>
-                        <div class="blog__sidebar__recent">
+                    <!-- Recent News Widget -->
+                    <div class="sidebar__widget__card">
+                        <h4 class="sidebar__widget__title">Recent Articles</h4>
+                        <div class="recent__blogs__wrapper">
                             {% for blog in recent_blogs %}
-                            <a href="{% url 'blog:blog_details' blog.id %}" class="blog__sidebar__recent__item">
-                                <div class="blog__sidebar__recent__item__pic">
-                                    <img src="{{ blog.blog_thumb.url }}" style="width: 100px; height: 80px;" alt="">
-                                </div>
-                                <div class="blog__sidebar__recent__item__text">
+                            <a href="{% url 'blog:blog_details' blog.id %}" class="recent__blog__item">
+                                <img src="{{ blog.blog_thumb.url }}" class="recent__blog__img" alt="{{ blog.title }}">
+                                <div class="recent__blog__info">
                                     <h6>{{ blog.title }}</h6>
-                                    <span>{{ blog.edited_at | date:'d M y'}}</span>
+                                    <span><i class="fa fa-calendar-o"></i> {{ blog.edited_at | date:'d M Y'}}</span>
                                 </div>
                             </a>
                             {% endfor %}
                         </div>
                     </div>
+
                 </div>
             </div>
 
+            <!-- Articles Feed Column -->
             <div class="col-lg-8 col-md-7">
                 <div class="row">
-                    {% if pages%}
+                    {% if pages %}
 
-                        {% for blog in pages %}
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="blog__item">
-                                <div class="blog__item__pic">
-                                    <img src="{{ blog.blog_thumb.url }}" alt="">
+                    {% for blog in pages %}
+                    <div class="col-lg-6 col-md-6 col-sm-6 mb-4">
+                        <div class="blog__card__item">
+                            <div class="blog__card__img">
+                                <img src="{{ blog.blog_thumb.url }}" alt="{{ blog.title }}">
+                            </div>
+                            <div class="blog__card__body">
+                                <div class="blog__card__meta">
+                                    <span><i class="fa fa-calendar-o"></i> {{ blog.edited_at | date:'d M y'}}</span>
+                                    <span><i class="fa fa-comment-o"></i> 5</span>
                                 </div>
-                                <div class="blog__item__text">
-                                    <ul>
-                                        <li><i class="fa fa-calendar-o"></i> {{ blog.edited_at | date:'d M y'}} </li>
-                                        <li><i class="fa fa-comment-o"></i> 5</li>
-                                    </ul>
-                                    <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
-                                    <p>{{ blog.blog_body | truncatechars:100 | striptags }}</p>
-                                    
-                                    <a href="{% url 'blog:blog_details' blog.id %}" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
-                                </div>
+
+                                <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
+                                <p>{{ blog.blog_body | striptags | truncatechars:100 }}</p>
+
+                                <a href="{% url 'blog:blog_details' blog.id %}" class="blog__card__btn">
+                                    Read Article <i class="fa fa-arrow-right"></i>
+                                </a>
                             </div>
                         </div>
-                        {% endfor %}
+                    </div>
+                    {% endfor %}
 
-                    {% else %}
-
-                        <div style="display: flex; justify-content: center; align-items: center; text_align:center; height: 50vh; width:100%">
-                            <h3>No Blog Found</h3>
-                        </div>
-
-                    {% endif %}
-
-                    <!-- pagination -->
-
+                    <!-- Pagination -->
+                    {% if pages.paginator.num_pages > 1 %}
                     <div class="col-lg-12">
-                        <div class="product__pagination blog__pagination">
+                        <div class="modern__pagination">
+                            {% if pages.has_previous %}
+                            <a href="?page=1" title="First Page"><i class="fa fa-angle-double-left"></i></a>
+                            <a href="?page={{ pages.previous_page_number }}"><i class="fa fa-angle-left"></i></a>
+                            {% endif %}
 
-                        {% if pages.has_previous %}
-                            <a href="?page=1">1</a>
-                        {% endif %}
+                            <span class="current-page">{{ pages.number }}</span>
 
-                        <span class="current">
-                            Page {{ pages.number }} of {{ pages.paginator.num_pages }}.
-                        </span>
-                
-                
-                        {% if pages.has_next %}
-                            <a href="?page={{ pages.next_page_number }}"><i class="fa fa-long-arrow-right"></i></a>
-                        {% endif %}
+                            {% if pages.has_next %}
+                            <a href="?page={{ pages.next_page_number }}"><i class="fa fa-angle-right"></i></a>
+                            <a href="?page={{ pages.paginator.num_pages }}" title="Last Page"><i
+                                    class="fa fa-angle-double-right"></i></a>
+                            {% endif %}
                         </div>
                     </div>
+                    {% endif %}
+
+                    {% else %}
+                    <div class="col-lg-12">
+                        <div class="category__empty__card">
+                            <div class="category__empty__icon">
+                                <i class="fa fa-folder-open-o"></i>
+                            </div>
+                            <h4>No Articles Found</h4>
+                            <p>There are currently no published articles under this category.</p>
+                            <a href="{% url 'blog:blog_page' %}" class="blog__card__btn"
+                                style="justify-content: center; font-size: 15px;">
+                                <i class="fa fa-arrow-left"></i> View All Articles
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
+
         </div>
     </div>
 </section>
-<!-- Blog Section End -->
-
 
 {% endblock %}
