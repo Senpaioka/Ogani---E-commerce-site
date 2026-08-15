@@ -1,114 +1,300 @@
 {% extends 'index.html' %}
 
-{% block title %} WishList {% endblock %}
+{% block title %} My Wishlist | Ogani {% endblock %}
 
 {% load static %}
 
 {% block content %}
 
+<style>
+    /* Wishlist Redesign Custom Styles */
+    .wishlist-section {
+        padding: 50px 0 80px;
+        background: #fafbfc;
+    }
 
+    .wishlist-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
+        border: 1px solid #eef2f5;
+        overflow: hidden;
+        margin-bottom: 35px;
+    }
 
-    <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="breadcrumb__text">
-                        <h2>Your WishList</h2>
+    .wishlist-table {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .wishlist-table thead {
+        background: #f8fafc;
+    }
+
+    .wishlist-table thead th {
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #4a5568;
+        padding: 18px 24px;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .wishlist-table tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+    .wishlist-table tbody tr:hover {
+        background-color: #fcfdfe;
+    }
+
+    .wishlist-table tbody td {
+        padding: 20px 24px;
+        vertical-align: middle;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .wishlist-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .wishlist-product-info {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .wishlist-product-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 1px solid #edf2f7;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        transition: transform 0.25s ease;
+    }
+
+    .wishlist-product-info:hover .wishlist-product-img {
+        transform: scale(1.05);
+    }
+
+    .wishlist-product-title {
+        font-size: 17px;
+        font-weight: 600;
+        color: #1a202c;
+        margin: 0;
+        text-decoration: none !important;
+        transition: color 0.2s ease;
+    }
+
+    .wishlist-product-title:hover {
+        color: #7fad39;
+    }
+
+    .wishlist-price {
+        font-size: 18px;
+        font-weight: 700;
+        color: #7fad39;
+    }
+
+    .remove-wishlist-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(239, 68, 68, 0.08);
+        color: #ef4444;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .remove-wishlist-btn:hover {
+        background: #ef4444;
+        color: #ffffff;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+
+    /* Empty Wishlist Layout */
+    .empty-wishlist-container {
+        text-align: center;
+        padding: 70px 20px;
+    }
+
+    .empty-wishlist-icon {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: rgba(239, 68, 68, 0.08);
+        color: #ef4444;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 38px;
+        margin-bottom: 24px;
+    }
+
+    .empty-wishlist-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 12px;
+    }
+
+    .empty-wishlist-desc {
+        color: #718096;
+        font-size: 15px;
+        margin-bottom: 28px;
+    }
+
+    /* Action Buttons */
+    .wishlist-actions-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .btn-custom-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        color: #4a5568;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 12px 28px;
+        border-radius: 30px;
+        transition: all 0.25s ease;
+        text-decoration: none !important;
+    }
+
+    .btn-custom-outline:hover {
+        border-color: #7fad39;
+        color: #7fad39;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(127, 173, 57, 0.15);
+    }
+
+    .btn-explore {
+        display: inline-block;
+        background: #7fad39;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px 36px;
+        border-radius: 30px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(127, 173, 57, 0.25);
+        text-decoration: none !important;
+    }
+
+    .btn-explore:hover {
+        background: #6b962e;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(127, 173, 57, 0.35);
+    }
+</style>
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Your Wishlist</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home:home_page' %}">Home</a>
+                        <span>Wishlist</span>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
 
-
- <!-- Shopping Cart Section Begin -->
-
- <section class="shoping-cart spad">
+<!-- Wishlist Section Begin -->
+<section class="wishlist-section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="shoping__product">Products</th>
-                                <th class="shoping__product">Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        {% if wishlist %}
-                            
-                            {% for data in wishlist %}
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <img src="{{ data.product.product_image.url }}" alt="">
-                                    <a href="{% url 'product:single_product' data.product.id %}"><h5>{{ data.product.product_name }}</h5></a>
-                                </td>
-
-                                <td class="shoping__cart__price">
-                                    ${{ data.product.product_price }}
-                                </td>
-                           
-
-                                <form action="{% url 'cart:remove_wishlist' data.product.id %}" method='POST'>
+        <!-- Wishlist Table Card -->
+        <div class="wishlist-card">
+            <table class="wishlist-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60%;">Product</th>
+                        <th style="width: 25%;">Price</th>
+                        <th style="width: 15%; text-align: center;">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if wishlist %}
+                        {% for data in wishlist %}
+                        <tr>
+                            <td>
+                                <div class="wishlist-product-info">
+                                    <img src="{{ data.product.product_image.url }}" alt="{{ data.product.product_name }}" class="wishlist-product-img">
+                                    <a href="{% url 'product:single_product' data.product.id %}" class="wishlist-product-title">
+                                        {{ data.product.product_name }}
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="wishlist-price">${{ data.product.product_price }}</span>
+                            </td>
+                            <td style="text-align: center;">
+                                <form action="{% url 'cart:remove_wishlist' data.product.id %}" method="POST" style="margin: 0;">
                                     {% csrf_token %}
-
-                                    <td class="shoping__cart__item__close">
-                                        <button type='submit' class="icon_close" style="background-color: red; color: white; border: none; padding: 10px 10px;"></button>
-                                    </td>
+                                    <button type="submit" class="remove-wishlist-btn" title="Remove from Wishlist">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
                                 </form>
-
-                    
-                            </tr>
-
-                            {% endfor %}
-
-                            {% else %}
-
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <div class="shoping__cart__btns">
-
-                                        
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <h3>No Products Found</h3>
-                                        <br>
-                                        <br>
-                                        <br>
-
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3">
+                                <div class="empty-wishlist-container">
+                                    <div class="empty-wishlist-icon">
+                                        <i class="fa fa-heart-o"></i>
                                     </div>
-                                </td>
-                            </tr>
-
-                            {% endif %}
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                    <h3 class="empty-wishlist-title">Your Wishlist is Empty</h3>
+                                    <p class="empty-wishlist-desc">Explore our products and save your favorite items here.</p>
+                                    <a href="{% url 'product:store_page' %}" class="btn-explore">
+                                        Explore Store
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__btns">
-                    <a href="{% url 'product:store_page' %}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                    <a href="{% url 'cart:wishlist_page' %}" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                        Refresh List</a>
-                </div>
-            </div>
-            
-            
-            </div>
+
+        <!-- Action Bar -->
+        <div class="wishlist-actions-bar">
+            <a href="{% url 'product:store_page' %}" class="btn-custom-outline">
+                <i class="fa fa-arrow-left"></i> Continue Shopping
+            </a>
+            <a href="{% url 'cart:wishlist_page' %}" class="btn-custom-outline">
+                <i class="fa fa-refresh"></i> Refresh List
+            </a>
         </div>
     </div>
 </section>
-<!-- Shoping Cart Section End -->
-
-
+<!-- Wishlist Section End -->
 
 {% endblock %}
+
 
