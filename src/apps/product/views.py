@@ -12,8 +12,18 @@ def product_store_page(request):
 
     html_file_name = 'product/store.html'
 
+    sort_option = request.GET.get('sort', 'default')
+
     all_categories = ProductCategory.objects.all()
     all_products = Product.objects.select_related('product_category').all()
+
+    if sort_option == 'price_low':
+        all_products = all_products.order_by('product_price')
+    elif sort_option == 'price_high':
+        all_products = all_products.order_by('-product_price')
+    elif sort_option == 'newest':
+        all_products = all_products.order_by('-created_at')
+
     # paginator
     paginator = Paginator(all_products, 6)
     page_number = request.GET.get('page')
@@ -24,12 +34,17 @@ def product_store_page(request):
     latest_product_two = Product.objects.select_related('product_category').order_by('-updated_at')[3:6]
     
 
+    # getting discount/featured products
+    discount_products = Product.objects.select_related('product_category').filter(is_available=True)[:6]
+
     context = {
         'categories': all_categories,
         'products': all_products,
         'pages': page_obj,
         'new_product_one': latest_product_one,
         'new_product_two': latest_product_two,
+        'discount_products': discount_products,
+        'current_sort': sort_option,
     }
 
     return render(request, html_file_name, context)
