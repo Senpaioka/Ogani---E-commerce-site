@@ -1,85 +1,260 @@
 {% extends 'index.html' %}
 
-{% block title %} Checkout {% endblock %}
+{% block title %} Checkout - Confirm & Pay {% endblock %}
 
 {% load static %}
 
 {% block content %}
+<style>
+    /* Custom Checkout Page Redesign */
+    .checkout-page-wrap {
+        padding: 50px 0 80px 0;
+        background: linear-gradient(180deg, #fbfbfb 0%, #f4f6f8 100%);
+    }
 
+    .checkout-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        padding: 35px;
+        margin-bottom: 30px;
+        border: 1px solid #f0f0f0;
+    }
 
-    <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="breadcrumb__text">
-                        <h2>Checkout</h2>
-                    </div>
+    .checkout-card-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: #1c1c1c;
+        margin-bottom: 25px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #7fad39;
+        display: inline-block;
+    }
+
+    /* Billing Info Grid */
+    .billing-info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .billing-info-item {
+        display: flex;
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 15px;
+    }
+
+    .billing-info-item:last-child {
+        border-bottom: none;
+    }
+
+    .billing-info-label {
+        width: 160px;
+        font-weight: 700;
+        color: #2d3748;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .billing-info-val {
+        color: #4a5568;
+        font-weight: 500;
+        flex-grow: 1;
+    }
+
+    /* Order Summary Side Card */
+    .order-summary-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.05);
+        padding: 32px;
+        border: 1px solid #edf2f7;
+    }
+
+    .order-summary-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: #1c1c1c;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 12px;
+    }
+
+    .order-products-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 700;
+        color: #718096;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 15px;
+    }
+
+    .order-items-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 20px 0;
+        max-height: 280px;
+        overflow-y: auto;
+    }
+
+    .order-items-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px dashed #e2e8f0;
+        font-size: 14px;
+        color: #2d3748;
+    }
+
+    .order-item-name {
+        font-weight: 600;
+    }
+
+    .order-item-qty {
+        font-size: 12px;
+        color: #a0aec0;
+        margin-left: 6px;
+    }
+
+    .order-item-price {
+        font-weight: 700;
+        color: #1a202c;
+    }
+
+    .price-row-calc {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 15px;
+        color: #4a5568;
+    }
+
+    .price-row-calc.total-row {
+        border-top: 2px solid #edf2f7;
+        margin-top: 10px;
+        padding-top: 16px;
+        font-size: 20px;
+        font-weight: 800;
+        color: #7fad39;
+    }
+
+    .btn-paypal-checkout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        background: #0070ba;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 14px 20px;
+        border-radius: 30px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 18px rgba(0, 112, 186, 0.3);
+        margin-top: 20px;
+    }
+
+    .btn-paypal-checkout:hover {
+        background: #005ea6;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px rgba(0, 112, 186, 0.4);
+        color: #ffffff;
+    }
+</style>
+
+<section class="checkout-page-wrap">
+    <div class="container">
+        <div class="row">
+            
+            <!-- Left: Billing Information -->
+            <div class="col-lg-7 col-md-6">
+                <div class="checkout-card">
+                    <h3 class="checkout-card-title"><i class="fa fa-address-card-o mr-2" style="color: #7fad39;"></i> Billing Details</h3>
+
+                    <ul class="billing-info-list">
+                        <li class="billing-info-item">
+                            <span class="billing-info-label"><i class="fa fa-user text-muted"></i> Name:</span>
+                            <span class="billing-info-val">{{ buyer.full_name }}</span>
+                        </li>
+                        <li class="billing-info-item">
+                            <span class="billing-info-label"><i class="fa fa-envelope text-muted"></i> Email:</span>
+                            <span class="billing-info-val">{{ buyer.email }}</span>
+                        </li>
+                        <li class="billing-info-item">
+                            <span class="billing-info-label"><i class="fa fa-phone text-muted"></i> Phone:</span>
+                            <span class="billing-info-val">{{ buyer.phone }}</span>
+                        </li>
+                        <li class="billing-info-item">
+                            <span class="billing-info-label"><i class="fa fa-map-marker text-muted"></i> Address:</span>
+                            <span class="billing-info-val">{{ buyer.address }}, {{ buyer.city }}, {{ buyer.country }}</span>
+                        </li>
+                        <li class="billing-info-item">
+                            <span class="billing-info-label"><i class="fa fa-clock-o text-muted"></i> Order Date:</span>
+                            <span class="billing-info-val">{{ time }}</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- Breadcrumb Section End -->
 
-    <!-- Checkout Section Begin -->
-    <section class="checkout spad">
-        <div class="container">
+            <!-- Right: Order Summary & Payment -->
+            <div class="col-lg-5 col-md-6">
+                <div class="order-summary-card">
+                    <h4 class="order-summary-title">Order Summary</h4>
 
-            <div class="checkout__form">
-                <h4>Billing Details</h4>
-
-                    <div class="row">
-                        <div class="col-lg-8 col-md-6">
-                            
-                            
-                           <!-- user billing info -->
-
-                        <ul>
-                            <li><b>Name:</b> <span>{{ buyer.full_name }}</span></li>
-                            <li><b>Email:</b> <span>{{ buyer.email }}</li>
-                            <li><b>Phone:</b> <span>{{ buyer.phone }}</span></li>
-                            <li><b>Billing Address:</b> <span>{{ buyer.address}}, {{ buyer.city }}, {{ buyer.country }}.</span></li>
-                            <br>
-                            <br>
-                            <li><b>Order Created at:</b> <span>{{ time }}</li>
-                        </ul>
-                            
-                            
-            
-                        </div>
-
-                        <div class="col-lg-4 col-md-6">
-                            <div class="checkout__order">
-                                <h4>Your Order</h4>
-                                <div class="checkout__order__products">Products <span>Total</span></div>
-                                <ul>
-                                    {% for item in products %}
-                                    <li>{{ item.product.product_name }} X {{ item.quantity }}<span>${{ item.product.product_price}}</span></li>
-                                    {% endfor %}
-                                </ul>
-                                <div class="checkout__order__subtotal">Subtotal <span>${{ total_without_tax }}</span></div>
-                                <div class="checkout__order__total">Total <span>${{ cart_total }}</span><p>(Tax Included)</p></div>
-                                
-                                {% if error %}
-                                <div class="alert alert-danger" role="alert">
-                                    {{ error }}
-                                </div>
-                                {% endif %}
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <button type="submit" class="site-btn btn-block" style="background-color: #0070ba; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 4px;">
-                                        PAY WITH PAYPAL
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+                    <div class="order-products-header">
+                        <span>Product</span>
+                        <span>Total</span>
                     </div>
+
+                    <ul class="order-items-list">
+                        {% for item in products %}
+                        <li>
+                            <span>
+                                <span class="order-item-name">{{ item.product.product_name }}</span>
+                                <span class="order-item-qty">x{{ item.quantity }}</span>
+                            </span>
+                            <span class="order-item-price">${{ item.product.product_price }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="price-row-calc">
+                        <span>Subtotal</span>
+                        <span><strong>${{ total_without_tax }}</strong></span>
+                    </div>
+                    
+                    <div class="price-row-calc total-row">
+                        <span>Total <small style="font-size: 12px; font-weight: normal; color: #718096;">(Tax Incl.)</small></span>
+                        <span>${{ cart_total }}</span>
+                    </div>
+
+                    {% if error %}
+                    <div class="alert alert-danger mt-3" role="alert">
+                        <i class="fa fa-exclamation-triangle mr-1"></i> {{ error }}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-paypal-checkout">
+                            <i class="fa fa-paypal" style="font-size: 20px;"></i> Pay with PayPal
+                        </button>
+                    </form>
+
+                </div>
             </div>
+
         </div>
-    </section>
-
-    <!-- Checkout Section End -->
-    
-
+    </div>
+</section>
 {% endblock %}
+
 
