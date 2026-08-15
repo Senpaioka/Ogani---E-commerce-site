@@ -1,51 +1,178 @@
-{% extends 'index.html' %} 
-{% block title %} Payment Info {% endblock %} 
-{% load static %} 
+{% extends 'index.html' %}
+
+{% block title %} Payment Successful - Order Confirmed {% endblock %}
+
+{% load static %}
+
 {% block content %}
+<style>
+    /* Payment Success Custom Styling */
+    .status-page-wrap {
+        padding: 70px 0 90px 0;
+        background: linear-gradient(180deg, #fbfbfb 0%, #f4f6f8 100%);
+    }
 
-<!-- Breadcrumb Section Begin -->
-<section
-  class="breadcrumb-section set-bg"
-  data-setbg="{% static 'img/breadcrumb.jpg' %}"
->
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <div class="breadcrumb__text">
-          <h2>Payment Info</h2>
+    .status-card-main {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+        padding: 50px 40px;
+        max-width: 680px;
+        margin: 0 auto;
+        text-align: center;
+        border: 1px solid #f0f0f0;
+    }
+
+    .status-icon-badge-success {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: #e8f5e9;
+        color: #2e7d32;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(46, 125, 50, 0.2);
+    }
+
+    .status-title {
+        font-size: 30px;
+        font-weight: 800;
+        color: #1c1c1c;
+        margin-bottom: 12px;
+    }
+
+    .status-desc {
+        color: #718096;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .status-info-box {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 20px 24px;
+        margin-bottom: 35px;
+        border: 1px solid #edf2f7;
+        text-align: left;
+    }
+
+    .status-info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px dashed #e2e8f0;
+        font-size: 15px;
+    }
+
+    .status-info-row:last-child {
+        border-bottom: none;
+    }
+
+    .status-info-label {
+        color: #718096;
+        font-weight: 600;
+    }
+
+    .status-info-val {
+        color: #2d3748;
+        font-weight: 700;
+    }
+
+    .status-actions-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .btn-status-success-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: #7fad39;
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 14px 28px;
+        border-radius: 30px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 18px rgba(127, 173, 57, 0.3);
+    }
+
+    .btn-status-success-primary:hover {
+        background: #6b962e;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px rgba(127, 173, 57, 0.4);
+    }
+
+    .btn-status-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 14px 28px;
+        border-radius: 30px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-status-secondary:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+        transform: translateY(-2px);
+    }
+</style>
+
+<section class="status-page-wrap">
+    <div class="container">
+        <div class="status-card-main">
+            
+            <div class="status-icon-badge-success">
+                <i class="fa fa-check"></i>
+            </div>
+
+            <h1 class="status-title">Payment Successful!</h1>
+            <p class="status-desc">Thank you for your purchase. Your payment has been processed and your order is currently being prepared.</p>
+
+            <div class="status-info-box">
+                <div class="status-info-row">
+                    <span class="status-info-label">Order Confirmation:</span>
+                    <span class="status-info-val" style="color: #2e7d32;"><i class="fa fa-check-circle mr-1"></i> Confirmed</span>
+                </div>
+                <div class="status-info-row">
+                    <span class="status-info-label">Fulfillment Status:</span>
+                    <span class="status-info-val"><i class="fa fa-refresh fa-spin text-primary mr-1"></i> Processing</span>
+                </div>
+            </div>
+
+            <div class="status-actions-group">
+                <a href="{% url 'product:store' %}" class="btn-status-success-primary">
+                    <i class="fa fa-shopping-bag"></i> Continue Shopping
+                </a>
+                <a href="{% url 'account:profile_page' %}" class="btn-status-secondary">
+                    <i class="fa fa-user"></i> View Profile
+                </a>
+            </div>
+
         </div>
-      </div>
     </div>
-  </div>
 </section>
-<!-- Breadcrumb Section End -->
-
-<!-- Checkout Section Begin -->
-<section class="checkout spad">
-  <div class="container">
-    <div class="checkout__form">
-      <h4>Billing Details</h4>
-
-      <div class="row">
-        <div class="col-lg-8 col-md-6">
-          <!-- payment success massage -->
-
-          <h1>Payment Successful</h1>
-        </div>
-
-        <div class="col-lg-4 col-md-6">
-          <div class="checkout__order">
-            <h4>Your Order</h4>
-
-            <p>Your Order confirmed</p>
-            <p>Your Order Processing</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Checkout Section End -->
-
 {% endblock %}
+
