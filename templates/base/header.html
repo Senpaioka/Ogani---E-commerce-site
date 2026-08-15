@@ -12,7 +12,7 @@
     <title>Ogani</title>
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
@@ -25,56 +25,218 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
 </head>
 
-<!-- dropdown styling for logout link -->
-
 <style>
+    /* Modern Header Custom Styles */
+    .header__top {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 8px 0;
+        font-size: 13px;
+    }
+
+    .header__top__left ul li {
+        color: #6c757d;
+        font-size: 13px;
+        font-weight: 500;
+        margin-right: 25px;
+        display: inline-block;
+    }
+
+    .header__top__left ul li i {
+        color: #7fad39;
+        margin-right: 6px;
+    }
+
+    .header__top__right__social a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        color: #495057;
+        background: #ffffff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        margin-right: 6px;
+        transition: all 0.3s ease;
+        font-size: 13px;
+    }
+
+    .header__top__right__social a:hover {
+        background: #7fad39;
+        color: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    .header__top__right__language {
+        margin-right: 20px;
+        cursor: pointer;
+    }
+
     /* Container for dropdown */
     .dropdown {
         position: relative;
-        /* Required for positioning the dropdown */
         display: inline-block;
-        /* Keeps the <a> inline */
     }
 
-    /* Dropdown content (hidden by default) */
-    .dropdown-content {
-        display: none;
-        /* Hidden initially */
-        position: absolute;
-        /* Positioned relative to the dropdown */
-        background-color: #f9f9f9;
-        /* Background for the dropdown */
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        /* Add shadow */
-        padding: 10px;
-        z-index: 1;
-        /* Ensure it appears on top */
-        min-width: 160px;
-        /* Width of the dropdown */
-    }
-
-    /* Show dropdown on hover */
-    .dropdown:hover .dropdown-content {
-        display: block;
-        /* Show the dropdown */
-    }
-
-    /* Style for individual dropdown links */
-    .dropdown-content a {
-        color: black;
-        /* Text color */
+    .header__auth__btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #252525;
+        font-weight: 600;
+        font-size: 14px;
         text-decoration: none;
-        /* Remove underline */
-        display: block;
-        /* Block level for easy clicking */
-        padding: 8px 12px;
-        /* Add padding */
+        padding: 6px 14px;
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        border: 1px solid #e2e8f0;
+        transition: all 0.25s ease;
     }
 
-    /* Hover effect for dropdown links */
+    .header__auth__btn:hover {
+        color: #7fad39;
+        border-color: #7fad39;
+        box-shadow: 0 4px 12px rgba(127, 173, 57, 0.15);
+        text-decoration: none;
+    }
+
+    /* Enhanced Dropdown Menu */
+    .dropdown-content {
+        display: opacity;
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        right: 0;
+        top: 120%;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        border: 1px solid #edf2f7;
+        padding: 8px 0;
+        z-index: 999;
+        min-width: 200px;
+        transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+        transform: translateY(10px);
+    }
+
+    .dropdown:hover .dropdown-content {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .dropdown-content a {
+        color: #2d3748;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .dropdown-content a i {
+        font-size: 15px;
+        width: 18px;
+        text-align: center;
+        color: #7fad39;
+    }
+
     .dropdown-content a:hover {
-        background-color: #f1f1f1;
-        /* Slightly darker background */
+        background-color: #f7fafc;
+        color: #7fad39;
+        text-decoration: none;
+    }
+
+    .dropdown-content .dropdown-divider {
+        height: 1px;
+        background-color: #e2e8f0;
+        margin: 6px 0;
+    }
+
+    .dropdown-content a.logout-link {
+        color: #e53e3e;
+    }
+
+    .dropdown-content a.logout-link i {
+        color: #e53e3e;
+    }
+
+    .dropdown-content a.logout-link:hover {
+        background-color: #fff5f5;
+        color: #c53030;
+    }
+
+    /* Nav Links Underline Indicator */
+    .header__menu ul li a {
+        position: relative;
+        font-weight: 700;
+        padding: 5px 0;
+        transition: color 0.3s ease;
+    }
+
+    .header__menu ul li a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background-color: #7fad39;
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    .header__menu ul li.active a::after,
+    .header__menu ul li a:hover::after {
+        width: 100%;
+    }
+
+    /* Clean Cart & Wishlist Icon Hover Styles */
+    .header__cart ul li a,
+    .humberger__menu__cart ul li a {
+        position: relative;
+        display: inline-block;
+        padding: 5px;
+        text-decoration: none;
+        transition: transform 0.2s ease;
+    }
+
+    .header__cart ul li a i,
+    .humberger__menu__cart ul li a i {
+        font-size: 20px;
+        color: #1c1c1c;
+        transition: color 0.25s ease, transform 0.25s ease;
+        display: inline-block;
+    }
+
+    .header__cart ul li a:hover i,
+    .humberger__menu__cart ul li a:hover i {
+        color: #7fad39;
+        transform: scale(1.18);
+    }
+
+    .header__cart ul li a span,
+    .humberger__menu__cart ul li a span {
+        height: 16px;
+        min-width: 16px;
+        background: #7fad39;
+        font-size: 10px;
+        color: #ffffff;
+        line-height: 16px;
+        text-align: center;
+        font-weight: 700;
+        border-radius: 10px;
+        position: absolute;
+        top: -2px;
+        right: -8px;
+        padding: 0 4px;
+        box-shadow: 0 2px 4px rgba(127, 173, 57, 0.3);
+        pointer-events: none;
     }
 </style>
 
@@ -88,7 +250,7 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="{% url 'home:home_page' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+            <a href="{% url 'home:home_page' %}"><img src="{% static 'img/logo.png' %}" alt="Ogani Logo"></a>
         </div>
         <div class="humberger__menu__cart">
             <ul>
@@ -103,36 +265,33 @@
             {% if user.is_authenticated %}
             <div class="header__cart__price">item: <span>${{ cart_total }}</span></div>
             {% else %}
-            <div class="header__cart__price">item: <span>$00.0</span></div>
+            <div class="header__cart__price">item: <span>$00.00</span></div>
             {% endif %}
         </div>
         <div class="humberger__menu__widget">
             <div class="header__top__right__language">
-                <img src="{% static 'img/language.png' %}" alt="">
+                <img src="{% static 'img/language.png' %}" alt="Language">
                 <div>English</div>
                 <span class="arrow_carrot-down"></span>
                 <ul>
-                    <li><a href="#">Spanis</a></li>
+                    <li><a href="#">Spanish</a></li>
                     <li><a href="#">English</a></li>
                 </ul>
             </div>
             <div class="header__top__right__auth">
                 {% if user.is_authenticated %}
-
                 <div class="dropdown">
-                    <!-- Trigger link -->
-                    <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
-
-                    <!-- Dropdown content -->
+                    <a href="#" class="header__auth__btn"><i class="fa fa-user-circle"></i> {{ user.username|default:"My Account" }} <i class="fa fa-angle-down"></i></a>
                     <div class="dropdown-content">
-                        <a href="{% url 'account:profile_page' %}">Profile</a>
-                        <a href="{% url 'account:settings_page' %}">Settings</a>
-                        <a href="{% url 'blog:blog_post' %}">Blog Posting</a>
+                        <a href="{% url 'account:profile_page' %}"><i class="fa fa-user"></i> Profile</a>
+                        <a href="{% url 'account:settings_page' %}"><i class="fa fa-cog"></i> Settings</a>
+                        <a href="{% url 'blog:blog_post' %}"><i class="fa fa-pencil-square-o"></i> Post Blog</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'account:logout' %}" class="logout-link"><i class="fa fa-sign-out"></i> Logout</a>
                     </div>
                 </div>
-
                 {% else %}
-                <a href="{% url 'account:login_page' %}"><i class="fa fa-user"></i> Login</a>
+                <a href="{% url 'account:login_page' %}" class="header__auth__btn"><i class="fa fa-user"></i> Login</a>
                 {% endif %}
             </div>
         </div>
@@ -172,17 +331,17 @@
     <header class="header">
         <div class="header__top">
             <div class="container">
-                <div class="row">
+                <div class="row align-items-center">
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
                                 <li><i class="fa fa-envelope"></i> hello@ogani.com</li>
-                                <li>Free Shipping for all Order of $99</li>
+                                <li><i class="fa fa-truck"></i> Free Shipping for all Orders over $99</li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
-                        <div class="header__top__right">
+                        <div class="header__top__right d-flex align-items-center justify-content-end">
                             <div class="header__top__right__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
@@ -190,31 +349,28 @@
                                 <a href="#"><i class="fa fa-pinterest-p"></i></a>
                             </div>
                             <div class="header__top__right__language">
-                                <img src="img/language.png" alt="">
+                                <img src="{% static 'img/language.png' %}" alt="Language">
                                 <div>English</div>
                                 <span class="arrow_carrot-down"></span>
                                 <ul>
-                                    <li><a href="#">Spanis</a></li>
+                                    <li><a href="#">Spanish</a></li>
                                     <li><a href="#">English</a></li>
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
                                 {% if user.is_authenticated %}
-
                                 <div class="dropdown">
-                                    <!-- Trigger link -->
-                                    <a href="{% url 'account:logout' %}"><i class="fa fa-user"></i> Logout</a>
-
-                                    <!-- Dropdown content -->
+                                    <a href="#" class="header__auth__btn"><i class="fa fa-user-circle"></i> {{ user.username|default:"My Account" }} <i class="fa fa-angle-down"></i></a>
                                     <div class="dropdown-content">
-                                        <a href="{% url 'account:profile_page' %}">Profile</a>
-                                        <a href="{% url 'account:settings_page' %}">Settings</a>
-                                        <a href="{% url 'blog:blog_post' %}">Blog Posting</a>
+                                        <a href="{% url 'account:profile_page' %}"><i class="fa fa-user"></i> Profile</a>
+                                        <a href="{% url 'account:settings_page' %}"><i class="fa fa-cog"></i> Settings</a>
+                                        <a href="{% url 'blog:blog_post' %}"><i class="fa fa-pencil-square-o"></i> Post Blog</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="{% url 'account:logout' %}" class="logout-link"><i class="fa fa-sign-out"></i> Logout</a>
                                     </div>
                                 </div>
-
                                 {% else %}
-                                <a href="{% url 'account:login_page' %}"><i class="fa fa-user"></i> Login</a>
+                                <a href="{% url 'account:login_page' %}" class="header__auth__btn"><i class="fa fa-user"></i> Login</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -223,14 +379,14 @@
             </div>
         </div>
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="{% url 'home:home_page' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                        <a href="{% url 'home:home_page' %}"><img src="{% static 'img/logo.png' %}" alt="Ogani Logo"></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <nav class="header__menu">
+                    <nav class="header__menu text-center">
                         <ul>
                             <li class="{% if request.path == '/' %}active{% endif %}">
                                 <a href="{% url 'home:home_page' %}">Home</a>
@@ -257,7 +413,6 @@
                             <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
                             <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
                             {% endif %}
-
                         </ul>
                         {% if user.is_authenticated %}
                         <div class="header__cart__price">item: <span>${{ cart_total }}</span></div>
@@ -272,4 +427,4 @@
             </div>
         </div>
     </header>
-    <!-- Header Section End -->
+    <!-- Header Section End -->
