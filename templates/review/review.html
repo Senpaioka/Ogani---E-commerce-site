@@ -1,69 +1,202 @@
 {% extends 'index.html' %}
 
-{% block title %} Post a Review {% endblock %}
+{% block title %} Write a Review {% endblock %}
 
 {% load static %}
 
 {% block content %}
+<style>
+    /* Review Page Custom Styling */
+    .review-section-wrap {
+        padding: 60px 0 90px 0;
+        background: linear-gradient(180deg, #fbfbfb 0%, #f4f6f8 100%);
+    }
 
-<!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="breadcrumb__text">
-                    <h2>Review Product</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Breadcrumb Section End -->
+    .review-card-box {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+        padding: 45px 50px;
+        max-width: 720px;
+        margin: 0 auto;
+        border: 1px solid #f0f0f0;
+    }
 
-<!-- Checkout Section Begin -->
-<section class="checkout spad">
+    .review-header-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: #1c1c1c;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .review-header-subtitle {
+        color: #718096;
+        font-size: 15px;
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    /* Interactive Star Rating Selector */
+    .star-rating-picker {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+
+    .star-rating-picker input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating-picker label {
+        font-size: 36px;
+        color: #cbd5e0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin: 0;
+    }
+
+    .star-rating-picker label:hover,
+    .star-rating-picker label:hover ~ label,
+    .star-rating-picker input[type="radio"]:checked ~ label {
+        color: #edbb0e;
+        transform: scale(1.15);
+    }
+
+    .rating-label-text {
+        text-align: center;
+        font-weight: 600;
+        color: #4a5568;
+        font-size: 14px;
+        height: 20px;
+        margin-bottom: 25px;
+    }
+
+    /* Form Fields */
+    .review-form-group {
+        margin-bottom: 25px;
+    }
+
+    .review-form-group label {
+        display: block;
+        font-weight: 700;
+        color: #2d3748;
+        font-size: 15px;
+        margin-bottom: 8px;
+    }
+
+    .review-textarea-custom {
+        width: 100%;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 16px;
+        font-size: 15px;
+        color: #2d3748;
+        background: #f8fafc;
+        transition: all 0.3s ease;
+        outline: none;
+        resize: vertical;
+        min-height: 140px;
+    }
+
+    .review-textarea-custom:focus {
+        border-color: #7fad39;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(127, 173, 57, 0.15);
+    }
+
+    .btn-submit-review {
+        width: 100%;
+        background: #7fad39;
+        color: #ffffff;
+        border: none;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 16px;
+        border-radius: 30px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(127, 173, 57, 0.3);
+    }
+
+    .btn-submit-review:hover {
+        background: #6b962e;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(127, 173, 57, 0.4);
+    }
+
+    @media (max-width: 575.98px) {
+        .review-card-box {
+            padding: 30px 20px;
+        }
+        .star-rating-picker label {
+            font-size: 28px;
+        }
+    }
+</style>
+
+<section class="review-section-wrap">
     <div class="container">
-        
-        <div class="checkout__form">
-            <h4>Write Product Review</h4>
-            <br>
-            <form action="{% url 'review:publish_review' id %}" method='POST'>
+        <div class="review-card-box">
+            
+            <h2 class="review-header-title">Share Your Experience</h2>
+            <p class="review-header-subtitle">How did you like this product? Your review helps others make better choices.</p>
+
+            <form action="{% url 'review:publish_review' id %}" method="POST">
                 {% csrf_token %}
-               
-                <div class="row">
-                    <div class="col-lg-8 col-md-6">
 
-                        <div class="checkout__input">
-                            <p>Please Select Your Score:<span>*</span></p>
-                            <select name="rating" required>
-                                <option value="" disabled selected>Select your rating</option>
-                                <option value="1">1 - Poor</option>
-                                <option value="2">2 - Fair</option>
-                                <option value="3">3 - Good</option>
-                                <option value="4">4 - Very Good</option>
-                                <option value="5">5 - Excellent</option>
-                            </select>
-                        </div>
-                        
-                        <br>
-                        <br>
-                        <br>
-                        
-                        <div class="checkout__input">
-                            <p>Write Review:<span></span></p>
-                            <textarea id="text_value" name="text_value" rows="4" cols="50" value=""></textarea>
-                        </div>
-                        
-                        <br>
-                        <button type="submit" class="site-btn">Post Review</button>
-                        </div>
-                    </div>
+                <!-- Hidden native select for form backward compatibility -->
+                <select name="rating" id="hiddenRatingSelect" style="display: none;" required>
+                    <option value="" disabled selected>Select rating</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <!-- Interactive Star Rating Display -->
+                <div class="star-rating-picker">
+                    <input type="radio" id="star5" name="star_picker" value="5" onclick="setRating(5)"><label for="star5" title="5 Stars - Excellent"><i class="fa fa-star"></i></label>
+                    <input type="radio" id="star4" name="star_picker" value="4" onclick="setRating(4)"><label for="star4" title="4 Stars - Very Good"><i class="fa fa-star"></i></label>
+                    <input type="radio" id="star3" name="star_picker" value="3" onclick="setRating(3)"><label for="star3" title="3 Stars - Good"><i class="fa fa-star"></i></label>
+                    <input type="radio" id="star2" name="star_picker" value="2" onclick="setRating(2)"><label for="star2" title="2 Stars - Fair"><i class="fa fa-star"></i></label>
+                    <input type="radio" id="star1" name="star_picker" value="1" onclick="setRating(1)"><label for="star1" title="1 Star - Poor"><i class="fa fa-star"></i></label>
                 </div>
+                <div class="rating-label-text" id="ratingTextDisplay">Tap a star to rate</div>
+
+                <!-- Textarea -->
+                <div class="review-form-group">
+                    <label for="text_value"><i class="fa fa-commenting-o mr-1" style="color: #7fad39;"></i> Your Feedback</label>
+                    <textarea id="text_value" name="text_value" class="review-textarea-custom" placeholder="What did you like or dislike about this item? Write your honest thoughts here..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit-review">
+                    <i class="fa fa-paper-plane mr-2"></i> Submit Review
+                </button>
             </form>
 
         </div>
     </div>
 </section>
-<!-- Checkout Section End -->
 
-{% endblock %}
+<script>
+    const ratingTexts = {
+        1: "1 Star - Poor",
+        2: "2 Stars - Fair",
+        3: "3 Stars - Good",
+        4: "4 Stars - Very Good",
+        5: "5 Stars - Excellent!"
+    };
+
+    function setRating(val) {
+        document.getElementById('hiddenRatingSelect').value = val;
+        document.getElementById('ratingTextDisplay').innerText = ratingTexts[val] || "";
+        document.getElementById('ratingTextDisplay').style.color = "#7fad39";
+    }
+</script>
+{% endblock %}
