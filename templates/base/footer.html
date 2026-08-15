@@ -321,6 +321,71 @@
 </footer>
 <!-- Footer Section End -->
 
+<!-- Go to Top Button -->
+<button id="backToTopBtn" aria-label="Go to top" title="Go to top">
+    <i class="fa fa-angle-up"></i>
+</button>
+
+<style>
+    #backToTopBtn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #7fad39 0%, #5b8724 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        box-shadow: 0 4px 15px rgba(127, 173, 57, 0.4);
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        outline: none;
+    }
+
+    #backToTopBtn:hover {
+        background: linear-gradient(135deg, #6b962e 0%, #4a701b 100%);
+        color: #ffffff;
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 8px 22px rgba(127, 173, 57, 0.55);
+    }
+
+    #backToTopBtn.show {
+        opacity: 1;
+        visibility: visible;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var backToTopBtn = document.getElementById('backToTopBtn');
+        if (backToTopBtn) {
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add('show');
+                } else {
+                    backToTopBtn.classList.remove('show');
+                }
+            });
+
+            backToTopBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+    });
+</script>
+
 <!-- Js Plugins -->
 <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
