@@ -1,12 +1,236 @@
 {% extends 'index.html' %}
 
-{% block title %} Contact {% endblock %}
+{% block title %} Contact Us | Ogani {% endblock %}
 
 {% load static %}
 
 {% block content %}
 
+<style>
+    /* Contact Page Redesign Styling */
+    .contact-hero {
+        position: relative;
+        background: linear-gradient(135deg, rgba(127, 173, 57, 0.1) 0%, rgba(127, 173, 57, 0.02) 100%);
+        padding: 50px 0 30px;
+        border-bottom: 1px solid #f0f0f0;
+    }
 
+    .contact-card-item {
+        background: #ffffff;
+        border: 1px solid #eef2f5;
+        border-radius: 16px;
+        padding: 35px 25px;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .contact-card-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(127, 173, 57, 0.12);
+        border-color: rgba(127, 173, 57, 0.3);
+    }
+
+    .contact-card-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: rgba(127, 173, 57, 0.08);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 22px;
+        transition: all 0.3s ease;
+    }
+
+    .contact-card-item:hover .contact-card-icon {
+        background: #7fad39;
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .contact-card-icon span {
+        font-size: 28px;
+        color: #7fad39;
+        transition: all 0.3s ease;
+    }
+
+    .contact-card-item:hover .contact-card-icon span {
+        color: #ffffff;
+    }
+
+    .contact-card-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1c1c1c;
+        margin-bottom: 10px;
+        letter-spacing: -0.3px;
+    }
+
+    .contact-card-text {
+        font-size: 15px;
+        color: #666666;
+        margin-bottom: 0;
+        line-height: 1.6;
+    }
+
+    .contact-form-wrapper {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        padding: 50px 40px;
+        border: 1px solid #f0f0f0;
+    }
+
+    .contact-form-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .contact-form-header h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1c1c1c;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 12px;
+    }
+
+    .contact-form-header h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: #7fad39;
+        border-radius: 3px;
+    }
+
+    .contact-form-header p {
+        color: #777777;
+        margin-top: 10px;
+        font-size: 15px;
+    }
+
+    .contact-input-field input,
+    .contact-input-field textarea {
+        width: 100%;
+        background: #f8fafc;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 14px 20px;
+        font-size: 15px;
+        color: #333333;
+        transition: all 0.25s ease;
+        outline: none;
+    }
+
+    .contact-input-field input:focus,
+    .contact-input-field textarea:focus {
+        background: #ffffff;
+        border-color: #7fad39;
+        box-shadow: 0 0 0 4px rgba(127, 173, 57, 0.15);
+    }
+
+    .contact-input-field textarea {
+        min-height: 160px;
+        resize: vertical;
+    }
+
+    .contact-submit-btn {
+        background: #7fad39;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 16px 45px;
+        border-radius: 50px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(127, 173, 57, 0.3);
+    }
+
+    .contact-submit-btn:hover {
+        background: #6b962e;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(127, 173, 57, 0.4);
+        color: #ffffff;
+    }
+
+    .map-container-wrapper {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        border: 1px solid #eef2f5;
+        margin-top: 50px;
+    }
+
+    .map-overlay-card {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 25px 30px;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        max-width: 320px;
+        z-index: 2;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .map-overlay-card h4 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1c1c1c;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .map-overlay-card h4 i {
+        color: #7fad39;
+    }
+
+    .map-overlay-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .map-overlay-card ul li {
+        font-size: 14px;
+        color: #555555;
+        margin-bottom: 8px;
+        line-height: 1.5;
+    }
+
+    .map-overlay-card ul li:last-child {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 767px) {
+        .map-overlay-card {
+            position: relative;
+            top: 0;
+            left: 0;
+            max-width: 100%;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .contact-form-wrapper {
+            padding: 30px 20px;
+        }
+    }
+</style>
 
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
@@ -26,88 +250,100 @@
 </section>
 <!-- Breadcrumb Section End -->
 
-<!-- Contact Section Begin -->
+<!-- Contact Info Cards Section -->
 <section class="contact spad">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-6 text-center">
-                <div class="contact__widget">
-                    <span class="icon_phone"></span>
-                    <h4>Phone</h4>
-                    <p>{{ contact.phone }}</p>
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="contact-card-item">
+                    <div class="contact-card-icon">
+                        <span class="icon_phone"></span>
+                    </div>
+                    <h4 class="contact-card-title">Phone</h4>
+                    <p class="contact-card-text">{{ contact.phone|default:"+1 234 567 890" }}</p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 text-center">
-                <div class="contact__widget">
-                    <span class="icon_pin_alt"></span>
-                    <h4>Address</h4>
-                    <p>{{ contact.address }}</p>
+
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="contact-card-item">
+                    <div class="contact-card-icon">
+                        <span class="icon_pin_alt"></span>
+                    </div>
+                    <h4 class="contact-card-title">Address</h4>
+                    <p class="contact-card-text">{{ contact.address|default:"60-49 Road 11375 New York" }}</p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 text-center">
-                <div class="contact__widget">
-                    <span class="icon_clock_alt"></span>
-                    <h4>Open time</h4>
-                    <p>{{ contact.open_time }}</p>
+
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="contact-card-item">
+                    <div class="contact-card-icon">
+                        <span class="icon_clock_alt"></span>
+                    </div>
+                    <h4 class="contact-card-title">Open Time</h4>
+                    <p class="contact-card-text">{{ contact.open_time|default:"10:00 am to 23:00 pm" }}</p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 text-center">
-                <div class="contact__widget">
-                    <span class="icon_mail_alt"></span>
-                    <h4>Email</h4>
-                    <p>{{ contact.email }}</p>
+
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="contact-card-item">
+                    <div class="contact-card-icon">
+                        <span class="icon_mail_alt"></span>
+                    </div>
+                    <h4 class="contact-card-title">Email</h4>
+                    <p class="contact-card-text">{{ contact.email|default:"hello@ogani.com" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form Section -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-10">
+                <div class="contact-form-wrapper">
+                    <div class="contact-form-header">
+                        <h2>Leave Us a Message</h2>
+                        <p>We'd love to hear from you! Send us a message and we'll reply as soon as possible.</p>
+                    </div>
+                    
+                    <form action="{% url 'contact:save_message' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 mb-4 contact-input-field">
+                                {{ form.name }}
+                            </div>
+                            <div class="col-lg-6 col-md-6 mb-4 contact-input-field">
+                                {{ form.email }}
+                            </div>
+                            <div class="col-lg-12 mb-4 contact-input-field">
+                                {{ form.message_body }}
+                            </div>
+                            <div class="col-lg-12 text-center">
+                                <button type="submit" class="contact-submit-btn">Send Message</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Map Section -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="map-container-wrapper">
+                    <div class="map-overlay-card">
+                        <h4><i class="icon_pin"></i> Main Office</h4>
+                        <ul>
+                            <li><strong>Phone:</strong> {{ contact.phone|default:"+1 234 567 890" }}</li>
+                            <li><strong>Address:</strong> {{ contact.address|default:"60-49 Road 11375 New York" }}</li>
+                            <li><strong>Hours:</strong> {{ contact.open_time|default:"10:00 am to 23:00 pm" }}</li>
+                        </ul>
+                    </div>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d49116.39176087041!2d-86.41867791216099!3d39.69977417971648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x886ca48c841038a1%3A0x70cfba96bf847f0!2sPlainfield%2C%20IN%2C%20USA!5e0!3m2!1sen!2sbd!4v1586106673811!5m2!1sen!2sbd"
+                        height="450" style="border:0; width:100%; display:block;" allowfullscreen="" loading="lazy" aria-hidden="false" tabindex="0"></iframe>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Contact Section End -->
 
-<!-- Map Begin -->
-<div class="map">
-    <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d49116.39176087041!2d-86.41867791216099!3d39.69977417971648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x886ca48c841038a1%3A0x70cfba96bf847f0!2sPlainfield%2C%20IN%2C%20USA!5e0!3m2!1sen!2sbd!4v1586106673811!5m2!1sen!2sbd"
-        height="500" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-    <div class="map-inside">
-        <i class="icon_pin"></i>
-        <div class="inside-widget">
-            <h4>New York</h4>
-            <ul>
-                <li>Phone: {{ contact.phone }}</li>
-                <li>Add: {{ contact.address }}</li>
-            </ul>
-        </div>
-    </div>
-</div>
-<!-- Map End -->
-
-<!-- Contact Form Begin -->
-<div class="contact-form spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="contact__form__title">
-                    <h2>Leave Message</h2>
-                </div>
-            </div>
-        </div>
-        <form action="{% url 'contact:save_message' %}" method='POST'>
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    {{ form.name }}
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    {{ form.email }}
-                </div>
-                <div class="col-lg-12 text-center">
-                    {{ form.message_body }}
-                    <button type="submit" class="site-btn">SEND MESSAGE</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!-- Contact Form End -->
-
-{% endblock %}
+{% endblock %}
