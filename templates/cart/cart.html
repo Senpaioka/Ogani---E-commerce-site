@@ -1,165 +1,489 @@
 {% extends 'index.html' %}
 
-{% block title %} Cart {% endblock %}
+{% block title %} Shopping Cart | Ogani {% endblock %}
 
 {% load static %}
 
 {% block content %}
 
+<style>
+    /* Shopping Cart Redesign Custom Styles */
+    .cart-section {
+        padding: 50px 0 80px;
+        background: #fafbfc;
+    }
 
+    .cart-table-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
+        border: 1px solid #eef2f5;
+        overflow: hidden;
+        margin-bottom: 40px;
+    }
 
-    <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="breadcrumb__text">
-                        <h2>Shopping Cart</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Breadcrumb Section End -->
+    .cart-table {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
 
+    .cart-table thead {
+        background: #f8fafc;
+    }
 
- <!-- Shopping Cart Section Begin -->
+    .cart-table thead th {
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #4a5568;
+        padding: 18px 24px;
+        border-bottom: 1px solid #edf2f7;
+    }
 
- <section class="shoping-cart spad">
+    .cart-table tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+    .cart-table tbody tr:hover {
+        background-color: #fcfdfe;
+    }
+
+    .cart-table tbody td {
+        padding: 20px 24px;
+        vertical-align: middle;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .cart-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .cart-product-info {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .cart-product-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 1px solid #edf2f7;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .cart-product-title {
+        font-size: 17px;
+        font-weight: 600;
+        color: #1a202c;
+        margin: 0;
+    }
+
+    .cart-price {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2d3748;
+    }
+
+    .cart-total-price {
+        font-size: 18px;
+        font-weight: 700;
+        color: #7fad39;
+    }
+
+    /* Quantity Control Styling */
+    .qty-control-wrapper {
+        display: inline-flex;
+        align-items: center;
+        background: #f1f5f9;
+        border-radius: 30px;
+        padding: 4px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .qty-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #4a5568;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+        text-decoration: none !important;
+    }
+
+    .qty-btn:hover {
+        background: #7fad39;
+        color: #ffffff;
+    }
+
+    .qty-input {
+        width: 45px;
+        border: none;
+        background: transparent;
+        text-align: center;
+        font-weight: 700;
+        font-size: 15px;
+        color: #1a202c;
+        outline: none;
+    }
+
+    .remove-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(239, 68, 68, 0.08);
+        color: #ef4444;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .remove-btn:hover {
+        background: #ef4444;
+        color: #ffffff;
+        transform: scale(1.1);
+    }
+
+    /* Empty Cart Layout */
+    .empty-cart-container {
+        text-align: center;
+        padding: 70px 20px;
+    }
+
+    .empty-cart-icon {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: rgba(127, 173, 57, 0.1);
+        color: #7fad39;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        margin-bottom: 24px;
+    }
+
+    .empty-cart-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 12px;
+    }
+
+    .empty-cart-desc {
+        color: #718096;
+        font-size: 15px;
+        margin-bottom: 28px;
+    }
+
+    /* Action Buttons & Cards */
+    .cart-actions-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .btn-custom-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        color: #4a5568;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 12px 28px;
+        border-radius: 30px;
+        transition: all 0.25s ease;
+        text-decoration: none !important;
+    }
+
+    .btn-custom-outline:hover {
+        border-color: #7fad39;
+        color: #7fad39;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(127, 173, 57, 0.15);
+    }
+
+    .summary-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
+        border: 1px solid #eef2f5;
+        height: 100%;
+    }
+
+    .summary-card h5 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f1f5f9;
+    }
+
+    .coupon-form {
+        display: flex;
+        gap: 10px;
+    }
+
+    .coupon-form input {
+        flex: 1;
+        background: #f8fafc;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 12px 18px;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    .coupon-form input:focus {
+        border-color: #7fad39;
+        background: #ffffff;
+    }
+
+    .coupon-form button {
+        background: #2d3748;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 13px;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .coupon-form button:hover {
+        background: #1a202c;
+    }
+
+    .cart-summary-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 24px 0;
+    }
+
+    .cart-summary-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 15px;
+        color: #4a5568;
+        padding: 12px 0;
+        border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .cart-summary-list li:last-child {
+        border-bottom: none;
+        padding-top: 16px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a202c;
+    }
+
+    .cart-summary-list li span {
+        font-weight: 600;
+        color: #2d3748;
+    }
+
+    .cart-summary-list li:last-child span {
+        color: #7fad39;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .checkout-btn {
+        display: block;
+        width: 100%;
+        background: #7fad39;
+        color: #ffffff;
+        text-align: center;
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 0.5px;
+        padding: 16px;
+        border-radius: 30px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(127, 173, 57, 0.25);
+        text-decoration: none !important;
+    }
+
+    .checkout-btn:hover:not(.disabled) {
+        background: #6b962e;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(127, 173, 57, 0.35);
+    }
+
+    .checkout-btn.disabled {
+        background: #cbd5e1;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+</style>
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="shoping__product">Products</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        {% if all_products %}
-                            
-                            {% for data in all_products %}
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <img src="{{ data.product.product_image.url }}" alt="">
-                                    <h5>{{ data.product.product_name }}</h5>
-                                </td> 
-                                <td class="shoping__cart__price">
-                                    ${{ data.product.product_price }}
-                                </td>
-                           
-                                <td class="shoping__cart__quantity">
-                                    
-                                    <div class="quantity" style="display: flex; align-items: center; gap: 0px;">
-
-
-                                        <a href="{% url 'cart:decrease_product' data.product.id %}" class="btn btn-light" type="button" id="button-plus">
-                                          <i class="fa fa-minus"></i>
-                                        </a>
-                                        
-                                        <form action="{% url 'cart:increase_product' data.product.id %}" method="POST" style="display: flex; align-items: center;">
-                                          {% csrf_token %}
-                                          <input type="text" style="width: 40px; height: 40px; text-align: center; margin: 0 10px;" value='{{ data.quantity }}' readonly>
-                                          <button class="btn btn-light" type="submit" id="button-minus">
-                                            <i class="fa fa-plus"></i>
-                                          </button>
-                                        </form>
-
-                                      </div>
-                                </td>
-
-                                <td class="shoping__cart__total">
-                                    ${{ data.sub_total }}
-                                </td>
-
-
-
-                                <form action="{% url 'cart:delete_product' data.product.id %}" method='POST'>
-                                    {% csrf_token %}
-                                    <td class="shoping__cart__item__close">
-                                        
-                                        <button type='submit' class="icon_close" style="background-color: red; color: white; border: none; padding: 10px 10px;"></button>
-                                    </td>
-
-                                </form>
-
-                    
-                            </tr>
-
-                            {% endfor %}
-
-                            {% else %}
-
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <div class="shoping__cart__btns">
-
-                                        
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <h3>No Products Found</h3>
-                                        <br>
-                                        <br>
-                                        <br>
-
-                                    </div>
-                                </td>
-                            </tr>
-
-                            {% endif %}
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__btns">
-                    <a href="{% url 'product:store_page' %}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                    <a href="{% url 'cart:cart_page' %}" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                        Refresh Cart</a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="shoping__continue">
-                    <div class="shoping__discount">
-                        <h5>Discount Codes</h5>
-                        <form action="#">
-                            <input type="text" placeholder="Enter your coupon code">
-                            <button type="submit" class="site-btn">APPLY COUPON</button>
-                        </form>
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Shopping Cart</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home:home_page' %}">Home</a>
+                        <span>Shopping Cart</span>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="shoping__checkout">
-                    <h5>Cart Total</h5>
-                    <ul>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Shopping Cart Section Begin -->
+<section class="cart-section">
+    <div class="container">
+        <!-- Cart Table Card -->
+        <div class="cart-table-card">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th style="width: 45%;">Product</th>
+                        <th style="width: 15%;">Price</th>
+                        <th style="width: 20%;">Quantity</th>
+                        <th style="width: 15%;">Total</th>
+                        <th style="width: 5%; text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if all_products %}
+                        {% for data in all_products %}
+                        <tr>
+                            <td>
+                                <div class="cart-product-info">
+                                    <img src="{{ data.product.product_image.url }}" alt="{{ data.product.product_name }}" class="cart-product-img">
+                                    <h5 class="cart-product-title">{{ data.product.product_name }}</h5>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="cart-price">${{ data.product.product_price }}</span>
+                            </td>
+                            <td>
+                                <div class="qty-control-wrapper">
+                                    <a href="{% url 'cart:decrease_product' data.product.id %}" class="qty-btn" title="Decrease quantity">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+                                    
+                                    <form action="{% url 'cart:increase_product' data.product.id %}" method="POST" style="display: inline-flex; align-items: center; margin: 0;">
+                                        {% csrf_token %}
+                                        <input type="text" class="qty-input" value="{{ data.quantity }}" readonly>
+                                        <button class="qty-btn" type="submit" title="Increase quantity">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="cart-total-price">${{ data.sub_total }}</span>
+                            </td>
+                            <td style="text-align: center;">
+                                <form action="{% url 'cart:delete_product' data.product.id %}" method="POST" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="remove-btn" title="Remove item">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5">
+                                <div class="empty-cart-container">
+                                    <div class="empty-cart-icon">
+                                        <i class="fa fa-shopping-basket"></i>
+                                    </div>
+                                    <h3 class="empty-cart-title">Your Cart is Currently Empty</h3>
+                                    <p class="empty-cart-desc">Looks like you haven't added any fresh items to your cart yet.</p>
+                                    <a href="{% url 'product:store_page' %}" class="checkout-btn" style="display: inline-block; width: auto; padding: 14px 36px;">
+                                        Explore Store
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="cart-actions-bar">
+            <a href="{% url 'product:store_page' %}" class="btn-custom-outline">
+                <i class="fa fa-arrow-left"></i> Continue Shopping
+            </a>
+            <a href="{% url 'cart:cart_page' %}" class="btn-custom-outline">
+                <i class="fa fa-refresh"></i> Refresh Cart
+            </a>
+        </div>
+
+        <!-- Cart Summary & Coupon Section -->
+        <div class="row g-4">
+            <div class="col-lg-6 mb-4">
+                <div class="summary-card">
+                    <h5><i class="fa fa-tag" style="color: #7fad39; margin-right: 8px;"></i> Discount Code</h5>
+                    <form action="#" class="coupon-form">
+                        <input type="text" placeholder="Enter coupon code">
+                        <button type="submit">Apply Coupon</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="summary-card">
+                    <h5><i class="fa fa-shopping-cart" style="color: #7fad39; margin-right: 8px;"></i> Order Summary</h5>
+                    <ul class="cart-summary-list">
                         <li>Subtotal <span>${{ total_price }}</span></li>
-                        <li>Tax <span>{{ tax }}</span><p> (10% tax)</p></li>
+                        <li>Tax (10%) <span>${{ tax }}</span></li>
                         <li>Total <span>${{ final_price }}</span></li>
                     </ul>
                     {% if all_products %}
-                    <a href="{% url 'payment:checkout' %}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        <a href="{% url 'payment:checkout' %}" class="checkout-btn">
+                            Proceed to Checkout <i class="fa fa-arrow-right" style="margin-left: 8px;"></i>
+                        </a>
                     {% else %}
-                    <a class="btn disabled primary-btn" href="#" >PROCEED TO CHECKOUT</a>
+                        <a href="#" class="checkout-btn disabled">
+                            Proceed to Checkout
+                        </a>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Shoping Cart Section End -->
-
-
+<!-- Shopping Cart Section End -->
 
 {% endblock %}
+
 
