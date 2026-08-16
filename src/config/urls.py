@@ -19,6 +19,7 @@ urlpatterns = [
 
     # Third-Party Packages
     path('paypal/', include("paypal.standard.ipn.urls")),
+    path('accounts/', include('allauth.urls')),
 ]
 
 

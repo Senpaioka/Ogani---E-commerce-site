@@ -1,0 +1,135 @@
+{% extends 'index.html' %}
+
+{% block title %} Account Inactive | Ogani {% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+    .auth-section {
+        background-color: #f8fafc;
+        padding: 70px 0 100px 0;
+    }
+    
+    .auth-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+        border: 1px solid #eef2f6;
+        overflow: hidden;
+        margin: 0 auto;
+        max-width: 540px;
+    }
+
+    .auth-card-header {
+        background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+        padding: 35px 40px;
+        color: #ffffff;
+        text-align: center;
+    }
+
+    .auth-card-header h3 {
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 26px;
+    }
+
+    .auth-card-header p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .auth-card-body {
+        padding: 40px;
+        text-align: center;
+    }
+
+    .status-icon-wrapper {
+        width: 72px;
+        height: 72px;
+        background: #fff1f2;
+        color: #e11d48;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px auto;
+        font-size: 32px;
+    }
+
+    .auth-card-body p {
+        font-size: 15px;
+        color: #475569;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .auth-btn-action {
+        background: #7fad39;
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 12px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .auth-btn-action:hover {
+        background: #6b9830;
+        color: #ffffff;
+        text-decoration: none;
+        transform: translateY(-2px);
+    }
+</style>
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Account Status</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home:home_page' %}">Home</a>
+                        <span>Account Inactive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <h3>Account Inactive</h3>
+                <p>Your account is currently disabled or pending activation.</p>
+            </div>
+
+            <div class="auth-card-body">
+                <div class="status-icon-wrapper">
+                    <i class="fa fa-user-times"></i>
+                </div>
+
+                <p>
+                    This account is inactive. If you registered via standard signup, please verify your account or contact our support team for assistance.
+                </p>
+
+                <a href="{% url 'account:login_page' %}" class="auth-btn-action">
+                    <i class="fa fa-arrow-left"></i> Return to Login
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

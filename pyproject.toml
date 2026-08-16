@@ -8,6 +8,7 @@ dependencies = [
     "certifi==2024.12.14",
     "charset-normalizer==3.4.1",
     "django==6.1",
+    "django-allauth[socialaccount]>=65.19.1",
     "django-ckeditor==6.7.2",
     "django-js-asset==3.0.1",
     "django-paypal==2.1",
