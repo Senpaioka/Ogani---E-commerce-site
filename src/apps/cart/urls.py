@@ -8,6 +8,8 @@ app_name = 'cart'
 urlpatterns = [
     # cart link
     path('cart_page/', views.main_cart_page, name='cart_page'),
+    path('apply_coupon/', views.apply_coupon, name='apply_coupon'),
+    path('remove_coupon/', views.remove_coupon, name='remove_coupon'),
     path('add_cart/<int:product_id>/', views.add_product_into_cart, name='add_cart'),
     path('increase_quantity/<int:product_id>/', views.increase_product_quantity, name='increase_product'),
     path('decrease_quantity/<int:product_id>/', views.decrease_product_quantity, name='decrease_product'),

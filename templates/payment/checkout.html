@@ -228,12 +228,24 @@
 
                     <div class="price-row-calc">
                         <span>Subtotal</span>
-                        <span><strong>${{ total_without_tax }}</strong></span>
+                        <span><strong>${{ raw_total|default:total_without_tax }}</strong></span>
+                    </div>
+
+                    {% if applied_coupon %}
+                    <div class="price-row-calc" style="color: #16a34a;">
+                        <span>Discount ({{ applied_coupon.code }} - {{ applied_coupon.discount_percentage }}%)</span>
+                        <span><strong>-${{ discount_amount }}</strong></span>
+                    </div>
+                    {% endif %}
+
+                    <div class="price-row-calc">
+                        <span>Tax (10%)</span>
+                        <span><strong>${{ tax }}</strong></span>
                     </div>
                     
                     <div class="price-row-calc total-row">
                         <span>Total <small style="font-size: 12px; font-weight: normal; color: #718096;">(Tax Incl.)</small></span>
-                        <span>${{ cart_total }}</span>
+                        <span>${{ final_price|default:cart_total }}</span>
                     </div>
 
                     {% if error %}

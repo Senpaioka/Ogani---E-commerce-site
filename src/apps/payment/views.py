@@ -13,16 +13,42 @@ from apps.payment.paypal_service import create_paypal_order, capture_paypal_orde
 
 # Create your views here.
 
+from apps.cart.models import CartProduct, Coupon
+
 @login_required
 def checkout_page(request):
     html_template_name = 'payment/checkout.html'
     current_user = request.user
-    get_cart_products = CartProduct.objects.filter(user=current_user).select_related('product')
+    get_cart_products = list(CartProduct.objects.filter(user=current_user).select_related('product'))
     ordering_time = datetime.datetime.now()
 
+    coupon_code = request.session.get('coupon_code')
+    applied_coupon = None
+    if coupon_code:
+        applied_coupon = Coupon.objects.filter(code__iexact=coupon_code, is_active=True).first()
+
+    raw_total = sum(item.product.product_price * item.quantity for item in get_cart_products)
+    discount_amount = 0
+
+    for item in get_cart_products:
+        item_raw = item.product.product_price * item.quantity
+        if applied_coupon and applied_coupon.product_id and applied_coupon.product_id == item.product_id:
+            item_disc = round(item_raw * (applied_coupon.discount_percentage / 100.0), 2)
+            item.discount_amount = item_disc
+            item.discounted_subtotal = round(item_raw - item_disc, 2)
+            item.has_coupon = True
+            discount_amount += item_disc
+        else:
+            item.discount_amount = 0
+            item.discounted_subtotal = round(item_raw, 2)
+            item.has_coupon = False
+
+    subtotal_after_discount = max(0.0, raw_total - discount_amount)
+    tax = round(subtotal_after_discount * 0.1, 2)
+    final_price = round(subtotal_after_discount + tax, 2)
+
     if request.method == "POST":
-        get_bill = cart_total(request)
-        bill = float(get_bill['cart_total'])
+        bill = float(final_price)
         
         scheme = 'https' if request.is_secure() else 'http'
         host = request.get_host()
@@ -38,6 +64,12 @@ def checkout_page(request):
                 'buyer': current_user,
                 'products': get_cart_products,
                 'time': ordering_time,
+                'raw_total': round(raw_total, 2),
+                'discount_amount': round(discount_amount, 2),
+                'subtotal_after_discount': round(subtotal_after_discount, 2),
+                'tax': tax,
+                'final_price': final_price,
+                'applied_coupon': applied_coupon,
                 'error': str(e)
             })
 
@@ -45,9 +77,16 @@ def checkout_page(request):
         'buyer': current_user,
         'products': get_cart_products,
         'time': ordering_time,
+        'raw_total': round(raw_total, 2),
+        'discount_amount': round(discount_amount, 2),
+        'subtotal_after_discount': round(subtotal_after_discount, 2),
+        'tax': tax,
+        'final_price': final_price,
+        'applied_coupon': applied_coupon,
     }
 
     return render(request, html_template_name, context)
+
 
 
 @login_required
