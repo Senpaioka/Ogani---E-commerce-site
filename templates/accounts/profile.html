@@ -391,9 +391,11 @@
                     </div>
 
                     <div class="profile-header-actions">
+                        {% if info.is_member %}
                         <a href="{% url 'blog:blog_post' %}" class="profile-action-btn profile-action-btn-success">
                             <i class="fa fa-pencil-square-o"></i> Write a Blog
                         </a>
+                        {% endif %}
                         <a href="{% url 'account:update_page' %}" class="profile-action-btn profile-action-btn-light">
                             <i class="fa fa-edit"></i> Edit Profile
                         </a>
@@ -459,6 +461,10 @@
                 <div class="profile-info-item">
                     <div class="label"><i class="fa fa-id-card"></i> Full Name</div>
                     <div class="value">{{ info.full_name | title }}</div>
+                </div>
+                <div class="profile-info-item">
+                    <div class="label"><i class="fa fa-shield"></i> Account Role</div>
+                    <div class="value"><span class="badge badge-success" style="font-size: 13px; text-transform: uppercase;">{{ info.get_role_display }}</span></div>
                 </div>
                 <div class="profile-info-item">
                     <div class="label"><i class="fa fa-at"></i> Username</div>

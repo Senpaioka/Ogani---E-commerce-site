@@ -285,7 +285,12 @@
                     <div class="dropdown-content">
                         <a href="{% url 'account:profile_page' %}"><i class="fa fa-user"></i> Profile</a>
                         <a href="{% url 'account:settings_page' %}"><i class="fa fa-cog"></i> Settings</a>
+                        {% if user.is_member %}
                         <a href="{% url 'blog:blog_post' %}"><i class="fa fa-pencil-square-o"></i> Post Blog</a>
+                        {% endif %}
+                        {% if user.is_admin_role %}
+                        <a href="/admin/" target="_blank"><i class="fa fa-shield"></i> Admin Panel</a>
+                        {% endif %}
                         <div class="dropdown-divider"></div>
                         <a href="{% url 'account:logout' %}" class="logout-link"><i class="fa fa-sign-out"></i> Logout</a>
                     </div>
@@ -364,7 +369,12 @@
                                     <div class="dropdown-content">
                                         <a href="{% url 'account:profile_page' %}"><i class="fa fa-user"></i> Profile</a>
                                         <a href="{% url 'account:settings_page' %}"><i class="fa fa-cog"></i> Settings</a>
+                                        {% if user.is_member %}
                                         <a href="{% url 'blog:blog_post' %}"><i class="fa fa-pencil-square-o"></i> Post Blog</a>
+                                        {% endif %}
+                                        {% if user.is_admin_role %}
+                                        <a href="/admin/" target="_blank"><i class="fa fa-shield"></i> Admin Panel</a>
+                                        {% endif %}
                                         <div class="dropdown-divider"></div>
                                         <a href="{% url 'account:logout' %}" class="logout-link"><i class="fa fa-sign-out"></i> Logout</a>
                                     </div>

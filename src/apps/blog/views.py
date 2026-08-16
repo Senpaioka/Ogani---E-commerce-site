@@ -6,9 +6,11 @@ from django.db.models import Q
 from apps.blog.blog_form import BlogPostForm, UpdateBlogForm
 import datetime
 from django.contrib.auth.decorators import login_required
+from apps.accounts.decorators import member_required
 from django.utils.html import escape
 from django.http import HttpResponseRedirect, HttpResponse
 # Create your views here.
+
 
 def blog_page(request):
 
@@ -136,7 +138,7 @@ def blog_search_functionality(request):
     return render(request, html_template_name, context)
 
 
-@login_required
+@member_required
 def blog_post_page(request):
 
     html_template_name = 'blog/blog_post.html'
@@ -150,7 +152,7 @@ def blog_post_page(request):
     return render(request, html_template_name, context)
 
 
-@login_required
+@member_required
 def publish_blog_view(request):
 
     current_user = request.user
@@ -165,19 +167,21 @@ def publish_blog_view(request):
     return redirect('blog:blog_page')
 
 
-@login_required
+@member_required
 def update_blog_view(request, blog_id):
 
     html_template_name = 'blog/blog_update.html'
     current_user = request.user
 
-    instance = get_object_or_404(BlogModel, pk=blog_id, author=current_user)
+    if current_user.is_superuser or current_user.is_staff or getattr(current_user, 'role', None) == 'admin':
+        instance = get_object_or_404(BlogModel, pk=blog_id)
+    else:
+        instance = get_object_or_404(BlogModel, pk=blog_id, author=current_user)
 
     if request.method == 'POST':
         update_blog = UpdateBlogForm(request.POST, request.FILES, instance=instance)
         if update_blog.is_valid():
             saving_blog = update_blog.save(commit=False)
-            saving_blog.author = current_user
             saving_blog.edited_at = datetime.datetime.now()
             saving_blog.save()
             return redirect('blog:blog_page')
@@ -192,13 +196,16 @@ def update_blog_view(request, blog_id):
     return render(request, html_template_name, context)
 
 
-@login_required
+@member_required
 def delete_blog_view(request, blog_id):
 
     current_user = request.user
     
-    # We use get_object_or_404 for security so users can only delete their own blogs
-    get_blog = get_object_or_404(BlogModel, pk=blog_id, author=current_user)
+    if current_user.is_superuser or current_user.is_staff or getattr(current_user, 'role', None) == 'admin':
+        get_blog = get_object_or_404(BlogModel, pk=blog_id)
+    else:
+        get_blog = get_object_or_404(BlogModel, pk=blog_id, author=current_user)
+    
     get_blog.delete()
 
     return redirect('blog:blog_page')

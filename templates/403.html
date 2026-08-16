@@ -1,0 +1,178 @@
+{% extends 'index.html' %}
+
+{% block title %} 403 Access Denied | Ogani {% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+    .forbidden-container {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top right, rgba(127, 173, 57, 0.08), transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(225, 29, 72, 0.05), transparent 50%),
+                    #f8fafc;
+        padding: 60px 20px;
+    }
+
+    .forbidden-card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+        border: 1px solid #eef2f6;
+        padding: 50px 40px;
+        max-width: 580px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .forbidden-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #e11d48 0%, #7fad39 100%);
+    }
+
+    .forbidden-icon-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 24px;
+        border-radius: 50%;
+        background: rgba(225, 29, 72, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #e11d48;
+        font-size: 42px;
+        box-shadow: 0 10px 25px rgba(225, 29, 72, 0.15);
+        animation: pulseLock 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseLock {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 10px 25px rgba(225, 29, 72, 0.15);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(225, 29, 72, 0.25);
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 10px 25px rgba(225, 29, 72, 0.15);
+        }
+    }
+
+    .forbidden-badge {
+        display: inline-block;
+        background: #fff1f2;
+        color: #e11d48;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 20px;
+        margin-bottom: 16px;
+        border: 1px solid rgba(225, 29, 72, 0.2);
+    }
+
+    .forbidden-title {
+        color: #0f172a;
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+    }
+
+    .forbidden-desc {
+        color: #64748b;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 32px;
+    }
+
+    .forbidden-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .forbidden-btn {
+        padding: 12px 28px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 14px;
+        text-decoration: none !important;
+        transition: all 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .forbidden-btn-primary {
+        background: #7fad39;
+        color: #ffffff !important;
+        box-shadow: 0 6px 18px rgba(127, 173, 57, 0.3);
+    }
+
+    .forbidden-btn-primary:hover {
+        background: #6b962e;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(127, 173, 57, 0.4);
+    }
+
+    .forbidden-btn-secondary {
+        background: #ffffff;
+        color: #334155 !important;
+        border: 1px solid #cbd5e1;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .forbidden-btn-secondary:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
+        color: #0f172a !important;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="forbidden-container">
+    <div class="forbidden-card">
+        <div class="forbidden-icon-wrapper">
+            <i class="fa fa-lock"></i>
+        </div>
+        <div class="forbidden-badge">Error 403</div>
+        <h1 class="forbidden-title">Access Restricted</h1>
+        <p class="forbidden-desc">
+            You do not have the required account role to access this page. This action requires elevated permissions (such as Member or Admin role).
+        </p>
+        <div class="forbidden-actions">
+            <a href="{% url 'home:home_page' %}" class="forbidden-btn forbidden-btn-primary">
+                <i class="fa fa-home"></i> Back to Homepage
+            </a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'account:profile_page' %}" class="forbidden-btn forbidden-btn-secondary">
+                <i class="fa fa-user"></i> View Profile
+            </a>
+            {% else %}
+            <a href="{% url 'account:login_page' %}" class="forbidden-btn forbidden-btn-secondary">
+                <i class="fa fa-sign-in"></i> Log In
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

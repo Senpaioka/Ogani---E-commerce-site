@@ -4,9 +4,15 @@ from typing import ClassVar
 
 # Create your models here.
 
+class RoleChoices(models.TextChoices):
+    USER = 'user', 'User'
+    MEMBER = 'member', 'Member'
+    ADMIN = 'admin', 'Admin'
+
+
 class UserAccountManager(BaseUserManager):
 
-    def create_user(self, first_name, last_name, username, email, city, country, password=None):
+    def create_user(self, first_name, last_name, username, email, city, country, password=None, role=RoleChoices.USER):
          
         if not username:
             raise ValueError('User must have an unique username')
@@ -21,6 +27,7 @@ class UserAccountManager(BaseUserManager):
             last_name = last_name,
             city = city,
             country = country,
+            role = role,
         )
         user.is_active = True 
 
@@ -39,6 +46,7 @@ class UserAccountManager(BaseUserManager):
             city = city,
             country = country,
             password = password,
+            role = RoleChoices.ADMIN,
         )
 
         user.is_admin = True
@@ -62,6 +70,8 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     city = models.CharField(max_length=50)
     country = models.CharField(max_length=20)
     
+    role = models.CharField(max_length=10, choices=RoleChoices.choices, default=RoleChoices.USER)
+
     birth_date = models.DateField(null=True, blank=True)
     date_joined     = models.DateTimeField(auto_now_add=True)
     last_login      = models.DateTimeField(blank=True, null=True)
@@ -78,6 +88,31 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
 
+    @property
+    def is_user_role(self):
+        return self.role == RoleChoices.USER
+
+    @property
+    def is_member(self):
+        return self.role in [RoleChoices.MEMBER, RoleChoices.ADMIN] or self.is_superuser or self.is_staff
+
+    @property
+    def is_admin_role(self):
+        return self.role == RoleChoices.ADMIN or self.is_superuser or self.is_staff
+
+    def save(self, *args, **kwargs):
+        if self.role == RoleChoices.ADMIN:
+            self.is_staff = True
+            self.is_admin = True
+            self.is_superuser = True
+        else:
+            self.is_staff = False
+            self.is_admin = False
+            self.is_superuser = False
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.username
+
+
 

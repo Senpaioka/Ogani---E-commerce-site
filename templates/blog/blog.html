@@ -379,9 +379,11 @@
             <div class="blog__hero__badge">Organic Living & Tips</div>
             <h1>The Ogani Blog</h1>
             <p>Explore healthy recipes, organic farming practices, and wellness guides curated by our community.</p>
+            {% if user.is_member %}
             <a href="{% url 'blog:blog_post' %}" class="publish__cta__btn">
                 <i class="fa fa-pencil"></i> Write an Article
             </a>
+            {% endif %}
         </div>
     </div>
 </section>
