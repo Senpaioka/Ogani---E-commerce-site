@@ -232,9 +232,11 @@ def comment_adding_view(request, blog_id):
         )
         
         # update or create comment tracker
-        tracker, created = BlogCommentTracker.objects.get_or_create(blog=get_blog)
-        if not created:
-            tracker.comment_count += 1
-            tracker.save()
+        tracker, _ = BlogCommentTracker.objects.get_or_create(
+            blog=get_blog,
+            defaults={'comment_count': 0}
+        )
+        tracker.comment_count = BlogCommentModel.objects.filter(blog=get_blog).count()
+        tracker.save()
 
-    return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER") or redirect('blog:blog_details', blog_id=blog_id).url)

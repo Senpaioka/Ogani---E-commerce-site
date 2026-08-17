@@ -111,6 +111,29 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
             self.is_superuser = False
         super().save(*args, **kwargs)
 
+    @property
+    def get_profile_picture_url(self):
+        if self.profile_picture:
+            try:
+                return self.profile_picture.url
+            except Exception:
+                pass
+
+        if hasattr(self, 'socialaccount_set'):
+            try:
+                social_acc = self.socialaccount_set.first()
+                if social_acc:
+                    avatar = social_acc.get_avatar_url()
+                    if avatar:
+                        return avatar
+                    extra_data = social_acc.extra_data
+                    if isinstance(extra_data, dict) and extra_data.get('picture'):
+                        return extra_data.get('picture')
+            except Exception:
+                pass
+
+        return None
+
     def __str__(self):
         return self.username
 

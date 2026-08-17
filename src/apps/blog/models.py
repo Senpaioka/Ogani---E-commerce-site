@@ -34,14 +34,20 @@ class BlogModel(models.Model):
     
 
     def author_profile_pic(self):
-        if self.author and self.author.profile_picture:
-            return self.author.profile_picture.url
+        if self.author:
+            return self.author.get_profile_picture_url
         return None
     
 
     def __str__(self):
         return self.title
-    
+
+    @property
+    def comment_count(self):
+        tracker = BlogCommentTracker.objects.filter(blog=self).first()
+        if tracker:
+            return tracker.comment_count
+        return BlogCommentModel.objects.filter(blog=self).count()
 
 
 class BlogCommentModel(models.Model):

@@ -982,15 +982,7 @@
                         <div class="blog__item__text">
                             <ul class="d-flex gap-3 mb-2">
                                 <li class="mr-3"><i class="fa fa-calendar-o text-success mr-1"></i> {{ blog.edited_at | date:'d M Y'}}</li>
-                                {% if commented_blogs %}
-                                    {% for data in commented_blogs %}
-                                        {% if data.blog.id == blog.id %}       
-                                        <li><i class="fa fa-comment-o text-success mr-1"></i> {{ data.comment_count }}</li>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                        <li><i class="fa fa-comment-o text-success mr-1"></i> 0</li>
-                                {% endif %}
+                                <li><i class="fa fa-comment-o text-success mr-1"></i> {{ blog.comment_count }}</li>
                             </ul>
                             <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
                             <p>{{ blog.blog_body | truncatechars:100 | striptags }}</p>

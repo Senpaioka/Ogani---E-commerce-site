@@ -345,7 +345,7 @@
                     <div class="search__card__body">
                         <div class="search__card__meta">
                             <span><i class="fa fa-calendar-o"></i> {{ blog.edited_at | date:'d M Y'}}</span>
-                            <span><i class="fa fa-comment-o"></i> 5</span>
+                            <span><i class="fa fa-comment-o"></i> {{ blog.comment_count }}</span>
                         </div>
                         <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
                         <p>{{ blog.blog_body | striptags | truncatechars:100 }}</p>

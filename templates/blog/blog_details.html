@@ -684,10 +684,12 @@
                     <div class="comments__list">
                         {% for comment in comments %}
                         <div class="comment__item">
-                            {% if comment.user.profile_picture %}
-                            <img src="{{ comment.user.profile_picture.url }}" class="comment__avatar" alt="{{ comment.user.username }}">
+                            {% if comment.user.get_profile_picture_url %}
+                            <img src="{{ comment.user.get_profile_picture_url }}" class="comment__avatar" alt="{{ comment.user.username }}">
                             {% else %}
-                            <img src="{% static 'img/blog/details/details-author.jpg' %}" class="comment__avatar" alt="{{ comment.user.username }}">
+                            <div class="comment__avatar d-inline-flex align-items-center justify-content-center bg-light text-secondary rounded-circle" style="width:50px; height:50px; font-size:20px; border:2px solid #e2e8f0;">
+                                <i class="fa fa-user"></i>
+                            </div>
                             {% endif %}
                             <div class="comment__content">
                                 <h6>{{ comment.user.username }}</h6>
@@ -732,7 +734,7 @@
                         <div class="related__card__body">
                             <div class="related__meta">
                                 <span><i class="fa fa-calendar-o"></i> {{ blog.created_at | date:"M d, Y"}}</span>
-                                <span><i class="fa fa-comment-o"></i> 5</span>
+                                <span><i class="fa fa-comment-o"></i> {{ blog.comment_count }}</span>
                             </div>
                             <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
                             <p>{{ blog.blog_body | striptags | truncatechars:90 }}</p>

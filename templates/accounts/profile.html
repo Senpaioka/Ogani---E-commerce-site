@@ -376,8 +376,8 @@
             <div class="profile-banner-header">
                 <div class="profile-header-content">
                     <div class="profile-avatar-wrapper">
-                        {% if info.profile_picture %}
-                            <img src="{{ info.profile_picture.url }}" alt="Profile Picture" class="profile-avatar">
+                        {% if info.get_profile_picture_url %}
+                            <img src="{{ info.get_profile_picture_url }}" alt="Profile Picture" class="profile-avatar">
                         {% else %}
                             <div class="profile-avatar-fallback">
                                 <i class="fa fa-user"></i>

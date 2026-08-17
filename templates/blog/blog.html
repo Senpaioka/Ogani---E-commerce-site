@@ -455,16 +455,7 @@
                             <div class="blog__card__body">
                                 <div class="blog__card__meta">
                                     <span><i class="fa fa-calendar-o"></i> {{ blog.edited_at | date:'d M y'}}</span>
-                                    
-                                    {% if commented_blogs %}
-                                        {% for data in commented_blogs %}
-                                            {% if data.blog.id == blog.id %}       
-                                            <span><i class="fa fa-comment-o"></i> {{ data.comment_count}}</span>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% else %}
-                                        <span><i class="fa fa-comment-o"></i> 0</span>
-                                    {% endif %}
+                                    <span><i class="fa fa-comment-o"></i> {{ blog.comment_count }}</span>
                                 </div>
 
                                 <h5><a href="{% url 'blog:blog_details' blog.id %}">{{ blog.title }}</a></h5>
