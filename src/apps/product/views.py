@@ -64,9 +64,13 @@ def single_product_page(request, product_id):
     if current_user.is_authenticated:
         wishlist_or_not = UserWishList.objects.filter(user=current_user, product_id=product_id, is_wishlist=True).exists()
         is_user_purchased = PurchaseHistory.objects.filter(user=current_user, product_id=product_id, is_purchased=True).exists()
+        user_review = ProductReview.objects.filter(user=current_user, product_id=product_id).first()
+        if user_review:
+            user_review.is_verified_buyer = is_user_purchased
     else:
         wishlist_or_not = False
         is_user_purchased = False
+        user_review = None
 
     # getting selected product safely with pre-joined category
     selected_product = get_object_or_404(Product.objects.select_related('product_category'), pk=product_id)
@@ -76,8 +80,16 @@ def single_product_page(request, product_id):
     related_category_product = Product.objects.filter(product_category=selected_product.product_category).select_related('product_category').exclude(pk=product_id)[:4]
 
     # get product reviews with user pre-fetched to avoid N+1 queries in template
-    get_reviews = ProductReview.objects.filter(product_id=product_id).select_related('user')
-    review_count = get_reviews.count()
+    get_reviews = list(ProductReview.objects.filter(product_id=product_id).select_related('user').order_by('-created_at'))
+    review_count = len(get_reviews)
+
+    # check which reviewers are verified buyers
+    purchased_user_ids = set(
+        PurchaseHistory.objects.filter(product_id=product_id, is_purchased=True)
+        .values_list('user_id', flat=True)
+    )
+    for rev in get_reviews:
+        rev.is_verified_buyer = rev.user_id in purchased_user_ids
 
     # star calculation
     star_total = sum(user_stars.star for user_stars in get_reviews) if review_count > 0 else 0
@@ -89,6 +101,7 @@ def single_product_page(request, product_id):
         'related_products': related_category_product,
         'check_wishlist': wishlist_or_not,
         'purchased_user': is_user_purchased,
+        'user_review': user_review,
         'all_review': get_reviews,
         'review_count': review_count,
         'avg_star': star_avg,

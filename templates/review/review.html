@@ -129,12 +129,63 @@
         box-shadow: 0 10px 25px rgba(127, 173, 57, 0.4);
     }
 
+    .product-review-preview {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 16px 20px;
+        margin-bottom: 30px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .product-review-preview img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 12px;
+        background: #ffffff;
+        padding: 6px;
+        border: 1px solid #edf2f7;
+    }
+
+    .product-review-preview-info h4 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1c1c1c;
+        margin: 0 0 4px 0;
+    }
+
+    .product-review-preview-info .price {
+        font-size: 16px;
+        font-weight: 700;
+        color: #7fad39;
+    }
+
+    .verified-badge-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        font-weight: 600;
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 4px 10px;
+        border-radius: 20px;
+        margin-top: 4px;
+    }
+
     @media (max-width: 575.98px) {
         .review-card-box {
             padding: 30px 20px;
         }
         .star-rating-picker label {
             font-size: 28px;
+        }
+        .product-review-preview {
+            flex-direction: column;
+            text-align: center;
         }
     }
 </style>
@@ -143,46 +194,85 @@
     <div class="container">
         <div class="review-card-box">
             
-            <h2 class="review-header-title">Share Your Experience</h2>
-            <p class="review-header-subtitle">How did you like this product? Your review helps others make better choices.</p>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show text-center mb-4" role="alert" style="border-radius: 12px;">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <h2 class="review-header-title">
+                {% if existing_review %}
+                    Edit Your Review
+                {% else %}
+                    Share Your Experience
+                {% endif %}
+            </h2>
+            <p class="review-header-subtitle">How did you like this product? Your review helps other shoppers make informed decisions.</p>
+
+            {% if product %}
+            <div class="product-review-preview">
+                <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}">
+                <div class="product-review-preview-info">
+                    <h4>{{ product.product_name }}</h4>
+                    <div class="price">${{ product.product_price }}</div>
+                    <div class="verified-badge-pill">
+                        <i class="fa fa-check-circle"></i> Verified Purchased Item
+                    </div>
+                </div>
+            </div>
+            {% endif %}
 
             <form action="{% url 'review:publish_review' id %}" method="POST">
                 {% csrf_token %}
 
                 <!-- Hidden native select for form backward compatibility -->
                 <select name="rating" id="hiddenRatingSelect" style="display: none;" required>
-                    <option value="" disabled selected>Select rating</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                    <option value="" disabled {% if not existing_review %}selected{% endif %}>Select rating</option>
+                    <option value="1" {% if existing_review and existing_review.star == 1 %}selected{% endif %}>1</option>
+                    <option value="2" {% if existing_review and existing_review.star == 2 %}selected{% endif %}>2</option>
+                    <option value="3" {% if existing_review and existing_review.star == 3 %}selected{% endif %}>3</option>
+                    <option value="4" {% if existing_review and existing_review.star == 4 %}selected{% endif %}>4</option>
+                    <option value="5" {% if existing_review and existing_review.star == 5 %}selected{% endif %}>5</option>
                 </select>
 
                 <!-- Interactive Star Rating Display -->
                 <div class="star-rating-picker">
-                    <input type="radio" id="star5" name="star_picker" value="5" onclick="setRating(5)"><label for="star5" title="5 Stars - Excellent"><i class="fa fa-star"></i></label>
-                    <input type="radio" id="star4" name="star_picker" value="4" onclick="setRating(4)"><label for="star4" title="4 Stars - Very Good"><i class="fa fa-star"></i></label>
-                    <input type="radio" id="star3" name="star_picker" value="3" onclick="setRating(3)"><label for="star3" title="3 Stars - Good"><i class="fa fa-star"></i></label>
-                    <input type="radio" id="star2" name="star_picker" value="2" onclick="setRating(2)"><label for="star2" title="2 Stars - Fair"><i class="fa fa-star"></i></label>
-                    <input type="radio" id="star1" name="star_picker" value="1" onclick="setRating(1)"><label for="star1" title="1 Star - Poor"><i class="fa fa-star"></i></label>
+                    <input type="radio" id="star5" name="star_picker" value="5" onclick="setRating(5)" {% if existing_review and existing_review.star == 5 %}checked{% endif %}><label for="star5" title="5 Stars - Excellent"><i class="fa fa-star"></i></label>
+                    <input type="radio" id="star4" name="star_picker" value="4" onclick="setRating(4)" {% if existing_review and existing_review.star == 4 %}checked{% endif %}><label for="star4" title="4 Stars - Very Good"><i class="fa fa-star"></i></label>
+                    <input type="radio" id="star3" name="star_picker" value="3" onclick="setRating(3)" {% if existing_review and existing_review.star == 3 %}checked{% endif %}><label for="star3" title="3 Stars - Good"><i class="fa fa-star"></i></label>
+                    <input type="radio" id="star2" name="star_picker" value="2" onclick="setRating(2)" {% if existing_review and existing_review.star == 2 %}checked{% endif %}><label for="star2" title="2 Stars - Fair"><i class="fa fa-star"></i></label>
+                    <input type="radio" id="star1" name="star_picker" value="1" onclick="setRating(1)" {% if existing_review and existing_review.star == 1 %}checked{% endif %}><label for="star1" title="1 Star - Poor"><i class="fa fa-star"></i></label>
                 </div>
                 <div class="rating-label-text" id="ratingTextDisplay">Tap a star to rate</div>
 
                 <!-- Textarea -->
                 <div class="review-form-group">
                     <label for="text_value"><i class="fa fa-commenting-o mr-1" style="color: #7fad39;"></i> Your Feedback</label>
-                    <textarea id="text_value" name="text_value" class="review-textarea-custom" placeholder="What did you like or dislike about this item? Write your honest thoughts here..." required></textarea>
+                    <textarea id="text_value" name="text_value" class="review-textarea-custom" placeholder="What did you like or dislike about this item? Write your honest thoughts here..." required>{% if existing_review %}{{ existing_review.review }}{% endif %}</textarea>
                 </div>
 
-                <button type="submit" class="btn-submit-review">
-                    <i class="fa fa-paper-plane mr-2"></i> Submit Review
-                </button>
+                <div class="d-flex gap-3 align-items-center">
+                    <button type="submit" class="btn-submit-review" style="flex: 1;">
+                        <i class="fa fa-paper-plane mr-2"></i> {% if existing_review %}Update Review{% else %}Submit Review{% endif %}
+                    </button>
+                    {% if product %}
+                        <a href="{% url 'product:single_product' product.id %}" class="btn btn-outline-secondary" style="border-radius: 30px; padding: 14px 24px; font-weight: 600;">Cancel</a>
+                    {% endif %}
+                </div>
             </form>
 
         </div>
     </div>
 </section>
+
+{% if existing_review and existing_review.star %}
+    {{ existing_review.star|json_script:"existing-rating-data" }}
+{% endif %}
 
 <script>
     const ratingTexts = {
@@ -198,5 +288,13 @@
         document.getElementById('ratingTextDisplay').innerText = ratingTexts[val] || "";
         document.getElementById('ratingTextDisplay').style.color = "#7fad39";
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const dataEl = document.getElementById('existing-rating-data');
+        if (dataEl) {
+            const initialRating = JSON.parse(dataEl.textContent);
+            setRating(initialRating);
+        }
+    });
 </script>
 {% endblock %}

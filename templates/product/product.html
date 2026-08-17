@@ -395,6 +395,17 @@
 <section class="product-details-container">
     <div class="container">
         
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show mb-4 shadow-sm" role="alert" style="border-radius: 14px;">
+                    <i class="fa fa-info-circle mr-2"></i> {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <!-- Main Product Card -->
         <div class="product-main-card">
             <div class="row align-items-center">
@@ -542,11 +553,25 @@
 
                 <div class="tab-pane" id="tabs-3" role="tabpanel">
                     <div class="tab-desc-content">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                             <h5 class="font-weight-bold text-dark m-0">Customer Reviews</h5>
                             {% if purchased_user %}
-                                <a href="{% url 'review:review_page' product.id %}" class="btn-add-cart-custom" style="padding: 8px 20px; font-size: 13px;">
-                                    <i class="fa fa-pencil"></i> Write a Review
+                                {% if user_review %}
+                                    <a href="{% url 'review:review_page' product.id %}" class="btn-add-cart-custom" style="padding: 8px 20px; font-size: 13px;">
+                                        <i class="fa fa-edit"></i> Edit Your Review
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'review:review_page' product.id %}" class="btn-add-cart-custom" style="padding: 8px 20px; font-size: 13px;">
+                                        <i class="fa fa-pencil"></i> Write a Review
+                                    </a>
+                                {% endif %}
+                            {% elif user.is_authenticated %}
+                                <span class="badge badge-light p-2 text-muted" style="border: 1px dashed #cbd5e0; border-radius: 12px; font-size: 13px;">
+                                    <i class="fa fa-shield text-warning mr-1"></i> Only verified buyers who purchased this product can write a review.
+                                </span>
+                            {% else %}
+                                <a href="{% url 'account:login_page' %}" class="btn btn-outline-secondary btn-sm" style="border-radius: 20px; font-size: 13px;">
+                                    <i class="fa fa-sign-in mr-1"></i> Log in to leave a review
                                 </a>
                             {% endif %}
                         </div>
@@ -555,8 +580,22 @@
                             {% for customer in all_review %}
                                 <div class="review-card-item">
                                     <div class="review-user-header">
-                                        <div class="review-username"><i class="fa fa-user-circle-o mr-2" style="color:#7fad39;"></i>{{ customer.user.username }}</div>
-                                        <div class="review-date">{{ customer.created_at }}</div>
+                                        <div class="review-username d-flex align-items-center flex-wrap gap-2">
+                                            <span><i class="fa fa-user-circle-o mr-2" style="color:#7fad39;"></i>{{ customer.user.username }}</span>
+                                            {% if customer.is_verified_buyer %}
+                                                <span class="badge" style="background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; font-weight: 600; font-size: 11px; padding: 4px 8px; border-radius: 12px;">
+                                                    <i class="fa fa-check-circle mr-1"></i> Verified Purchase
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="review-date">
+                                            {{ customer.created_at|date:"M d, Y" }}
+                                            {% if user.is_authenticated and customer.user == user %}
+                                                <a href="{% url 'review:review_page' product.id %}" class="text-success font-weight-bold ml-2" style="font-size: 13px;">
+                                                    <i class="fa fa-edit"></i> Edit
+                                                </a>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                     <div class="product-rating-stars mb-2">
                                         {% for _ in ""|rjust:customer.star %}
