@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: ogani-e-commerce-site
+    runtime: python
+    buildCommand: uv sync && uv run python manage.py collectstatic --noinput && uv run python manage.py migrate
+    startCommand: uv run gunicorn --chdir src config.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
+      - key: PYTHONPATH
+        value: src
