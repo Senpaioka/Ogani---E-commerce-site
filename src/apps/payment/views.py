@@ -105,6 +105,9 @@ def payment_success_view(request):
                     PurchaseHistory(
                         user=current_user,
                         product=item.product,
+                        quantity=item.quantity,
+                        price=item.product.product_price,
+                        payment_status='Completed',
                         is_purchased=True
                     )
                     for item in get_cart_products

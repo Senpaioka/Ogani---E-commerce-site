@@ -11,6 +11,7 @@ from apps.accounts.forms import (
 )
 from apps.accounts.models import UserAccount
 from apps.blog.models import BlogModel
+from apps.payment.models import PurchaseHistory
 
 
 def registration_page(request):
@@ -102,12 +103,21 @@ def user_profile_page(request):
     html_template_name = 'accounts/profile.html'
 
     # Direct access to request.user without extra DB lookup
-    # select_related prevents N+1 query when iterating over blogs in template
+    # select_related prevents N+1 query when iterating over blogs and purchases in template
     get_blogs = BlogModel.objects.filter(author=request.user).select_related('author').order_by('-edited_at')
+    get_purchases = PurchaseHistory.objects.filter(
+        user=request.user, 
+        is_purchased=True
+    ).select_related('product', 'product__product_category').order_by('-created_at')
+
+    total_spent = sum(purchase.total_amount for purchase in get_purchases)
 
     context = {
         'info': request.user,
         'user_blogs': get_blogs,
+        'purchase_history': get_purchases,
+        'total_purchases_count': len(get_purchases),
+        'total_spent': round(total_spent, 2),
     }
 
     return render(request, html_template_name, context)

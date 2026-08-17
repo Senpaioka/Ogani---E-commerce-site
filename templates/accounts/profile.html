@@ -169,6 +169,11 @@
         color: #2563eb;
     }
 
+    .profile-stat-icon.purple {
+        background: rgba(147, 51, 234, 0.12);
+        color: #9333ea;
+    }
+
     .profile-stat-icon.amber {
         background: rgba(217, 119, 6, 0.12);
         color: #d97706;
@@ -415,7 +420,7 @@
 
         <!-- Quick Activity Stats Cards -->
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-lg-3 col-md-6">
                 <div class="profile-stat-card">
                     <div class="profile-stat-icon green">
                         <i class="fa fa-heart"></i>
@@ -427,7 +432,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-lg-3 col-md-6">
                 <div class="profile-stat-card">
                     <div class="profile-stat-icon blue">
                         <i class="fa fa-shopping-bag"></i>
@@ -439,7 +444,19 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="profile-stat-card">
+                    <div class="profile-stat-icon purple">
+                        <i class="fa fa-shopping-cart"></i>
+                    </div>
+                    <div class="profile-stat-details">
+                        <h4>{{ total_purchases_count }}</h4>
+                        <p>Past Purchases</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
                 <div class="profile-stat-card">
                     <div class="profile-stat-icon amber">
                         <i class="fa fa-pencil"></i>
@@ -487,6 +504,85 @@
                     <div class="value">{{ info.city | capfirst }}, {{ info.country | capfirst }}</div>
                 </div>
             </div>
+        </div>
+
+        <!-- Purchase & Payment History Section -->
+        <div class="profile-details-card">
+            <div class="profile-section-title d-flex align-items-center justify-content-between">
+                <div><i class="fa fa-shopping-cart"></i> Purchase & Payment History</div>
+                {% if purchase_history %}
+                    <span class="badge badge-primary" style="font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 8px; background-color: #7fad39; border: none;">
+                        Total Spent: ${{ total_spent }}
+                    </span>
+                {% endif %}
+            </div>
+
+            {% if purchase_history %}
+                <div class="table-responsive">
+                    <table class="profile-blog-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Item Details</th>
+                                <th>Date & Time</th>
+                                <th class="text-center">Qty</th>
+                                <th>Total Price</th>
+                                <th>Payment Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in purchase_history %}
+                                <tr>
+                                    <td>
+                                        <span class="font-weight-bold text-dark" style="font-size: 13px;">#PUR-{{ item.id }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            {% if item.product.product_image %}
+                                                <img src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}" class="profile-blog-item-thumb mr-3">
+                                            {% endif %}
+                                            <div>
+                                                <a href="{% url 'product:single_product' item.product.id %}" class="profile-blog-title">{{ item.product.product_name }}</a>
+                                                <div class="profile-blog-meta"><i class="fa fa-tag"></i> {{ item.product.product_category.product_category | title }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 13px; color: #475569; font-weight: 500;">
+                                            <i class="fa fa-calendar-o"></i> {{ item.created_at | date:"d M Y, h:i A" }}
+                                        </div>
+                                    </td>
+                                    <td class="text-center font-weight-bold">
+                                        {{ item.quantity }}
+                                    </td>
+                                    <td class="font-weight-bold text-success" style="font-size: 14px;">
+                                        ${{ item.total_amount }}
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success" style="padding: 6px 10px; font-size: 12px; border-radius: 6px; background-color: #22c55e;">
+                                            <i class="fa fa-check-circle"></i> {{ item.payment_status }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'product:single_product' item.product.id %}" class="btn-action-icon btn-action-edit" title="View & Review Product" style="width: auto; padding: 0 12px; font-size: 12px; gap: 5px;">
+                                            <i class="fa fa-star"></i> Review
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state-box">
+                    <i class="fa fa-shopping-basket"></i>
+                    <p class="m-0 font-weight-bold mb-3">No purchase history found</p>
+                    <a href="{% url 'product:store_page' %}" class="profile-action-btn profile-action-btn-success" style="background: #7fad39; color: #ffffff;">
+                        <i class="fa fa-shopping-cart"></i> Explore Products
+                    </a>
+                </div>
+            {% endif %}
         </div>
 
         <!-- Blog History Section -->
