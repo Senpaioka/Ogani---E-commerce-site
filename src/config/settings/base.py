@@ -15,6 +15,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-key-change-in-production')
 
+# Allowed Hosts configuration
+RENDER_EXTERNAL_HOSTNAME = config('RENDER_EXTERNAL_HOSTNAME', default='')
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='ogani-e-commerce-site.onrender.com,localhost,127.0.0.1,.onrender.com',
+    cast=lambda v: [s.strip() for s in v.split(',') if s.strip()]
+)
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 # Application definition
 INSTALLED_APPS = [
     'unfold',
