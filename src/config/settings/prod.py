@@ -2,7 +2,14 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='ogani-e-commerce-site.onrender.com', cast=lambda v: [s.strip() for s in v.split(',')])
+RENDER_EXTERNAL_HOSTNAME = config('RENDER_EXTERNAL_HOSTNAME', default='')
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='ogani-e-commerce-site.onrender.com,localhost,127.0.0.1',
+    cast=lambda v: [s.strip() for s in v.split(',') if s.strip()]
+)
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Security Hardening
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

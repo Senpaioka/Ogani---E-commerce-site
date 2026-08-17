@@ -9,3 +9,6 @@ services:
         value: 3.13.0
       - key: PYTHONPATH
         value: src
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.prod
+
