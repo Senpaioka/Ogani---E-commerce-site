@@ -3,3 +3,6 @@ venv
 .env
 .vscode
 info.txt
+
+# Django collected static files
+staticfiles/
