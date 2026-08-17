@@ -12,6 +12,7 @@ dependencies = [
     "django-ckeditor==6.7.2",
     "django-js-asset==3.0.1",
     "django-paypal==2.1",
+    "django-unfold>=0.104.1",
     "gunicorn==23.0.0",
     "idna==3.10",
     "packaging==24.2",

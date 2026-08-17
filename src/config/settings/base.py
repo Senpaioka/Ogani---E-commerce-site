@@ -6,6 +6,7 @@ Shared across all environments.
 from pathlib import Path
 import os
 from decouple import config
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR points to root repository directory
@@ -16,6 +17,9 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-key-change-in-product
 
 # Application definition
 INSTALLED_APPS = [
+    'unfold',
+    'unfold.contrib.filters',
+    'unfold.contrib.forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +50,131 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
 ]
+
+UNFOLD = {
+    "SITE_TITLE": "Ogani Admin",
+    "SITE_HEADER": "Ogani Dashboard",
+    "SITE_SUBHEADER": "E-Commerce Management System",
+    "SITE_SYMBOL": "shopping_cart", # Material symbol icon
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "THEME": "dark", # dark, light, or auto
+    "COLORS": {
+        "primary": {
+            "50": "240 253 244",
+            "100": "220 252 231",
+            "200": "187 247 208",
+            "300": "134 239 172",
+            "400": "74 222 128",
+            "500": "34 197 94",
+            "600": "22 163 74",
+            "700": "21 128 61",
+            "800": "22 101 52",
+            "900": "20 83 45",
+            "950": "5 46 22",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": "Navigation",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Dashboard",
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                ],
+            },
+            {
+                "title": "Store Management",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Products",
+                        "icon": "inventory_2",
+                        "link": reverse_lazy("admin:product_product_changelist"),
+                    },
+                    {
+                        "title": "Categories",
+                        "icon": "category",
+                        "link": reverse_lazy("admin:product_productcategory_changelist"),
+                    },
+                    {
+                        "title": "Product Reviews",
+                        "icon": "star",
+                        "link": reverse_lazy("admin:review_productreview_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Orders & Sales",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Purchase History",
+                        "icon": "receipt_long",
+                        "link": reverse_lazy("admin:payment_purchasehistory_changelist"),
+                    },
+                    {
+                        "title": "Shopping Carts",
+                        "icon": "shopping_cart",
+                        "link": reverse_lazy("admin:cart_cartid_changelist"),
+                    },
+                    {
+                        "title": "Cart Items",
+                        "icon": "shopping_bag",
+                        "link": reverse_lazy("admin:cart_cartproduct_changelist"),
+                    },
+                    {
+                        "title": "Wishlists",
+                        "icon": "favorite",
+                        "link": reverse_lazy("admin:cart_userwishlist_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Users & Content",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Users",
+                        "icon": "group",
+                        "link": reverse_lazy("admin:accounts_useraccount_changelist"),
+                    },
+                    {
+                        "title": "Blog Posts",
+                        "icon": "article",
+                        "link": reverse_lazy("admin:blog_blogmodel_changelist"),
+                    },
+                    {
+                        "title": "Blog Categories",
+                        "icon": "label",
+                        "link": reverse_lazy("admin:blog_blogcategory_changelist"),
+                    },
+                    {
+                        "title": "Blog Comments",
+                        "icon": "comment",
+                        "link": reverse_lazy("admin:blog_blogcommentmodel_changelist"),
+                    },
+                    {
+                        "title": "Contact Messages",
+                        "icon": "mail",
+                        "link": reverse_lazy("admin:contact_contactformmodel_changelist"),
+                    },
+                    {
+                        "title": "Newsletter Subscribers",
+                        "icon": "mark_email_unread",
+                        "link": reverse_lazy("admin:contact_newslettermodel_changelist"),
+                    },
+                ],
+            },
+        ],
+    },
+}
 
 SITE_ID = 1
 
